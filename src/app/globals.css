@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-white text-main-text;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #E4E7ED transparent;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-kinetic text-white font-semibold py-3 px-6 rounded-xl
+           hover:bg-[#E64D00] active:scale-[0.97] transition-all duration-200;
+  }
+
+  .btn-outline {
+    @apply border-2 border-kinetic text-kinetic font-semibold py-3 px-6 rounded-xl
+           hover:bg-soft-orange active:scale-[0.97] transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border border-border-gray
+           hover:shadow-lg hover:border-kinetic/20 transition-all duration-300;
+  }
+
+  .badge-available {
+    @apply inline-flex items-center gap-1 bg-emerald-50 text-emerald-700
+           text-xs font-medium px-2.5 py-1 rounded-full;
+  }
+
+  .badge-busy {
+    @apply inline-flex items-center gap-1 bg-red-50 text-red-600
+           text-xs font-medium px-2.5 py-1 rounded-full;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-border-gray
+           focus:outline-none focus:border-kinetic focus:ring-2 focus:ring-kinetic/10
+           text-main-text placeholder:text-sub-text transition-all duration-200;
+  }
+
+  .mega-catalog-overlay {
+    @apply fixed inset-0 bg-black/40 z-40 backdrop-blur-sm;
+  }
+}
+
+@layer utilities {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
