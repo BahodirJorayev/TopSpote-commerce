@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Topspot — Universal Ijara Marketi</title>
+  <link rel="icon" href="./public/logo.png" type="image/png">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#0B0F17',
+            kinetic: '#FF5500',
+            'soft-orange': '#FFF1EB',
+            'arch-white': '#FFFFFF',
+            'main-text': '#1F2026',
+            'sub-text': '#7E818C',
+            'border-gray': '#E4E7ED',
+          },
+          animation: {
+            'pulse-spot': 'pulseSpot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            pulseSpot: {
+              '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+              '50%': { opacity: '0.7', transform: 'scale(1.08)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: #1F2026;
+      background-color: #FFFFFF;
+    }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen text-main-text pb-20 md:pb-8">
+
+  <!-- ==================== 1. SPLASH SCREEN ==================== -->
+  <div id="splashScreen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-obsidian transition-opacity duration-500 ease-in-out">
+    <div class="animate-pulse-spot flex flex-col items-center gap-4">
+      <div class="w-24 h-24 relative flex items-center justify-center">
+        <img src="./public/logo.png" alt="Topspot Logo" class="w-full h-full object-contain drop-shadow-2xl" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-20 h-20 rounded-2xl bg-kinetic flex items-center justify-center text-white text-3xl font-black\'>TS</div>'">
+      </div>
+      <h1 class="text-3xl font-black tracking-widest text-white mt-2">TOPSPOT</h1>
+      <p class="text-sub-text text-sm font-medium tracking-wide">Universal Ijara Marketi</p>
+      <div class="w-12 h-1 bg-kinetic rounded-full mt-2 animate-pulse"></div>
+    </div>
+  </div>
+
+  <!-- ==================== 2. HEADER (UZUM STYLE) ==================== -->
+  <header class="sticky top-0 z-30 bg-obsidian text-white shadow-md">
+    <!-- Top Row -->
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between h-14 border-b border-white/10 text-sm">
+        <!-- City & Location -->
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-1.5 cursor-pointer hover:text-kinetic transition-colors" onclick="requestUserGPS()">
+            <svg class="w-4 h-4 text-kinetic" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span id="currentCity" class="font-medium">Toshkent</span>
+            <span class="text-xs text-sub-text underline ml-1">(GPS)</span>
+          </div>
+          <span class="hidden sm:inline text-xs text-gray-400">Topshirish punktlari: 142 ta</span>
+        </div>
+
+        <!-- Top Right Links -->
+        <div class="flex items-center gap-5 text-xs text-gray-300">
+          <button class="hover:text-white transition-colors" onclick="openWizard()">E'lon berish</button>
+          <span class="text-gray-600">|</span>
+          <button class="hover:text-white transition-colors font-medium">O'zbekcha</button>
+          <span class="text-gray-600">|</span>
+          <button onclick="openAuthModal()" class="flex items-center gap-1.5 text-white hover:text-kinetic transition-colors font-medium">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <span id="headerUserLabel">Kirish</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3 md:gap-4">
+      <!-- Logo -->
+      <a href="#" onclick="filterByCategory(null); return false;" class="flex items-center gap-2 flex-shrink-0">
+        <img src="./public/logo.png" alt="Topspot" class="w-9 h-9 object-contain" onerror="this.onerror=null; this.src='https://via.placeholder.com/36?text=TS'">
+        <span class="text-xl font-black tracking-wider text-white hidden sm:inline">TOPSPOT</span>
+      </a>
+
+      <!-- Mega Catalog Button -->
+      <button onclick="toggleMegaCatalog()" class="flex items-center gap-2 bg-kinetic hover:bg-[#E64D00] text-white font-semibold px-4 py-2.5 rounded-xl transition-colors flex-shrink-0 text-sm">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <span class="hidden md:inline">Katalog</span>
+      </button>
+
+      <!-- Realtime Search -->
+      <div class="flex-1 relative">
+        <input 
+          id="searchInput"
+          type="text" 
+          placeholder="Ijaraga qidiring: Onix, dacha, perforator, fotostudiya, santexnik..." 
+          oninput="handleSearch(this.value)"
+          class="w-full bg-white/10 border border-white/20 text-white placeholder-gray-400 text-sm rounded-xl px-4 py-2.5 focus:outline-none focus:bg-white/15 focus:border-kinetic transition-all"
+        >
+        <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-kinetic">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Action Icons (Desktop) -->
+      <div class="hidden md:flex items-center gap-4 text-gray-200">
+        <button onclick="openAuthModal()" class="flex flex-col items-center hover:text-kinetic transition-colors text-xs">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <span class="mt-0.5">Kabinet</span>
+        </button>
+        <button onclick="filterFavorites()" class="flex flex-col items-center hover:text-kinetic transition-colors text-xs relative">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+          <span class="mt-0.5">Saralangan</span>
+          <span id="favBadge" class="hidden absolute -top-1 -right-1 bg-kinetic text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+        </button>
+        <button onclick="openWizard()" class="flex flex-col items-center hover:text-kinetic transition-colors text-xs">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+          </svg>
+          <span class="mt-0.5">E'lon berish</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== 3. MEGA CATALOG MODAL ==================== -->
+  <div id="megaCatalogModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleMegaCatalog()"></div>
+    <div class="relative top-24 max-w-5xl mx-auto bg-white rounded-2xl shadow-2xl border border-border-gray overflow-hidden z-10 m-4">
+      <div class="flex flex-col md:flex-row min-h-[420px]">
+        <!-- Verticals List (Left) -->
+        <div class="w-full md:w-64 bg-gray-50 border-r border-border-gray p-4 space-y-1">
+          <h4 class="text-xs font-bold text-sub-text uppercase tracking-wider mb-3 px-2">Asosiy Vertikallar</h4>
+          <button onclick="switchVerticalTab('mobility')" id="vTab-mobility" class="vertical-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all bg-soft-orange text-kinetic">
+            <span class="text-xl">🚗</span> Mobillik
+          </button>
+          <button onclick="switchVerticalTab('realestate')" id="vTab-realestate" class="vertical-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-main-text hover:bg-gray-100">
+            <span class="text-xl">🏢</span> Ko'chmas mulk
+          </button>
+          <button onclick="switchVerticalTab('equipment')" id="vTab-equipment" class="vertical-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-main-text hover:bg-gray-100">
+            <span class="text-xl">🔧</span> Uskunalar & Texnika
+          </button>
+          <button onclick="switchVerticalTab('specialists')" id="vTab-specialists" class="vertical-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-main-text hover:bg-gray-100">
+            <span class="text-xl">👷</span> Mutaxassislar
+          </button>
+        </div>
+
+        <!-- Subcategories Grid (Right) -->
+        <div class="flex-1 p-6">
+          <div class="flex justify-between items-center mb-4 pb-2 border-b border-border-gray">
+            <h3 id="catalogTabTitle" class="text-lg font-bold text-main-text flex items-center gap-2">
+              🚗 Mobillik ijarasi
+            </h3>
+            <button onclick="toggleMegaCatalog()" class="text-sub-text hover:text-main-text text-xl">&times;</button>
+          </div>
+          <div id="catalogSubgrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
+            <!-- Populated dynamically by switchVerticalTab -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 4. MAIN CONTENT ==================== -->
+  <main class="max-w-7xl mx-auto px-4 py-4">
+    <!-- Category Quick Filters Bar -->
+    <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-3 text-sm">
+      <button onclick="filterByCategory(null)" id="chip-all" class="category-chip flex-shrink-0 px-4 py-2 rounded-full font-medium transition-all bg-kinetic text-white shadow-sm">
+        Barchasi
+      </button>
+      <button onclick="filterByCategory('mobility')" id="chip-mobility" class="category-chip flex-shrink-0 px-4 py-2 rounded-full font-medium transition-all bg-soft-orange text-main-text hover:bg-orange-100 flex items-center gap-1.5">
+        <span>🚗</span> Mobillik
+      </button>
+      <button onclick="filterByCategory('realestate')" id="chip-realestate" class="category-chip flex-shrink-0 px-4 py-2 rounded-full font-medium transition-all bg-soft-orange text-main-text hover:bg-orange-100 flex items-center gap-1.5">
+        <span>🏢</span> Ko'chmas mulk
+      </button>
+      <button onclick="filterByCategory('equipment')" id="chip-equipment" class="category-chip flex-shrink-0 px-4 py-2 rounded-full font-medium transition-all bg-soft-orange text-main-text hover:bg-orange-100 flex items-center gap-1.5">
+        <span>🔧</span> Uskunalar & Texnika
+      </button>
+      <button onclick="filterByCategory('specialists')" id="chip-specialists" class="category-chip flex-shrink-0 px-4 py-2 rounded-full font-medium transition-all bg-soft-orange text-main-text hover:bg-orange-100 flex items-center gap-1.5">
+        <span>👷</span> Mutaxassislar
+      </button>
+    </div>
+
+    <!-- Promo Banner (Obsidian & The Spot) -->
+    <div class="relative bg-gradient-to-r from-obsidian via-[#141B26] to-[#0B0F17] rounded-3xl p-6 md:p-8 my-3 text-white overflow-hidden shadow-lg border border-white/5">
+      <div class="relative z-10 max-w-xl">
+        <span class="inline-block bg-kinetic/20 border border-kinetic/40 text-kinetic text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
+          Topspot Universal Ijara Marketi
+        </span>
+        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
+          Kerakli texnika, avtomobil va mutaxassislarni tezda toping
+        </h2>
+        <p class="text-gray-300 text-sm mb-5 leading-relaxed">
+          O'zbekistonning birinchi ijara agregatori. O'z mulkingizni ijaraga berib daromad oling yoki kerakli uskunani arzon narxda oling.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <button onclick="openWizard()" class="bg-kinetic hover:bg-[#E64D00] text-white font-bold px-6 py-3 rounded-xl transition-transform active:scale-95 shadow-md flex items-center gap-2 text-sm">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+            </svg>
+            E'lon berish (+Bonus)
+          </button>
+          <button onclick="toggleMegaCatalog()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-5 py-3 rounded-xl transition-colors text-sm">
+            Katalogdan ko'rish
+          </button>
+        </div>
+      </div>
+      <!-- Decorative Orange Spot Ring -->
+      <div class="absolute -right-16 -top-16 w-64 h-64 bg-kinetic/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute right-6 bottom-4 opacity-10 hidden md:block pointer-events-none">
+        <span class="text-9xl font-black">TS</span>
+      </div>
+    </div>
+
+    <!-- Listings Section Title -->
+    <div class="flex items-center justify-between mt-6 mb-4">
+      <div>
+        <h3 id="listingsHeading" class="text-xl font-bold text-main-text">Tavsiya etilgan ijaralar</h3>
+        <p id="listingsSubheading" class="text-xs text-sub-text mt-0.5">Hozirda band qilishga tayyor bo'lgan aktiv e'lonlar</p>
+      </div>
+      <span id="resultsCount" class="text-xs font-semibold bg-gray-200 text-gray-700 px-2.5 py-1 rounded-full">8 ta</span>
+    </div>
+
+    <!-- Product Grid (Uzum Style 4/5 Aspect Ratio) -->
+    <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-5">
+      <!-- Populated via Javascript -->
+    </div>
+  </main>
+
+  <!-- ==================== 5. MODAL: 4-STEP WIZARD ==================== -->
+  <div id="wizardModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWizard()"></div>
+    <div class="relative min-h-screen flex items-center justify-center p-4">
+      <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden border border-border-gray">
+        <!-- Wizard Header & Steps -->
+        <div class="bg-obsidian text-white p-5 border-b border-white/10">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-kinetic"></span>
+              <h3 class="font-bold text-lg">Yangi e'lon berish</h3>
+            </div>
+            <button onclick="closeWizard()" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+          </div>
+          <!-- 4 Steps Indicators -->
+          <div class="grid grid-cols-4 gap-2 text-center text-xs">
+            <div id="step-ind-1" class="border-b-2 border-kinetic pb-1 font-bold text-kinetic">1. Obyekt</div>
+            <div id="step-ind-2" class="border-b-2 border-white/20 pb-1 text-gray-400">2. Joylashuv</div>
+            <div id="step-ind-3" class="border-b-2 border-white/20 pb-1 text-gray-400">3. Tarif</div>
+            <div id="step-ind-4" class="border-b-2 border-white/20 pb-1 text-gray-400">4. Chek</div>
+          </div>
+        </div>
+
+        <!-- Wizard Forms Container -->
+        <div class="p-6">
+          <!-- Step 1: Obyekt ma'lumotlari -->
+          <div id="wizardStep1" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-main-text mb-1">E'lon nomi va modeli *</label>
+              <input type="text" id="wTitle" placeholder="Masalan: Chevrolet Onix 2024 kunlik ijara" class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-main-text mb-1">Asosiy Vertikal *</label>
+                <select id="wVertical" class="w-full border border-border-gray rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-kinetic">
+                  <option value="mobility">🚗 Mobillik</option>
+                  <option value="realestate">🏢 Ko'chmas mulk</option>
+                  <option value="equipment">🔧 Uskunalar & Texnika</option>
+                  <option value="specialists">👷 Mutaxassislar</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-main-text mb-1">Toifa / Kategoriya *</label>
+                <input type="text" id="wCategoryName" placeholder="Masalan: Yengil avto" class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-main-text mb-1">Kunlik narx (UZS) *</label>
+                <input type="number" id="wDailyPrice" placeholder="250000" class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-main-text mb-1">Soatlik narx (UZS)</label>
+                <input type="number" id="wHourlyPrice" placeholder="45000" class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-main-text mb-1">Egasi / Kompaniya *</label>
+                <input type="text" id="wOwnerName" placeholder="Bahodir" class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-main-text mb-1">Telefon raqam *</label>
+                <input type="tel" id="wPhone" placeholder="+998 90 123 45 67" class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-main-text mb-1">Tavsif</label>
+              <textarea id="wDesc" rows="2" placeholder="Holati a'lo, toza, to'liq jihozlangan..." class="w-full border border-border-gray rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-kinetic"></textarea>
+            </div>
+          </div>
+
+          <!-- Step 2: Joylashuv & GPS -->
+          <div id="wizardStep2" class="hidden space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-main-text mb-1">Aniq manzil yoki orientir *</label>
+              <input type="text" id="wAddress" placeholder="Toshkent sh., Mirzo Ulug'bek t., Buyuk Ipak Yo'li" class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
+            </div>
+            <div class="bg-gray-50 border border-border-gray rounded-2xl p-4 text-center">
+              <svg class="w-10 h-10 text-kinetic mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <p class="text-xs text-sub-text mb-3">Mijozlar sizni xaritada tezroq topishi uchun GPS koordinatalarni avtomatik oling</p>
+              <button onclick="getWizardGPS()" type="button" class="bg-white border-2 border-kinetic text-kinetic hover:bg-soft-orange font-bold px-4 py-2 rounded-xl text-xs transition-colors">
+                📍 GPS Koordinatalarni olish
+              </button>
+              <div id="gpsResult" class="hidden mt-3 text-xs font-semibold text-emerald-600 bg-emerald-50 py-1.5 rounded-lg">
+                Koordinatalar muvaffaqiyatli aniqlandi!
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Monetizatsiya & Tariflar -->
+          <div id="wizardStep3" class="hidden space-y-3">
+            <p class="text-xs text-sub-text mb-1">E'loningiz samaradorligini oshirish uchun tarifni tanlang:</p>
+            
+            <label class="flex items-center justify-between p-3.5 border-2 rounded-2xl cursor-pointer hover:border-kinetic transition-all tariff-card border-kinetic bg-soft-orange" onclick="selectTariff('standard', 0)">
+              <div class="flex items-center gap-3">
+                <input type="radio" name="wTariff" value="standard" checked class="text-kinetic focus:ring-kinetic">
+                <div>
+                  <div class="font-bold text-sm text-main-text">Standart E'lon</div>
+                  <div class="text-xs text-sub-text">Oddiy qidiruv listingi, umumiy vitrina</div>
+                </div>
+              </div>
+              <span class="font-bold text-sm text-emerald-600">Bepul</span>
+            </label>
+
+            <label class="flex items-center justify-between p-3.5 border-2 border-border-gray rounded-2xl cursor-pointer hover:border-kinetic transition-all tariff-card" onclick="selectTariff('vip', 35000)">
+              <div class="flex items-center gap-3">
+                <input type="radio" name="wTariff" value="vip" class="text-kinetic focus:ring-kinetic">
+                <div>
+                  <div class="font-bold text-sm text-main-text flex items-center gap-1.5">
+                    VIP Pin <span class="bg-yellow-400 text-yellow-900 text-[10px] px-1.5 py-0.2 rounded font-extrabold">VIP</span>
+                  </div>
+                  <div class="text-xs text-sub-text">Xaritada yorqin nishon bilan alohida ajralib turish</div>
+                </div>
+              </div>
+              <span class="font-bold text-sm text-kinetic">35 000 UZS</span>
+            </label>
+
+            <label class="flex items-center justify-between p-3.5 border-2 border-border-gray rounded-2xl cursor-pointer hover:border-kinetic transition-all tariff-card" onclick="selectTariff('top', 15000)">
+              <div class="flex items-center gap-3">
+                <input type="radio" name="wTariff" value="top" class="text-kinetic focus:ring-kinetic">
+                <div>
+                  <div class="font-bold text-sm text-main-text flex items-center gap-1.5">
+                    TOP-Listing <span class="bg-kinetic text-white text-[10px] px-1.5 py-0.2 rounded font-extrabold">TOP</span>
+                  </div>
+                  <div class="text-xs text-sub-text">Vitrinaning eng boshida ko'rsatiladi</div>
+                </div>
+              </div>
+              <span class="font-bold text-sm text-kinetic">15 000 UZS/kun</span>
+            </label>
+          </div>
+
+          <!-- Step 4: Chek va Tasdiqlash -->
+          <div id="wizardStep4" class="hidden space-y-4">
+            <div class="bg-gray-50 border border-border-gray rounded-2xl p-4 text-xs space-y-2">
+              <div class="flex justify-between"><span class="text-sub-text">E'lon:</span> <span id="summaryTitle" class="font-bold text-main-text">-</span></div>
+              <div class="flex justify-between"><span class="text-sub-text">Tanlangan tarif:</span> <span id="summaryTariff" class="font-bold text-kinetic">Standart</span></div>
+              <div class="flex justify-between"><span class="text-sub-text">To'lov summasi:</span> <span id="summaryPrice" class="font-bold text-emerald-600">0 UZS</span></div>
+            </div>
+
+            <!-- Payment instructions if paid -->
+            <div id="paymentBox" class="hidden bg-soft-orange border border-kinetic/30 rounded-2xl p-4 text-xs space-y-2">
+              <h5 class="font-bold text-kinetic text-sm">To'lov rekvizitlari:</h5>
+              <p class="text-main-text">Quyidagi kartalardan biriga to'lov qiling va chek skrinshot havolasini kiriting:</p>
+              <div class="bg-white p-2.5 rounded-xl border border-border-gray font-mono text-[11px] space-y-1">
+                <div><strong>Click / Payme:</strong> 8600 1234 5678 9012 (Bahodir J.)</div>
+                <div><strong>Izoh:</strong> Topspot Ijara</div>
+              </div>
+              <div class="mt-2">
+                <label class="block font-semibold text-main-text mb-1">To'lov cheki skrinshot URL'i *</label>
+                <input type="url" id="wReceiptUrl" placeholder="https://t.me/c/... yoki skrinshot linki" class="w-full bg-white border border-border-gray rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-kinetic">
+              </div>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-2xl p-3 text-xs leading-relaxed">
+              ℹ️ E'lon yuborilgach, moderatsiya markazi (Admin CRM) tomonidan chek va ma'lumotlar tekshirilib, listing tasdiqlanadi.
+            </div>
+          </div>
+        </div>
+
+        <!-- Wizard Navigation Footer -->
+        <div class="bg-gray-50 px-6 py-4 border-t border-border-gray flex justify-between items-center">
+          <button id="wBtnPrev" onclick="prevWizardStep()" type="button" class="hidden text-xs font-bold text-sub-text hover:text-main-text px-4 py-2.5 rounded-xl border border-border-gray bg-white">
+            ← Orqaga
+          </button>
+          <div class="flex-1"></div>
+          <button id="wBtnNext" onclick="nextWizardStep()" type="button" class="bg-kinetic hover:bg-[#E64D00] text-white text-xs font-bold px-6 py-2.5 rounded-xl transition-all shadow-md">
+            Davom etish →
+          </button>
+          <button id="wBtnSubmit" onclick="submitListing()" type="button" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-6 py-2.5 rounded-xl transition-all shadow-md">
+            ✓ E'lonni yuborish
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 6. MODAL: AUTH & SECRET CRM LINK ==================== -->
+  <div id="authModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAuthModal()"></div>
+    <div class="relative min-h-screen flex items-center justify-center p-4">
+      <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden border border-border-gray">
+        <div class="bg-obsidian text-white p-5 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-kinetic"></span>
+            <h4 class="font-bold text-base">Topspot Kabinet</h4>
+          </div>
+          <button onclick="closeAuthModal()" class="text-gray-400 hover:text-white text-xl leading-none">&times;</button>
+        </div>
+        <div class="p-6 space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-main-text mb-1">Telefon raqam</label>
+            <input type="tel" id="authPhone" value="+998 " class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-main-text mb-1">Ism-familiya</label>
+            <input type="text" id="authName" placeholder="Bahodir Jo'rayev" class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
+          </div>
+          <button onclick="saveUserProfile()" class="w-full bg-kinetic hover:bg-[#E64D00] text-white font-bold py-2.5 rounded-xl text-sm transition-all shadow-md">
+            Tizimga kirish
+          </button>
+          <!-- Secret Admin CRM Access -->
+          <div class="pt-3 border-t border-border-gray flex justify-between items-center text-[10px] text-gray-400">
+            <span>Versiya 1.0.0 (MVP)</span>
+            <button onclick="openSecretCRM()" class="text-gray-400 hover:text-kinetic underline">Admin CRM</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 7. MODAL: ADMIN CRM (PASSWORD: admin777) ==================== -->
+  <div id="crmModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+    <div class="fixed inset-0 bg-black/70 backdrop-blur-sm" onclick="closeCRM()"></div>
+    <div class="relative min-h-screen flex items-center justify-center p-4">
+      <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden border border-border-gray">
+        <!-- CRM Header -->
+        <div class="bg-obsidian text-white p-5 flex items-center justify-between border-b border-white/10">
+          <div class="flex items-center gap-3">
+            <span class="bg-kinetic text-white text-xs font-black px-2 py-1 rounded">ADMIN</span>
+            <h3 class="font-bold text-lg">Topspot Boshqaruv Markazi (CRM)</h3>
+          </div>
+          <button onclick="closeCRM()" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+        </div>
+
+        <!-- CRM Content -->
+        <div class="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+          <!-- Live KPI Cards -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div class="bg-gray-50 border border-border-gray p-4 rounded-2xl">
+              <div class="text-xs text-sub-text font-semibold">Jami Listinglar</div>
+              <div id="crmTotalListings" class="text-2xl font-black text-main-text mt-1">8</div>
+            </div>
+            <div class="bg-amber-50 border border-amber-200 p-4 rounded-2xl">
+              <div class="text-xs text-amber-700 font-semibold">Kutilayotgan (Pending)</div>
+              <div id="crmPendingListings" class="text-2xl font-black text-amber-800 mt-1">0</div>
+            </div>
+            <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl">
+              <div class="text-xs text-emerald-700 font-semibold">Aktiv Listinglar</div>
+              <div id="crmApprovedListings" class="text-2xl font-black text-emerald-800 mt-1">8</div>
+            </div>
+            <div class="bg-orange-50 border border-orange-200 p-4 rounded-2xl">
+              <div class="text-xs text-kinetic font-semibold">Tushum (Monetizatsiya)</div>
+              <div id="crmTotalRevenue" class="text-xl font-black text-kinetic mt-1">115 000 UZS</div>
+            </div>
+          </div>
+
+          <!-- Moderation Queue -->
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="font-bold text-sm text-main-text">Moderatsiya Jadvallari (Tasdiqlash kutilmoqda)</h4>
+              <span class="text-xs text-sub-text">Real-vaqtda boshqaruv</span>
+            </div>
+            <div class="overflow-x-auto border border-border-gray rounded-2xl">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-gray-100 text-sub-text uppercase border-b border-border-gray">
+                  <tr>
+                    <th class="p-3">Obyekt</th>
+                    <th class="p-3">Toifa</th>
+                    <th class="p-3">Narx (Kun/Soat)</th>
+                    <th class="p-3">Egasi & Tel</th>
+                    <th class="p-3">Tarif</th>
+                    <th class="p-3">Chek</th>
+                    <th class="p-3">Status</th>
+                    <th class="p-3 text-right">Amal</th>
+                  </tr>
+                </thead>
+                <tbody id="crmTableBody" class="divide-y divide-border-gray">
+                  <!-- Injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 px-6 py-3 border-t border-border-gray text-right">
+          <button onclick="closeCRM()" class="text-xs font-bold bg-gray-200 hover:bg-gray-300 text-main-text px-4 py-2 rounded-xl transition-colors">
+            Yopish
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 8. MOBILE BOTTOM NAVIGATION ==================== -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-border-gray shadow-lg">
+    <div class="grid grid-cols-5 h-16 text-center text-[10px] font-semibold text-sub-text">
+      <button onclick="filterByCategory(null)" class="flex flex-col items-center justify-center hover:text-kinetic transition-colors active:text-kinetic">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+        <span>Bosh sahifa</span>
+      </button>
+
+      <button onclick="toggleMegaCatalog()" class="flex flex-col items-center justify-center hover:text-kinetic transition-colors">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <span>Katalog</span>
+      </button>
+
+      <!-- Center Add Button -->
+      <button onclick="openWizard()" class="flex flex-col items-center justify-center -mt-4">
+        <div class="w-12 h-12 bg-kinetic rounded-full flex items-center justify-center text-white shadow-lg shadow-kinetic/40">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" />
+          </svg>
+        </div>
+        <span class="mt-1 text-kinetic">E'lon berish</span>
+      </button>
+
+      <button onclick="filterFavorites()" class="flex flex-col items-center justify-center hover:text-kinetic transition-colors">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+        <span>Saralangan</span>
+      </button>
+
+      <button onclick="openAuthModal()" class="flex flex-col items-center justify-center hover:text-kinetic transition-colors">
+        <svg class="w-5 h-5 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+        <span>Kabinet</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== JAVASCRIPT APPLICATION CORE ==================== -->
+  <script>
+    // Initial Seed Data
+    const INITIAL_LISTINGS = [
+      {
+        id: "l-1",
+        title: "Chevrolet Onix 2024 Premier — kunlik ijara",
+        vertical: "mobility",
+        category_name: "Yengil avtomobillar",
+        daily_price: 250000,
+        hourly_price: 45000,
+        owner_name: "Sardor Karimov",
+        phone: "+998 90 123 45 67",
+        address: "Toshkent, Mirzo Ulug'bek",
+        tariff: "top",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
+      },
+      {
+        id: "l-2",
+        title: "Bosch GBH 2-26 DRE Professional Perforator",
+        vertical: "equipment",
+        category_name: "Qurilish asboblari",
+        daily_price: 80000,
+        hourly_price: 15000,
+        owner_name: "Anvar Jo'rayev",
+        phone: "+998 91 234 56 78",
+        address: "Toshkent, Sergeli",
+        tariff: "standard",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
+      },
+      {
+        id: "l-3",
+        title: "Sony FX3 Cinema Line + 24-70mm GM II Obektiv",
+        vertical: "equipment",
+        category_name: "Kamera & Video",
+        daily_price: 500000,
+        hourly_price: 80000,
+        owner_name: "Jasur Mirzayev",
+        phone: "+998 93 345 67 89",
+        address: "Toshkent, Chilonzor",
+        tariff: "vip",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
+      },
+      {
+        id: "l-4",
+        title: "Coworking individual ish o'rni — Regus City",
+        vertical: "realestate",
+        category_name: "Coworking",
+        daily_price: 120000,
+        hourly_price: 20000,
+        owner_name: "Aziza Tursunova",
+        phone: "+998 94 456 78 90",
+        address: "Toshkent, Amir Temur shox ko'chasi",
+        tariff: "top",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
+      },
+      {
+        id: "l-5",
+        title: "Sertifikatlangan Master Santexnik xizmati",
+        vertical: "specialists",
+        category_name: "Santexnik",
+        daily_price: 250000,
+        hourly_price: 40000,
+        owner_name: "Nodir Usta",
+        phone: "+998 97 765 43 21",
+        address: "Toshkent shahar bo'ylab",
+        tariff: "standard",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
+      },
+      {
+        id: "l-6",
+        title: "Chevrolet Tracker Redline 2024 — to'liq kasko",
+        vertical: "mobility",
+        category_name: "Yengil avtomobillar",
+        daily_price: 350000,
+        hourly_price: 60000,
+        owner_name: "Bobur Alimov",
+        phone: "+998 99 876 54 32",
+        address: "Toshkent, Yunusobod",
+        tariff: "vip",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
+      },
+      {
+        id: "l-7",
+        title: "Professional Fotostudiya — Cyclorama va softboxlar",
+        vertical: "realestate",
+        category_name: "Fotostudiya",
+        daily_price: 600000,
+        hourly_price: 90000,
+        owner_name: "Kamila Vohidova",
+        phone: "+998 90 987 65 43",
+        address: "Toshkent, Yakkasaroy",
+        tariff: "standard",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
+      },
+      {
+        id: "l-8",
+        title: "Professional Elektrik va Smart Home montaj ustasi",
+        vertical: "specialists",
+        category_name: "Elektrik",
+        daily_price: 300000,
+        hourly_price: 50000,
+        owner_name: "Alisher Ergashov",
+        phone: "+998 95 111 22 33",
+        address: "Toshkent shahar bo'ylab",
+        tariff: "top",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
+      }
+    ];
+
+    // State
+    let listings = [];
+    let activeCategory = null;
+    let favorites = new Set();
+    let currentStep = 1;
+    let wizardTariff = 'standard';
+    let wizardTariffPrice = 0;
+    let wizardGPS = { lat: null, lng: null };
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      // Load listings from localStorage or fallback
+      const stored = localStorage.getItem('topspot_listings_data');
+      if (stored) {
+        try { listings = JSON.parse(stored); } catch (e) { listings = INITIAL_LISTINGS; }
+      } else {
+        listings = INITIAL_LISTINGS;
+        saveListings();
+      }
+
+      // Load favorites
+      const favStored = localStorage.getItem('topspot_favs');
+      if (favStored) {
+        try { favorites = new Set(JSON.parse(favStored)); } catch (e) {}
+      }
+
+      // Render default listings
+      renderListings();
+      updateFavBadge();
+
+      // Setup MegaCatalog default
+      switchVerticalTab('mobility');
+
+      // Dismiss Splash after 1.5s
+      setTimeout(() => {
+        const splash = document.getElementById('splashScreen');
+        splash.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => splash.remove(), 500);
+      }, 1500);
+
+      // Auto detect GPS
+      requestUserGPS(false);
+    });
+
+    function saveListings() {
+      localStorage.setItem('topspot_listings_data', JSON.stringify(listings));
+    }
+
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+    // ==================== RENDERING LISTINGS ====================
+    function renderListings(itemsToRender = null) {
+      const grid = document.getElementById('productGrid');
+      let items = itemsToRender || listings.filter(l => l.status === 'approved');
+
+      // Filter by category if selected
+      if (activeCategory && !itemsToRender) {
+        items = items.filter(l => l.vertical === activeCategory);
+      }
+
+      document.getElementById('resultsCount').innerText = `${items.length} ta`;
+
+      if (items.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-16 text-center text-sub-text">
+            <div class="text-5xl mb-3">🔍</div>
+            <div class="text-base font-bold text-main-text">E'lonlar topilmadi</div>
+            <p class="text-xs mt-1">Ushbu toifada hozircha aktiv e'lon mavjud emas</p>
+            <button onclick="openWizard()" class="mt-4 bg-kinetic text-white text-xs font-bold px-4 py-2.5 rounded-xl">Yangi e'lon qo'shish</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = items.map(item => {
+        const isFav = favorites.has(item.id);
+        const hourlyTag = item.hourly_price ? `
+          <span class="absolute top-2.5 left-2.5 bg-soft-orange text-kinetic font-bold text-[10px] px-2 py-0.5 rounded-full shadow-sm">
+            ${formatNumber(item.hourly_price)} so'm/soat
+          </span>` : '';
+
+        const vipBadge = item.tariff === 'vip' ? `
+          <span class="absolute bottom-2.5 left-2.5 bg-yellow-400 text-yellow-950 font-black text-[9px] px-2 py-0.5 rounded-md shadow-sm">
+            VIP PIN
+          </span>` : item.tariff === 'top' ? `
+          <span class="absolute bottom-2.5 left-2.5 bg-kinetic text-white font-black text-[9px] px-2 py-0.5 rounded-md shadow-sm">
+            TOP
+          </span>` : '';
+
+        return `
+          <div class="bg-white rounded-2xl border border-border-gray overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col justify-between cursor-pointer">
+            <!-- 4/5 Aspect Ratio Image container -->
+            <div class="relative w-full aspect-[4/5] bg-gray-100 overflow-hidden">
+              <img src="${item.image || 'https://via.placeholder.com/400x500?text=Topspot'}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              
+              <!-- Badges -->
+              ${hourlyTag}
+              ${vipBadge}
+
+              <!-- Heart Button -->
+              <button onclick="toggleFav('${item.id}', event)" class="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-gray-500 hover:text-red-500 hover:scale-110 transition-all shadow-sm">
+                <svg class="w-4 h-4 ${isFav ? 'text-red-500 fill-red-500' : ''}" fill="${isFav ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Details -->
+            <div class="p-3 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="text-[10px] text-sub-text uppercase tracking-wider mb-0.5">${item.category_name}</div>
+                <h4 class="font-bold text-xs md:text-sm text-main-text line-clamp-2 leading-tight">${item.title}</h4>
+              </div>
+
+              <div class="mt-2.5 pt-2 border-t border-border-gray/60">
+                <!-- Status Badge -->
+                <div class="flex items-center gap-1.5 mb-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span class="text-[10px] font-semibold text-emerald-700">Bo'sh (Bugun)</span>
+                </div>
+
+                <!-- Price Row -->
+                <div class="flex items-baseline justify-between">
+                  <div>
+                    <span class="text-sm md:text-base font-extrabold text-main-text">${formatNumber(item.daily_price)}</span>
+                    <span class="text-[10px] text-sub-text"> so'm/kun</span>
+                  </div>
+                </div>
+
+                <!-- Location -->
+                <div class="text-[10px] text-sub-text flex items-center gap-1 mt-1 truncate">
+                  <svg class="w-3 h-3 text-gray-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  </svg>
+                  <span>${item.address}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ==================== SEARCH & FILTERS ====================
+    function handleSearch(query) {
+      if (!query.trim()) {
+        renderListings();
+        return;
+      }
+      const q = query.toLowerCase();
+      const filtered = listings.filter(l => 
+        l.status === 'approved' && (
+          l.title.toLowerCase().includes(q) ||
+          l.category_name.toLowerCase().includes(q) ||
+          l.address.toLowerCase().includes(q) ||
+          l.owner_name.toLowerCase().includes(q)
+        )
+      );
+      renderListings(filtered);
+    }
+
+    function filterByCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('.category-chip').forEach(btn => {
+        btn.classList.remove('bg-kinetic', 'text-white');
+        btn.classList.add('bg-soft-orange', 'text-main-text');
+      });
+      const activeBtn = document.getElementById(cat ? `chip-${cat}` : 'chip-all');
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-soft-orange', 'text-main-text');
+        activeBtn.classList.add('bg-kinetic', 'text-white');
+      }
+      renderListings();
+    }
+
+    function toggleFav(id, e) {
+      if (e) e.stopPropagation();
+      if (favorites.has(id)) {
+        favorites.delete(id);
+      } else {
+        favorites.add(id);
+      }
+      localStorage.setItem('topspot_favs', JSON.stringify(Array.from(favorites)));
+      updateFavBadge();
+      renderListings();
+    }
+
+    function updateFavBadge() {
+      const badge = document.getElementById('favBadge');
+      if (favorites.size > 0) {
+        badge.innerText = favorites.size;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function filterFavorites() {
+      const favList = listings.filter(l => favorites.has(l.id));
+      renderListings(favList);
+      document.getElementById('listingsHeading').innerText = "Saralangan ijaralar";
+    }
+
+    // ==================== GPS GEOLOCATION ====================
+    function requestUserGPS(showAlert = true) {
+      if (!navigator.geolocation) {
+        if (showAlert) alert("Brauzeringiz geolokatsiyani qo'llab-quvvatlamaydi.");
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(pos => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        // Simple Uzbekistan city approximation
+        let city = "Toshkent";
+        if (lat < 40 && lng < 67) city = "Samarqand";
+        else if (lat < 40.5 && lng < 65) city = "Buxoro";
+        else if (lat > 40.5 && lng > 71) city = "Farg'ona vodiysi";
+        
+        document.getElementById('currentCity').innerText = city;
+        if (showAlert) alert(`Joylashuvingiz aniqlandi: ${city} (${lat.toFixed(2)}, ${lng.toFixed(2)})`);
+      }, err => {
+        if (showAlert) alert("GPS ma'lumotlarini olishga ruxsat berilmadi yoki xatolik yuz berdi.");
+      }, { timeout: 5000 });
+    }
+
+    function getWizardGPS() {
+      if (!navigator.geolocation) return alert("Geolokatsiya mavjud emas");
+      navigator.geolocation.getCurrentPosition(pos => {
+        wizardGPS = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        document.getElementById('gpsResult').classList.remove('hidden');
+        document.getElementById('wAddress').value = `Toshkent, Koordinatalar: ${wizardGPS.lat.toFixed(4)}, ${wizardGPS.lng.toFixed(4)}`;
+      }, err => {
+        alert("GPS ruxsati olinmadi.");
+      });
+    }
+
+    // ==================== MEGA CATALOG ====================
+    const CATALOG_DATA = {
+      mobility: {
+        title: "🚗 Mobillik ijarasi",
+        groups: [
+          { name: "Yengil avtomobillar", items: ["Sedanlar (Onix, Gentra)", "Krossoverlar (Tracker)", "Premium (Malibu, Tahoe)"] },
+          { name: "Skuterlar & Samokatlar", items: ["Moto skuterlar", "Elektrosamokatlar", "Velosipedlar"] },
+          { name: "Yuk transporti & Maxsus", items: ["Labo / Damas", "Gazel / Isuzu", "Ekskavatorlar va kranlar"] }
+        ]
+      },
+      realestate: {
+        title: "🏢 Ko'chmas mulk ijarasi",
+        groups: [
+          { name: "Coworking & Ofis", items: ["Alohida stol", "Maxsus kabinet", "Muzokaralar xonasi"] },
+          { name: "Studiyalar", items: ["Fotostudiya", "Podkast & ovoz studiyasi", "Videostudiya"] },
+          { name: "Tadbirlar & Dam olish", items: ["Banket zallari", "Konferens-zallar", "Chorvoq dachalar"] }
+        ]
+      },
+      equipment: {
+        title: "🔧 Uskunalar & Texnika",
+        groups: [
+          { name: "Qurilish asboblari", items: ["Perforatorlar (Bosch, Makita)", "Payvandlash apparatlari", "Generatorlar"] },
+          { name: "Foto & Video apparatura", items: ["Kino kameralar (Sony FX3)", "Obektivlar & stabilizatorlar", "Dronlar (DJI)"] },
+          { name: "Ovoz va yorug'lik", items: ["Akustik kolonka va miksher", "Mikrofonlar (Rode, Shure)", "Sahna yorug'ligi"] }
+        ]
+      },
+      specialists: {
+        title: "👷 Mutaxassislar xizmati",
+        groups: [
+          { name: "Texnik ustalar", items: ["Santexnik usta", "Professional elektrik", "Isitish qozoni ustasi"] },
+          { name: "Yig'uvchilar & Montaj", items: ["Mebel yig'uvchi usta", "Konditsioner o'rnatuvchi", "Gipsokarton ustasi"] },
+          { name: "Media ustalari", items: ["Video operator", "Professional fotograf", "Ovoz rejissyori"] }
+        ]
+      }
+    };
+
+    function toggleMegaCatalog() {
+      const modal = document.getElementById('megaCatalogModal');
+      modal.classList.toggle('hidden');
+    }
+
+    function switchVerticalTab(key) {
+      document.querySelectorAll('.vertical-tab').forEach(b => {
+        b.classList.remove('bg-soft-orange', 'text-kinetic');
+        b.classList.add('text-main-text');
+      });
+      const active = document.getElementById(`vTab-${key}`);
+      if (active) {
+        active.classList.add('bg-soft-orange', 'text-kinetic');
+        active.classList.remove('text-main-text');
+      }
+
+      const data = CATALOG_DATA[key];
+      document.getElementById('catalogTabTitle').innerText = data.title;
+      const subgrid = document.getElementById('catalogSubgrid');
+      subgrid.innerHTML = data.groups.map(g => `
+        <div>
+          <h5 class="font-bold text-main-text mb-2 pb-1 border-b border-border-gray/50">${g.name}</h5>
+          <ul class="space-y-1.5 text-xs text-sub-text">
+            ${g.items.map(i => `<li onclick="searchCatalogItem('${i}')" class="hover:text-kinetic cursor-pointer transition-colors">• ${i}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('');
+    }
+
+    function searchCatalogItem(name) {
+      toggleMegaCatalog();
+      document.getElementById('searchInput').value = name;
+      handleSearch(name);
+    }
+
+    // ==================== 4-STEP WIZARD ====================
+    function openWizard() {
+      currentStep = 1;
+      updateWizardUI();
+      document.getElementById('wizardModal').classList.remove('hidden');
+    }
+
+    function closeWizard() {
+      document.getElementById('wizardModal').classList.add('hidden');
+    }
+
+    function updateWizardUI() {
+      // Hide all steps
+      [1, 2, 3, 4].forEach(s => {
+        document.getElementById(`wizardStep${s}`).classList.add('hidden');
+        const ind = document.getElementById(`step-ind-${s}`);
+        ind.className = s <= currentStep ? "border-b-2 border-kinetic pb-1 font-bold text-kinetic" : "border-b-2 border-white/20 pb-1 text-gray-400";
+      });
+
+      document.getElementById(`wizardStep${currentStep}`).classList.remove('hidden');
+
+      // Buttons
+      const btnPrev = document.getElementById('wBtnPrev');
+      const btnNext = document.getElementById('wBtnNext');
+      const btnSubmit = document.getElementById('wBtnSubmit');
+
+      if (currentStep === 1) {
+        btnPrev.classList.add('hidden');
+        btnNext.classList.remove('hidden');
+        btnSubmit.classList.add('hidden');
+      } else if (currentStep < 4) {
+        btnPrev.classList.remove('hidden');
+        btnNext.classList.remove('hidden');
+        btnSubmit.classList.add('hidden');
+      } else {
+        btnPrev.classList.remove('hidden');
+        btnNext.classList.add('hidden');
+        btnSubmit.classList.remove('hidden');
+
+        // Populate summary
+        document.getElementById('summaryTitle').innerText = document.getElementById('wTitle').value || 'Nomsiz e\'lon';
+        document.getElementById('summaryTariff').innerText = wizardTariff === 'vip' ? 'VIP Pin (35 000 UZS)' : wizardTariff === 'top' ? 'TOP-Listing (15 000 UZS)' : 'Standart (Bepul)';
+        document.getElementById('summaryPrice').innerText = wizardTariffPrice > 0 ? `${formatNumber(wizardTariffPrice)} UZS` : '0 UZS (Bepul)';
+        
+        const payBox = document.getElementById('paymentBox');
+        if (wizardTariffPrice > 0) payBox.classList.remove('hidden');
+        else payBox.classList.add('hidden');
+      }
+    }
+
+    function nextWizardStep() {
+      if (currentStep === 1) {
+        const title = document.getElementById('wTitle').value.trim();
+        const daily = document.getElementById('wDailyPrice').value;
+        const owner = document.getElementById('wOwnerName').value.trim();
+        const phone = document.getElementById('wPhone').value.trim();
+        if (!title || !daily || !owner || !phone) {
+          alert("Iltimos, yulduzcha (*) bilan belgilangan barcha maydonlarni to'ldiring!");
+          return;
+        }
+      } else if (currentStep === 2) {
+        const addr = document.getElementById('wAddress').value.trim();
+        if (!addr) {
+          alert("Iltimos, obyekt manzilini kiriting!");
+          return;
+        }
+      }
+      currentStep++;
+      updateWizardUI();
+    }
+
+    function prevWizardStep() {
+      currentStep--;
+      updateWizardUI();
+    }
+
+    function selectTariff(tariff, price) {
+      wizardTariff = tariff;
+      wizardTariffPrice = price;
+      document.querySelectorAll('.tariff-card').forEach(c => {
+        c.classList.remove('border-kinetic', 'bg-soft-orange');
+        c.classList.add('border-border-gray');
+      });
+      event.currentTarget.classList.add('border-kinetic', 'bg-soft-orange');
+    }
+
+    function submitListing() {
+      if (wizardTariffPrice > 0) {
+        const receipt = document.getElementById('wReceiptUrl').value.trim();
+        if (!receipt) {
+          alert("Iltimos, to'lov cheki skrinshot havolasini kiriting!");
+          return;
+        }
+      }
+
+      const newListing = {
+        id: `l-${Date.now()}`,
+        title: document.getElementById('wTitle').value.trim(),
+        vertical: document.getElementById('wVertical').value,
+        category_name: document.getElementById('wCategoryName').value.trim() || 'Ijara',
+        daily_price: parseInt(document.getElementById('wDailyPrice').value) || 0,
+        hourly_price: parseInt(document.getElementById('wHourlyPrice').value) || 0,
+        owner_name: document.getElementById('wOwnerName').value.trim(),
+        phone: document.getElementById('wPhone').value.trim(),
+        address: document.getElementById('wAddress').value.trim(),
+        description: document.getElementById('wDesc').value.trim(),
+        tariff: wizardTariff,
+        status: 'pending', // Awaiting Admin CRM confirmation!
+        receipt_url: document.getElementById('wReceiptUrl')?.value.trim() || '',
+        image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80',
+        created_at: new Date().toISOString()
+      };
+
+      listings.unshift(newListing);
+      saveListings();
+
+      alert("🎉 Tabriklaymiz! Sizning e'loningiz qabul qilindi va tekshiruvga yuborildi (Status: Pending).\n\nAdmin tasdiqlashi bilan asosiy vitrinada ko'rinadi.");
+      closeWizard();
+      renderListings();
+    }
+
+    // ==================== AUTH MODAL ====================
+    function openAuthModal() {
+      document.getElementById('authModal').classList.remove('hidden');
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+
+    function saveUserProfile() {
+      const name = document.getElementById('authName').value.trim();
+      const phone = document.getElementById('authPhone').value.trim();
+      if (name) {
+        document.getElementById('headerUserLabel').innerText = name.split(' ')[0];
+        alert(`Xush kelibsiz, ${name}!`);
+      }
+      closeAuthModal();
+    }
+
+    // ==================== 5. ADMIN CRM (PASSWORD: admin777) ====================
+    function openSecretCRM() {
+      closeAuthModal();
+      const pass = prompt("Topspot Admin CRM xavfsizlik parolini kiriting:");
+      if (pass === "admin777") {
+        renderCRM();
+        document.getElementById('crmModal').classList.remove('hidden');
+      } else if (pass !== null) {
+        alert("Xato parol! Kirish taqiqlandi.");
+      }
+    }
+
+    function closeCRM() {
+      document.getElementById('crmModal').classList.add('hidden');
+    }
+
+    function renderCRM() {
+      const total = listings.length;
+      const pending = listings.filter(l => l.status === 'pending').length;
+      const approved = listings.filter(l => l.status === 'approved').length;
+      const revenue = listings.reduce((acc, l) => {
+        if (l.tariff === 'vip') return acc + 35000;
+        if (l.tariff === 'top') return acc + 15000;
+        return acc;
+      }, 0);
+
+      document.getElementById('crmTotalListings').innerText = total;
+      document.getElementById('crmPendingListings').innerText = pending;
+      document.getElementById('crmApprovedListings').innerText = approved;
+      document.getElementById('crmTotalRevenue').innerText = `${formatNumber(revenue)} UZS`;
+
+      const tbody = document.getElementById('crmTableBody');
+      if (listings.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-sub-text">Listinglar mavjud emas</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = listings.map(l => `
+        <tr class="hover:bg-gray-50 transition-colors">
+          <td class="p-3 font-semibold text-main-text">${l.title}</td>
+          <td class="p-3 text-sub-text">${l.category_name}</td>
+          <td class="p-3 font-mono font-bold">${formatNumber(l.daily_price)} / ${l.hourly_price ? formatNumber(l.hourly_price) : '-'} UZS</td>
+          <td class="p-3 text-sub-text">${l.owner_name}<br><span class="text-[10px] text-gray-400">${l.phone}</span></td>
+          <td class="p-3">
+            <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded ${l.tariff === 'vip' ? 'bg-yellow-100 text-yellow-800' : l.tariff === 'top' ? 'bg-orange-100 text-kinetic' : 'bg-gray-100 text-gray-700'}">
+              ${l.tariff}
+            </span>
+          </td>
+          <td class="p-3">
+            ${l.receipt_url ? `<a href="${l.receipt_url}" target="_blank" class="text-kinetic underline font-bold">Chekni ko'rish</a>` : '<span class="text-gray-400">-</span>'}
+          </td>
+          <td class="p-3">
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${l.status === 'approved' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
+              ${l.status === 'approved' ? 'Tasdiqlangan' : 'Kutilmoqda'}
+            </span>
+          </td>
+          <td class="p-3 text-right">
+            ${l.status === 'pending' ? `
+              <button onclick="approveListing('${l.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2.5 py-1 rounded-lg text-[10px] shadow-sm">
+                Tasdiqlash ✓
+              </button>
+            ` : `
+              <button onclick="deleteListing('${l.id}')" class="text-red-500 hover:text-red-700 font-bold text-[10px]">
+                O'chirish
+              </button>
+            `}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function approveListing(id) {
+      const idx = listings.findIndex(l => l.id === id);
+      if (idx !== -1) {
+        listings[idx].status = 'approved';
+        saveListings();
+        renderCRM();
+        renderListings();
+        alert("Listing tasdiqlandi va asosiy vitrinada ko'rindi!");
+      }
+    }
+
+    function deleteListing(id) {
+      if (confirm("Rostdan ham bu listingni o'chirmoqchimisiz?")) {
+        listings = listings.filter(l => l.id !== id);
+        saveListings();
+        renderCRM();
+        renderListings();
+      }
+    }
+  </script>
+</body>
+</html>
