@@ -253,330 +253,858 @@
     </div>
   </main>
 
-  <!-- ==================== 4.5. MOBILE PROFILE VIEW (1:1 UZUM STYLE) ==================== -->
+  <!-- ==================== 4.5. MOBILE PROFILE & SUB-VIEWS (1:1 UZUM STYLE) ==================== -->
   <div id="profileView" class="hidden min-h-screen bg-[#F2F4F7] pb-24 animate-fadeIn">
-    <!-- Header Card -->
-    <div class="bg-gradient-to-b from-[#0B0F17] via-[#121824] to-[#1C1F2E] text-white rounded-b-3xl shadow-lg relative overflow-hidden pb-6 pt-4 px-4">
-      <!-- Glow ambient background effects -->
-      <div class="absolute -right-12 -top-12 w-48 h-48 bg-kinetic/20 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -left-12 -bottom-12 w-40 h-40 bg-kinetic/15 rounded-full blur-2xl pointer-events-none"></div>
+    <div class="max-w-md mx-auto min-h-screen relative bg-[#F2F4F7]">
 
-      <!-- Top Header Row -->
-      <div class="max-w-md mx-auto flex items-center justify-between relative z-10 mb-2">
-        <button onclick="switchMobileTab('home')" class="p-2 hover:bg-white/10 rounded-full transition-colors text-gray-300 hover:text-white" title="Bosh sahifaga qaytish">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
+      <!-- ==================== SUB-VIEW: ROOT PROFILE ==================== -->
+      <div id="profileSubView-root" class="profile-sub-view">
+        <!-- Header Card -->
+        <div class="bg-gradient-to-b from-[#0B0F17] via-[#121824] to-[#1C1F2E] text-white rounded-b-3xl shadow-lg relative overflow-hidden pb-6 pt-4 px-4">
+          <!-- Glow ambient background effects -->
+          <div class="absolute -right-12 -top-12 w-48 h-48 bg-kinetic/20 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -left-12 -bottom-12 w-40 h-40 bg-kinetic/15 rounded-full blur-2xl pointer-events-none"></div>
 
-        <h1 class="text-base font-bold text-white tracking-wide">Profil</h1>
+          <!-- Top Header Row -->
+          <div class="flex items-center justify-between relative z-10 mb-2">
+            <button onclick="switchMobileTab('home')" class="p-2 hover:bg-white/10 rounded-full transition-colors text-gray-300 hover:text-white" title="Bosh sahifaga qaytish">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
 
-        <button onclick="openEditProfileModal()" class="p-2 hover:bg-white/10 rounded-full transition-colors text-gray-300 hover:text-white" title="Sozlamalar">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-        </button>
+            <h1 class="text-base font-bold text-white tracking-wide">Profil</h1>
+
+            <button onclick="navigateToProfileSubView('settings')" class="p-2 hover:bg-white/10 rounded-full transition-colors text-gray-300 hover:text-white" title="Sozlamalar">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- User Card Info -->
+          <div class="text-center relative z-10">
+            <!-- Avatar -->
+            <div class="relative w-20 h-20 mx-auto">
+              <div onclick="navigateToProfileSubView('settings')" class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg cursor-pointer border-2 border-white/40 overflow-hidden group hover:scale-105 transition-transform">
+                <svg class="w-12 h-12 text-gray-400 mt-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              </div>
+              <button onclick="navigateToProfileSubView('settings')" class="absolute -bottom-1 -right-1 bg-kinetic hover:bg-[#E64D00] text-white w-6 h-6 rounded-full flex items-center justify-center shadow-md border-2 border-[#0B0F17] transition-transform active:scale-90">
+                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+              </button>
+            </div>
+
+            <button onclick="navigateToProfileSubView('settings')" class="text-[11px] text-orange-200 hover:text-white mt-1.5 underline font-medium inline-flex items-center gap-1">
+              O'zgartirish
+            </button>
+
+            <h2 id="profileNameDisplay" class="text-lg md:text-xl font-bold text-white tracking-tight mt-1">
+              Jo'rayev Bahodir
+            </h2>
+            <p id="profilePhoneDisplay" class="text-xs text-gray-300 font-mono tracking-wider mt-0.5">
+              +998 88 530 53 63
+            </p>
+
+            <div class="flex items-center justify-center gap-2 mt-2.5">
+              <span class="inline-flex items-center gap-1.5 bg-kinetic/20 border border-kinetic/40 text-kinetic text-[11px] font-bold px-3 py-0.5 rounded-full">
+                <span class="w-1.5 h-1.5 rounded-full bg-kinetic animate-ping"></span>
+                Topspot Tasdiqlangan Ijarachi
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ajratilgan Oq Bloklar (Uzum Card Groups) -->
+        <div class="px-4 py-4 space-y-3.5">
+          <!-- 1-Blok (Ijara amallari) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+            <div onclick="navigateToProfileSubView('orders')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">🛍</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm group-hover:text-kinetic transition-colors">Mening buyurtmalarim & bronlarim</div>
+                  <div class="text-[11px] text-sub-text">Faol ijara muddatlari va xaridlar</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span id="rootOrdersBadge" class="bg-kinetic/10 text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-full">1 ta faol</span>
+                <svg class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+
+            <div onclick="navigateToProfileSubView('orders')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">🔄</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm">Qaytarishlar</div>
+                  <div class="text-[11px] text-sub-text">Ijarani topshirish va qabul holati</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+
+            <div onclick="alert('Siz qoldirgan sharhlar: 3 ta ijobiy baho (5.0 yulduz).')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">⭐</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm">Sharhlarim</div>
+                  <div class="text-[11px] text-sub-text">Ijara egalariga qoldirilgan fikrlar</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+
+            <div onclick="navigateToProfileSubView('wallet')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">💳</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm group-hover:text-kinetic transition-colors">Topspot Hamyon / Balans</div>
+                  <div class="text-[11px] text-sub-text">Depozit va to'lovlar balansi</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span id="profileBalanceDisplay" class="font-bold text-kinetic text-xs">150 000 UZS</span>
+                <svg class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+
+            <div onclick="navigateToProfileSubView('orders')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">🚗</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm">Avtoprokat va transportlarim</div>
+                  <div class="text-[11px] text-sub-text">Band qilingan yoki berilgan mashinalar</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- 2-Blok (Ijara biznesi & Hamkorlik) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+            <div onclick="openWizard()" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">🏪</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm flex items-center gap-1.5 group-hover:text-kinetic transition-colors">
+                    Ijaraga beruvchi bo'lish
+                    <span class="bg-kinetic text-white text-[9px] font-black px-1.5 py-0.2 rounded">TOP</span>
+                  </div>
+                  <div class="text-[11px] text-sub-text">Mulk yoki texnikani ijaraga qo'yish</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+
+            <div onclick="navigateToProfileSubView('points')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">📍</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm">Topshirish punktini ochish</div>
+                  <div class="text-[11px] text-sub-text">Hamkorlik dasturi va franshiza</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+
+            <div onclick="alert('Topspot jamoasiga qo\'shiling: operator, logist yoki texnik mutaxassis sifatida rezyumeni @topspot_hr ga yuboring.')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">💼</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm">Topspotda ishlash</div>
+                  <div class="text-[11px] text-sub-text">Vakansiyalar va kuryerlik</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- 3-Blok (Shaxsiy imtiyozlar) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+            <div onclick="navigateToProfileSubView('promo')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">🎟</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm group-hover:text-kinetic transition-colors">Promokodlarim</div>
+                  <div class="text-[11px] text-sub-text">Maxsus chegirma vaucherlari</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span id="promoBadge" class="bg-soft-orange text-kinetic font-bold text-[10px] px-2 py-0.5 rounded-full">1 ta vaucher</span>
+                <svg class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4-Blok (Muloqot va tizim) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+            <div onclick="navigateToProfileSubView('chats')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">💬</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm group-hover:text-kinetic transition-colors">Chatlarim</div>
+                  <div class="text-[11px] text-sub-text">Ijara egalari va operator bilan xabarlar</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-kinetic animate-ping"></span>
+                <svg class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+
+            <div onclick="alert('Bildirishnomalar: Yangi buyurtma holatlari bu yerda xabar qilinadi.')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">🔔</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm">Bildirishnomalar</div>
+                  <div class="text-[11px] text-sub-text">Yangiliklar va ogohlantirishlar</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+
+            <div onclick="navigateToProfileSubView('settings')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">⚙️</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm group-hover:text-kinetic transition-colors">Sozlamalar</div>
+                  <div class="text-[11px] text-sub-text">Xavfsizlik va profil sozlamalari</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- 5-Blok (Til va Xarita) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+            <div onclick="navigateToProfileSubView('language')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">🇺🇿</span>
+                <div class="font-semibold text-main-text text-sm group-hover:text-kinetic transition-colors">Ilova tili</div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span id="currentLangLabel" class="text-xs text-sub-text font-medium">O'zbekcha</span>
+                <svg class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+
+            <div onclick="navigateToProfileSubView('points')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">🗺</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm group-hover:text-kinetic transition-colors">Xaritadagi topshirish punktlari</div>
+                  <div class="text-[11px] text-sub-text">142 ta faol punkt</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- 6-Blok (Ma'lumot va yordam) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+            <div onclick="navigateToProfileSubView('faq')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">❓</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm group-hover:text-kinetic transition-colors">Ma'lumotnoma (FAQ)</div>
+                  <div class="text-[11px] text-sub-text">Tez-tez beriladigan savollar</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+
+            <div onclick="window.open('https://t.me', '_blank')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">🌐</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm group-hover:text-kinetic transition-colors">Topspot ijtimoiy tarmoqlarda</div>
+                  <div class="text-[11px] text-sub-text">Telegram, Instagram, YouTube</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+
+            <div onclick="navigateToProfileSubView('contact')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
+              <div class="flex items-center gap-3">
+                <span class="text-xl w-7 text-center">✉️</span>
+                <div>
+                  <div class="font-semibold text-main-text text-sm group-hover:text-kinetic transition-colors">Biz bilan bog'lanish</div>
+                  <div class="text-[11px] text-sub-text">Qo'llab-quvvatlash xizmati (24/7)</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- 4. Pastki qism (Versiya va Chiqish) -->
+          <div class="pt-2 text-center">
+            <p class="text-xs text-sub-text font-medium mb-3">
+              Ilova versiyasi: 1.0.1 (Topspot Mobile)
+            </p>
+            <button onclick="handleLogout()" class="w-full bg-obsidian hover:bg-black text-white font-bold py-3.5 rounded-2xl text-sm transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 border border-white/10">
+              <svg class="w-4 h-4 text-kinetic" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Chiqish
+            </button>
+          </div>
+        </div>
       </div>
 
-      <!-- User Card Info -->
-      <div class="max-w-md mx-auto text-center relative z-10">
-        <!-- Avatar -->
-        <div class="relative w-20 h-20 mx-auto">
-          <div onclick="openEditProfileModal()" class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg cursor-pointer border-2 border-white/40 overflow-hidden group hover:scale-105 transition-transform">
-            <svg class="w-12 h-12 text-gray-400 mt-2" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+      <!-- ==================== SUB-VIEW: BUYURTMALARIM (ORDERS) ==================== -->
+      <div id="profileSubView-orders" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+        <!-- Sticky Header Bar -->
+        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+          <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90" title="Ortga">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
             </svg>
-          </div>
-          <button onclick="openEditProfileModal()" class="absolute -bottom-1 -right-1 bg-kinetic hover:bg-[#E64D00] text-white w-6 h-6 rounded-full flex items-center justify-center shadow-md border-2 border-[#0B0F17] transition-transform active:scale-90">
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
+          </button>
+          <h2 class="font-bold text-base text-main-text tracking-wide">Buyurtmalarim</h2>
+          <div class="w-7"></div>
+        </div>
+
+        <!-- 1:1 Uzum Style Tabs: Faollar & Barchasi -->
+        <div class="bg-white border-b border-gray-200 flex text-center sticky top-[49px] z-20">
+          <button id="orderTabBtn-active" onclick="switchOrdersTab('active')" class="flex-1 py-3 text-sm font-bold border-b-2 border-kinetic text-kinetic transition-all flex items-center justify-center gap-1.5">
+            <span>Faollar</span>
+            <span id="activeOrdersBadge" class="bg-kinetic/10 text-kinetic text-[11px] px-2 py-0.2 rounded-full font-bold">1</span>
+          </button>
+          <button id="orderTabBtn-all" onclick="switchOrdersTab('all')" class="flex-1 py-3 text-sm font-medium border-b-2 border-transparent text-sub-text hover:text-main-text transition-all flex items-center justify-center gap-1.5">
+            <span>Barchasi</span>
+            <span id="allOrdersBadge" class="bg-gray-100 text-sub-text text-[11px] px-2 py-0.2 rounded-full font-bold">2</span>
           </button>
         </div>
 
-        <button onclick="openEditProfileModal()" class="text-[11px] text-orange-200 hover:text-white mt-1.5 underline font-medium inline-flex items-center gap-1">
-          O'zgartirish
-        </button>
-
-        <h2 id="profileNameDisplay" class="text-lg md:text-xl font-bold text-white tracking-tight mt-1">
-          Jo'rayev Bahodir
-        </h2>
-        <p id="profilePhoneDisplay" class="text-xs text-gray-300 font-mono tracking-wider mt-0.5">
-          +998 88 530 53 63
-        </p>
-
-        <div class="flex items-center justify-center gap-2 mt-2.5">
-          <span class="inline-flex items-center gap-1.5 bg-kinetic/20 border border-kinetic/40 text-kinetic text-[11px] font-bold px-3 py-0.5 rounded-full">
-            <span class="w-1.5 h-1.5 rounded-full bg-kinetic animate-ping"></span>
-            Topspot Tasdiqlangan Ijarachi
-          </span>
+        <!-- Orders Content (Cards or Uzum Empty State) -->
+        <div id="ordersContent" class="p-4 space-y-3">
+          <!-- Populated dynamically by renderOrdersSubView() -->
         </div>
       </div>
-    </div>
 
-    <!-- 3. Ajratilgan Oq Bloklar (Uzum Card Groups) -->
-    <div class="max-w-md mx-auto px-4 py-4 space-y-3.5">
-      <!-- 1-Blok (Ijara amallari) -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
-        <div onclick="openBookingsModal()" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">🛍</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Mening buyurtmalarim & bronlarim</div>
-              <div class="text-[11px] text-sub-text">Faol ijara muddatlari</div>
-            </div>
-          </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
+      <!-- ==================== SUB-VIEW: CHATLARIM ==================== -->
+      <div id="profileSubView-chats" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+        <!-- Sticky Header Bar -->
+        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+          <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h2 class="font-bold text-base text-main-text">Chatlarim</h2>
+          <div class="w-7"></div>
         </div>
 
-        <div onclick="alert('Hozirda faol qaytarish arizalari mavjud emas.')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">🔄</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Qaytarishlar</div>
-              <div class="text-[11px] text-sub-text">Ijarani topshirish holati</div>
-            </div>
-          </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-
-        <div onclick="alert('Siz qoldirgan sharhlar: 3 ta ijobiy baho.')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">💬</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Sharhlarim</div>
-              <div class="text-[11px] text-sub-text">Ijara egalariga qoldirilgan fikrlar</div>
-            </div>
-          </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-
-        <div onclick="openWalletModal()" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">💳</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Topspot Hamyon / Balans</div>
-              <div class="text-[11px] text-sub-text">Depozit va to'lovlar balansi</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span id="profileBalanceDisplay" class="font-bold text-kinetic text-xs">150 000 UZS</span>
-            <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+        <div class="p-4 space-y-3">
+          <!-- Search in chats -->
+          <div class="relative">
+            <input type="text" placeholder="Xabarlarni qidirish..." class="w-full bg-white border border-gray-200 rounded-xl pl-9 pr-4 py-2.5 text-xs text-main-text placeholder-sub-text focus:outline-none focus:border-kinetic">
+            <svg class="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
-        </div>
 
-        <div onclick="alert('Faol transportlar: Chevrolet Onix (Bugun topshiriladi).')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">🚗</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Avtoprokat va transportlarim</div>
-              <div class="text-[11px] text-sub-text">Band qilingan yoki berilgan mashinalar</div>
-            </div>
-          </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-      </div>
-
-      <!-- 2-Blok (Ijara biznesi & Hamkorlik) -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
-        <div onclick="openWizard()" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">🏪</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm flex items-center gap-1.5">
-                Ijaraga beruvchi bo'lish
-                <span class="bg-kinetic text-white text-[9px] font-black px-1.5 py-0.2 rounded">TOP</span>
+          <!-- Chat List -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+            <div onclick="alert('Topspot 24/7 Operator bilan tezkor ulanish: Salom! Sizga qanday yordam bera olamiz?')" class="p-3.5 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
+              <div class="w-11 h-11 rounded-full bg-kinetic text-white flex items-center justify-center font-bold text-base flex-shrink-0">
+                TS
               </div>
-              <div class="text-[11px] text-sub-text">Mulk yoki texnikani ijaraga qo'yish</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                  <h4 class="font-bold text-sm text-main-text truncate">Topspot Qo'llab-quvvatlash</h4>
+                  <span class="text-[10px] text-kinetic font-bold">10:42</span>
+                </div>
+                <p class="text-xs text-sub-text truncate mt-0.5">Assalomu alaykum! Chevrolet Onix buyurtmangiz tasdiqlandi.</p>
+              </div>
             </div>
-          </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
 
-        <div onclick="alert('Topshirish punkti ochish franshizasi bo\'yicha tez orada arizalar ochiladi.')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">📍</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Topshirish punktini ochish</div>
-              <div class="text-[11px] text-sub-text">Hamkorlik dasturi</div>
+            <div onclick="alert('Chevrolet Onix egasi (Azizbek): Salom! Mashina toza holatda tayyor, soat 14:00 da topshira olaman.')" class="p-3.5 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
+              <div class="w-11 h-11 rounded-full bg-[#121824] text-white flex items-center justify-center font-bold text-base flex-shrink-0">
+                🚗
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                  <h4 class="font-bold text-sm text-main-text truncate">Azizbek R. (Onix Premier)</h4>
+                  <span class="text-[10px] text-gray-400">Kecha</span>
+                </div>
+                <p class="text-xs text-sub-text truncate mt-0.5">Mashina toza holatda tayyor, kutib olaman.</p>
+              </div>
             </div>
-          </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
 
-        <div onclick="alert('Topspot jamoasiga qo\'shiling: operator, logist yoki texnik mutaxassis sifatida.')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">💼</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Topspotda ishlash</div>
-              <div class="text-[11px] text-sub-text">Vakansiyalar va kuryerlik</div>
+            <div onclick="alert('Bosch Perforator egasi (Rustam): Uskuna soz holatda qabul qilindi, depozit qaytarildi.')" class="p-3.5 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
+              <div class="w-11 h-11 rounded-full bg-gray-100 text-main-text flex items-center justify-center font-bold text-base flex-shrink-0">
+                🔨
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                  <h4 class="font-bold text-sm text-main-text truncate">Rustam Usta (Bosch GBH)</h4>
+                  <span class="text-[10px] text-gray-400">03.10</span>
+                </div>
+                <p class="text-xs text-sub-text truncate mt-0.5">Depozit hamyoningizga muvaffaqiyatli qaytarildi.</p>
+              </div>
             </div>
           </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
         </div>
       </div>
 
-      <!-- 3-Blok (Shaxsiy imtiyozlar) -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
-        <div onclick="openPromoModal()" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">🎟</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Promokodlarim</div>
-              <div class="text-[11px] text-sub-text">Maxsus chegirma vaucherlari</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span id="promoBadge" class="bg-soft-orange text-kinetic font-bold text-[10px] px-2 py-0.5 rounded-full">1 ta vaucher</span>
-            <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+      <!-- ==================== SUB-VIEW: PROMOKODLARIM ==================== -->
+      <div id="profileSubView-promo" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+        <!-- Sticky Header Bar -->
+        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+          <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
             </svg>
+          </button>
+          <h2 class="font-bold text-base text-main-text">Promokodlarim</h2>
+          <div class="w-7"></div>
+        </div>
+
+        <div class="p-4 space-y-4">
+          <!-- Input card -->
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <h3 class="font-bold text-sm text-main-text mb-2">Yangi promokodni faollashtirish</h3>
+            <form onsubmit="applyPromocode(event)" class="space-y-3">
+              <input type="text" id="promoInput" placeholder="Masalan: TOPSPOT2026" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-xs uppercase font-mono tracking-wider focus:outline-none focus:border-kinetic" required>
+              <button type="submit" class="w-full bg-kinetic hover:bg-[#E64D00] text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md active:scale-95">
+                Faollashtirish
+              </button>
+            </form>
+          </div>
+
+          <!-- Active Vouchers -->
+          <h3 class="font-bold text-sm text-main-text px-1">Mavjud vaucherlar</h3>
+          <div class="space-y-3">
+            <div class="bg-white border-2 border-dashed border-kinetic/50 rounded-2xl p-4 relative overflow-hidden shadow-sm">
+              <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-soft-orange rounded-full pointer-events-none"></div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono font-black text-kinetic text-base tracking-wider">TOPSPOT2026</span>
+                <span class="bg-kinetic text-white text-[11px] font-black px-2.5 py-0.5 rounded-full">-10% Chegirma</span>
+              </div>
+              <p class="text-xs text-sub-text">Barcha turdagi avtomobil, texnika va ko'chmas mulk ijarasi uchun yagona chegirma vaucheri.</p>
+              <div class="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px]">
+                <span class="text-sub-text">Amal qilish muddati: 31.12.2026 gacha</span>
+                <button onclick="navigator.clipboard.writeText('TOPSPOT2026'); alert('Promokod nusxalandi: TOPSPOT2026')" class="text-kinetic font-bold hover:underline">
+                  Nusxa olish
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-2xl p-4 opacity-80">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-mono font-bold text-main-text text-sm">MOBIL50K</span>
+                <span class="bg-gray-100 text-sub-text text-[10px] font-bold px-2 py-0.5 rounded-full">50 000 UZS</span>
+              </div>
+              <p class="text-xs text-sub-text">Yengil avtomobillar uchun birinchi 3 kunlik ijarada amal qiladi.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 4-Blok (Muloqot va tizim) -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
-        <div onclick="alert('Chatlar bo\'limi: Hozirda yangi o\'qilmagan xabarlar yo\'q.')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">💬</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Chatlarim</div>
-              <div class="text-[11px] text-sub-text">Ijara egalari bilan xabarlar</div>
-            </div>
-          </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-
-        <div onclick="alert('Bildirishnomalar: Tizim muvaffaqiyatli ishlamoqda.')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">🔔</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Bildirishnomalar</div>
-              <div class="text-[11px] text-sub-text">Yangiliklar va ogohlantirishlar</div>
-            </div>
-          </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-
-        <div onclick="openEditProfileModal()" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">⚙️</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Sozlamalar</div>
-              <div class="text-[11px] text-sub-text">Xavfsizlik va profil sozlamalari</div>
-            </div>
-          </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-      </div>
-
-      <!-- 5-Blok (Til va Xarita) -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
-        <div onclick="alert('Hozirgi ilova tili: O\'zbekcha (Lotin).')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">🇺🇿</span>
-            <div class="font-semibold text-main-text text-sm">Ilova tili</div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <span class="text-xs text-sub-text font-medium">O'zbekcha</span>
-            <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+      <!-- ==================== SUB-VIEW: SOZLAMALAR ==================== -->
+      <div id="profileSubView-settings" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+        <!-- Sticky Header Bar -->
+        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+          <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
             </svg>
-          </div>
+          </button>
+          <h2 class="font-bold text-base text-main-text">Sozlamalar</h2>
+          <div class="w-7"></div>
         </div>
 
-        <div onclick="alert('Toshkent shahrida 142 ta topshirish va qabul qilish punkti faol.')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">🗺</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Xaritadagi topshirish punktlari</div>
-              <div class="text-[11px] text-sub-text">142 ta faol punkt</div>
+        <div class="p-4 space-y-4">
+          <!-- User Profile Form -->
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <h3 class="font-bold text-sm text-main-text mb-3">Shaxsiy ma'lumotlar</h3>
+            <form onsubmit="saveEditedProfile(event)" class="space-y-3">
+              <div>
+                <label class="block text-xs font-semibold text-main-text mb-1">To'liq ism</label>
+                <input type="text" id="editProfileName" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-xs text-main-text focus:outline-none focus:border-kinetic" required>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-main-text mb-1">Telefon raqam</label>
+                <input type="tel" id="editProfilePhone" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-xs text-main-text font-mono focus:outline-none focus:border-kinetic" required>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-main-text mb-1">Asosiy shahar / Hudud</label>
+                <select id="settingsCitySelect" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-xs text-main-text focus:outline-none focus:border-kinetic">
+                  <option value="Toshkent">Toshkent shahri</option>
+                  <option value="Samarqand">Samarqand</option>
+                  <option value="Buxoro">Buxoro</option>
+                  <option value="Namangan">Namangan</option>
+                  <option value="Andijon">Andijon</option>
+                  <option value="Farg'ona">Farg'ona</option>
+                </select>
+              </div>
+              <button type="submit" class="w-full bg-kinetic hover:bg-[#E64D00] text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md active:scale-95">
+                O'zgarishlarni saqlash
+              </button>
+            </form>
+          </div>
+
+          <!-- Preferences & Security -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+            <div class="p-3.5 flex items-center justify-between">
+              <div>
+                <div class="font-semibold text-main-text text-xs">Push bildirishnomalar</div>
+                <div class="text-[10px] text-sub-text">Buyurtma holati va eslatmalar</div>
+              </div>
+              <input type="checkbox" checked class="w-4 h-4 accent-kinetic cursor-pointer">
+            </div>
+            <div class="p-3.5 flex items-center justify-between">
+              <div>
+                <div class="font-semibold text-main-text text-xs">SMS xabarnomalar</div>
+                <div class="text-[10px] text-sub-text">Ijara muddati tugashi bo'yicha</div>
+              </div>
+              <input type="checkbox" checked class="w-4 h-4 accent-kinetic cursor-pointer">
+            </div>
+            <div class="p-3.5 flex items-center justify-between">
+              <div>
+                <div class="font-semibold text-main-text text-xs">Biometrik kirish (Face/Touch ID)</div>
+                <div class="text-[10px] text-sub-text">Ilovani xavfsiz ochish</div>
+              </div>
+              <input type="checkbox" checked class="w-4 h-4 accent-kinetic cursor-pointer">
+            </div>
+            <div onclick="alert('Kesh tozalash muvaffaqiyatli bajarildi.')" class="p-3.5 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
+              <span class="font-semibold text-main-text text-xs text-red-600">Keshni tozalash</span>
+              <span class="text-[11px] text-sub-text">14.2 MB</span>
             </div>
           </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
         </div>
       </div>
 
-      <!-- 6-Blok (Ma'lumot va yordam) -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
-        <div onclick="openFaqModal()" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">❓</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Ma'lumotnoma (FAQ)</div>
-              <div class="text-[11px] text-sub-text">Tez-tez beriladigan savollar</div>
-            </div>
-          </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
+      <!-- ==================== SUB-VIEW: ILOVA TILI ==================== -->
+      <div id="profileSubView-language" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+        <!-- Sticky Header Bar -->
+        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+          <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h2 class="font-bold text-base text-main-text">Ilova tili</h2>
+          <div class="w-7"></div>
         </div>
 
-        <div onclick="window.open('https://t.me', '_blank')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">🌐</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Topspot ijtimoiy tarmoqlarda</div>
-              <div class="text-[11px] text-sub-text">Telegram, Instagram, YouTube</div>
+        <div class="p-4 space-y-3">
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+            <div onclick="selectAppLanguage('O\'zbekcha')" class="p-4 flex items-center justify-between hover:bg-soft-orange/30 cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="text-xl">🇺🇿</span>
+                <div>
+                  <div class="font-bold text-sm text-main-text">O'zbekcha</div>
+                  <div class="text-[11px] text-sub-text">Lotin alifbosida</div>
+                </div>
+              </div>
+              <span class="w-5 h-5 rounded-full bg-kinetic text-white flex items-center justify-center text-xs font-bold">✓</span>
             </div>
-          </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
 
-        <div onclick="alert('Biz bilan bog\'lanish: +998 71 200 00 00 yoki Telegram @topspot_support')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <span class="text-xl w-7 text-center">✉️</span>
-            <div>
-              <div class="font-semibold text-main-text text-sm">Biz bilan bog'lanish</div>
-              <div class="text-[11px] text-sub-text">Qo'llab-quvvatlash xizmati (24/7)</div>
+            <div onclick="selectAppLanguage('Ўзбекча')" class="p-4 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="text-xl">🇺🇿</span>
+                <div>
+                  <div class="font-bold text-sm text-main-text">Ўзбекча</div>
+                  <div class="text-[11px] text-sub-text">Кирилл алифбосида</div>
+                </div>
+              </div>
+              <span class="w-5 h-5 rounded-full border border-gray-300"></span>
+            </div>
+
+            <div onclick="selectAppLanguage('Русский')" class="p-4 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="text-xl">🇷🇺</span>
+                <div>
+                  <div class="font-bold text-sm text-main-text">Русский</div>
+                  <div class="text-[11px] text-sub-text">Русский язык</div>
+                </div>
+              </div>
+              <span class="w-5 h-5 rounded-full border border-gray-300"></span>
+            </div>
+
+            <div onclick="selectAppLanguage('English')" class="p-4 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="text-xl">🇬🇧</span>
+                <div>
+                  <div class="font-bold text-sm text-main-text">English</div>
+                  <div class="text-[11px] text-sub-text">English language</div>
+                </div>
+              </div>
+              <span class="w-5 h-5 rounded-full border border-gray-300"></span>
             </div>
           </div>
-          <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
         </div>
       </div>
 
-      <!-- 4. Pastki qism (Versiya va Chiqish) -->
-      <div class="pt-2 text-center">
-        <p class="text-xs text-sub-text font-medium mb-3">
-          Ilova versiyasi: 1.0.1 (Topspot Mobile)
-        </p>
-        <button onclick="handleLogout()" class="w-full bg-obsidian hover:bg-black text-white font-bold py-3.5 rounded-2xl text-sm transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 border border-white/10">
-          <svg class="w-4 h-4 text-kinetic" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-          Chiqish
-        </button>
+      <!-- ==================== SUB-VIEW: TOPSHIRISH PUNKTLARI ==================== -->
+      <div id="profileSubView-points" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+        <!-- Sticky Header Bar -->
+        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+          <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h2 class="font-bold text-base text-main-text">Topshirish punktlari</h2>
+          <div class="w-7"></div>
+        </div>
+
+        <div class="p-4 space-y-3">
+          <div class="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 flex items-center justify-between">
+            <div>
+              <div class="text-xs text-sub-text">Shahardagi jami punktlar</div>
+              <div class="text-lg font-black text-main-text mt-0.5">142 ta faol PVS punkti</div>
+            </div>
+            <span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Barchasi ochiq
+            </span>
+          </div>
+
+          <!-- Points list -->
+          <div class="space-y-2.5">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+              <div class="flex items-start justify-between">
+                <div>
+                  <h4 class="font-bold text-sm text-main-text">Topspot Chilonzor PVS №1</h4>
+                  <p class="text-xs text-sub-text mt-1">Chilonzor tumani, Qatortol ko'chasi, 60-uy</p>
+                  <p class="text-[11px] text-emerald-600 font-medium mt-1">Har kuni: 09:00 — 21:00</p>
+                </div>
+                <span class="bg-soft-orange text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-md">800 m</span>
+              </div>
+              <button onclick="alert('Xaritada yo\'nalish ko\'rsatilmoqda: Chilonzor Qatortol 60')" class="w-full mt-3 bg-gray-50 hover:bg-soft-orange text-kinetic font-bold py-2 rounded-xl text-xs transition-colors border border-kinetic/20">
+                Marshrut olish
+              </button>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+              <div class="flex items-start justify-between">
+                <div>
+                  <h4 class="font-bold text-sm text-main-text">Topspot Yunusobod PVS №4</h4>
+                  <p class="text-xs text-sub-text mt-1">Yunusobod tumani, Amir Temur shox ko'chasi, 107B</p>
+                  <p class="text-[11px] text-emerald-600 font-medium mt-1">Har kuni: 09:00 — 21:00</p>
+                </div>
+                <span class="bg-soft-orange text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-md">2.4 km</span>
+              </div>
+              <button onclick="alert('Xaritada yo\'nalish ko\'rsatilmoqda: Yunusobod 107B')" class="w-full mt-3 bg-gray-50 hover:bg-soft-orange text-kinetic font-bold py-2 rounded-xl text-xs transition-colors border border-kinetic/20">
+                Marshrut olish
+              </button>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+              <div class="flex items-start justify-between">
+                <div>
+                  <h4 class="font-bold text-sm text-main-text">Topspot Mirzo Ulug'bek PVS №7</h4>
+                  <p class="text-xs text-sub-text mt-1">Mirzo Ulug'bek tumani, Buyuk Ipak Yo'li, 42</p>
+                  <p class="text-[11px] text-emerald-600 font-medium mt-1">Har kuni: 09:00 — 21:00</p>
+                </div>
+                <span class="bg-soft-orange text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-md">3.8 km</span>
+              </div>
+              <button onclick="alert('Xaritada yo\'nalish ko\'rsatilmoqda: Buyuk Ipak Yo\'li 42')" class="w-full mt-3 bg-gray-50 hover:bg-soft-orange text-kinetic font-bold py-2 rounded-xl text-xs transition-colors border border-kinetic/20">
+                Marshrut olish
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <!-- ==================== SUB-VIEW: MA'LUMOTNOMA (FAQ) ==================== -->
+      <div id="profileSubView-faq" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+        <!-- Sticky Header Bar -->
+        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+          <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h2 class="font-bold text-base text-main-text">Ma'lumotnoma (FAQ)</h2>
+          <div class="w-7"></div>
+        </div>
+
+        <div class="p-4 space-y-3">
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-1">
+            <h4 class="font-bold text-sm text-main-text">Topspot orqali qanday ijara olinadi?</h4>
+            <p class="text-xs text-sub-text leading-relaxed">Katalogdan kerakli avtomobil, uskuna yoki ko'chmas mulkni tanlang. Ijara muddatini belgilab, bron qiling va egasi bilan yoki topshirish punkti orqali qabul qilib oling.</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-1">
+            <h4 class="font-bold text-main-text text-sm">Depozit summasi qachon qaytariladi?</h4>
+            <p class="text-xs text-sub-text leading-relaxed">Obyekt yoki texnika soz holatda topshirilgach, depozit balansingizga 15 daqiqa ichida to'liq qaytariladi. Balansdagi mablag'ni istalgan payt kartangizga chiqarib olishingiz mumkin.</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-1">
+            <h4 class="font-bold text-main-text text-sm">E'lon berish qoidalari qanday?</h4>
+            <p class="text-xs text-sub-text leading-relaxed">Profil menyusidagi "Ijaraga beruvchi bo'lish" tugmasi orqali 4 bosqichli formani to'ldiring. Admin moderatsiyasidan so'ng e'loningiz barcha foydalanuvchilarga ko'rinadi.</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-1">
+            <h4 class="font-bold text-main-text text-sm">Ijara vaqtida buzilsa nima bo'ladi?</h4>
+            <p class="text-xs text-sub-text leading-relaxed">Har bir shartnoma raqamli dalolatnoma bilan himoyalangan. Ishlab chiqaruvchi nuqsoni bo'lsa egasi javobgar, noto'g'ri foydalanilsa depozit hisobidan qoplanadi.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SUB-VIEW: BIZ BILAN BOG'LANISH ==================== -->
+      <div id="profileSubView-contact" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+        <!-- Sticky Header Bar -->
+        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+          <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h2 class="font-bold text-base text-main-text">Biz bilan bog'lanish</h2>
+          <div class="w-7"></div>
+        </div>
+
+        <div class="p-4 space-y-3.5">
+          <!-- Call card -->
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-kinetic/10 text-kinetic flex items-center justify-center text-lg">
+                📞
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-main-text">Yagona koll-markaz (24/7)</h4>
+                <p class="text-xs text-sub-text font-mono">+998 71 200 00 00</p>
+              </div>
+            </div>
+            <a href="tel:+998712000000" class="bg-kinetic text-white text-xs font-bold px-3 py-1.5 rounded-xl">Qo'ng'iroq</a>
+          </div>
+
+          <!-- Telegram Bot card -->
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center text-lg">
+                ✈️
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-main-text">Telegram yordamchi bot</h4>
+                <p class="text-xs text-sub-text">@topspot_support</p>
+              </div>
+            </div>
+            <a href="https://t.me" target="_blank" class="border border-blue-500 text-blue-600 text-xs font-bold px-3 py-1.5 rounded-xl">Yozish</a>
+          </div>
+
+          <!-- Message Form -->
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <h4 class="font-bold text-sm text-main-text mb-2">To'g'ridan-to'g'ri xabar yuborish</h4>
+            <form onsubmit="event.preventDefault(); alert('Xabaringiz qabul qilindi. Tez orada operator siz bilan bog\'lanadi.'); navigateToProfileSubView('root');" class="space-y-3">
+              <textarea placeholder="Savol yoki taklifingizni yozing..." class="w-full border border-gray-200 rounded-xl p-3 text-xs text-main-text focus:outline-none focus:border-kinetic h-24 resize-none" required></textarea>
+              <button type="submit" class="w-full bg-kinetic text-white font-bold py-3 rounded-xl text-xs shadow-md">
+                Yuborish
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== SUB-VIEW: TOPSPOT HAMYON ==================== -->
+      <div id="profileSubView-wallet" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+        <!-- Sticky Header Bar -->
+        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+          <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h2 class="font-bold text-base text-main-text">Topspot Hamyon</h2>
+          <div class="w-7"></div>
+        </div>
+
+        <div class="p-4 space-y-4">
+          <!-- Balance Card -->
+          <div class="bg-gradient-to-br from-[#0B0F17] to-[#1C1F2E] text-white p-5 rounded-2xl shadow-lg relative overflow-hidden">
+            <div class="text-xs text-gray-400">Hozirgi mavjud balans</div>
+            <div id="subViewWalletBalance" class="text-3xl font-black text-white mt-1">150 000 UZS</div>
+            <div class="mt-4 flex items-center justify-between text-xs border-t border-white/10 pt-3">
+              <span class="text-gray-300">Depozitlar uchun yaroqli</span>
+              <span class="text-emerald-400 font-bold">Faol hisob ✓</span>
+            </div>
+          </div>
+
+          <!-- Top-up buttons -->
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <h4 class="font-bold text-sm text-main-text mb-2.5">Balansni to'ldirish (Click / Payme)</h4>
+            <div class="grid grid-cols-3 gap-2">
+              <button onclick="addWalletFunds(50000)" class="border border-kinetic text-kinetic hover:bg-soft-orange font-bold text-xs py-2.5 rounded-xl transition-all">
+                +50 000
+              </button>
+              <button onclick="addWalletFunds(100000)" class="border border-kinetic text-kinetic hover:bg-soft-orange font-bold text-xs py-2.5 rounded-xl transition-all">
+                +100 000
+              </button>
+              <button onclick="addWalletFunds(200000)" class="border border-kinetic text-kinetic hover:bg-soft-orange font-bold text-xs py-2.5 rounded-xl transition-all">
+                +200 000
+              </button>
+            </div>
+          </div>
+
+          <!-- Transactions History -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-4 py-3 border-b border-gray-100 font-bold text-xs text-main-text">
+              Oxirgi amallar tarixi
+            </div>
+            <div class="divide-y divide-gray-100 text-xs">
+              <div class="p-3.5 flex items-center justify-between">
+                <div>
+                  <div class="font-bold text-main-text">Hisob to'ldirildi (Click)</div>
+                  <div class="text-[10px] text-sub-text">Bugun, 11:20</div>
+                </div>
+                <span class="font-bold text-emerald-600">+150 000 UZS</span>
+              </div>
+              <div class="p-3.5 flex items-center justify-between">
+                <div>
+                  <div class="font-bold text-main-text">Chevrolet Onix depoziti</div>
+                  <div class="text-[10px] text-sub-text">Kecha, 18:45</div>
+                </div>
+                <span class="font-bold text-main-text">-350 000 UZS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -1743,19 +2271,62 @@
       }
     }
 
-    // ==================== PROFILE VIEW & TABS ====================
+    // ==================== 1:1 UZUM PROFILE & ORDERS ARCHITECTURE ====================
+    let userOrders = [
+      {
+        id: "TS-849201",
+        title: "Chevrolet Onix 2024 Premier",
+        category: "Yengil avtomobil",
+        image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=500&auto=format&fit=crop&q=80",
+        period: "Bugun 20:00 gacha",
+        daily_price: 350000,
+        total_price: 350000,
+        deposit: 1000000,
+        status: "active", // active | completed
+        owner_name: "Azizbek R.",
+        owner_phone: "+998 90 123 45 67",
+        address: "Chilonzor tumani, Qatortol 60 (PVS №1)",
+        created_at: "Bugun, 09:30"
+      },
+      {
+        id: "TS-849188",
+        title: "Bosch GBH 2-26 DRE Perforator",
+        category: "Qurilish asbobi",
+        image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=500&auto=format&fit=crop&q=80",
+        period: "Topshirilgan: Kecha",
+        daily_price: 80000,
+        total_price: 160000,
+        deposit: 200000,
+        status: "completed",
+        owner_name: "Rustam Usta",
+        owner_phone: "+998 93 456 78 90",
+        address: "Yunusobod tumani, Amir Temur 107B",
+        created_at: "03.10.2026, 14:15"
+      }
+    ];
+
+    let currentProfileSubView = 'root';
+    let currentOrdersTab = 'active'; // 'active' | 'all'
+
     function syncUserUI() {
       const nameElem = document.getElementById('profileNameDisplay');
       const phoneElem = document.getElementById('profilePhoneDisplay');
       const balElem = document.getElementById('profileBalanceDisplay');
+      const subBalElem = document.getElementById('subViewWalletBalance');
       const modalBalElem = document.getElementById('modalWalletBalance');
       const headerLabel = document.getElementById('headerUserLabel');
 
       if (nameElem) nameElem.innerText = currentUser.name;
       if (phoneElem) phoneElem.innerText = currentUser.phone;
       if (balElem) balElem.innerText = `${formatNumber(currentUser.balance)} UZS`;
+      if (subBalElem) subBalElem.innerText = `${formatNumber(currentUser.balance)} UZS`;
       if (modalBalElem) modalBalElem.innerText = `${formatNumber(currentUser.balance)} UZS`;
       if (headerLabel) headerLabel.innerText = currentUser.name.split(' ')[0] || 'Kabinet';
+
+      // Update badge counts
+      const activeCount = userOrders.filter(o => o.status === 'active').length;
+      const rootOrdersBadge = document.getElementById('rootOrdersBadge');
+      if (rootOrdersBadge) rootOrdersBadge.innerText = `${activeCount} ta faol`;
     }
 
     function switchMobileTab(tab) {
@@ -1776,6 +2347,7 @@
       if (tab === 'profile') {
         showcase.classList.add('hidden');
         profile.classList.remove('hidden');
+        navigateToProfileSubView('root');
         syncUserUI();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
@@ -1792,14 +2364,208 @@
       }
     }
 
-    function openEditProfileModal() {
-      document.getElementById('editProfileName').value = currentUser.name;
-      document.getElementById('editProfilePhone').value = currentUser.phone;
-      document.getElementById('editProfileModal').classList.remove('hidden');
+    function navigateToProfileSubView(subViewKey) {
+      currentProfileSubView = subViewKey;
+      document.querySelectorAll('.profile-sub-view').forEach(el => {
+        el.classList.add('hidden');
+      });
+
+      const target = document.getElementById(`profileSubView-${subViewKey}`);
+      if (target) {
+        target.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      if (subViewKey === 'orders') {
+        renderOrdersSubView();
+      } else if (subViewKey === 'settings') {
+        const nameInp = document.getElementById('editProfileName');
+        const phoneInp = document.getElementById('editProfilePhone');
+        if (nameInp) nameInp.value = currentUser.name;
+        if (phoneInp) phoneInp.value = currentUser.phone;
+      } else if (subViewKey === 'wallet') {
+        syncUserUI();
+      }
     }
 
-    function closeEditProfileModal() {
-      document.getElementById('editProfileModal').classList.add('hidden');
+    function switchOrdersTab(tab) {
+      currentOrdersTab = tab;
+      const activeBtn = document.getElementById('orderTabBtn-active');
+      const allBtn = document.getElementById('orderTabBtn-all');
+
+      if (!activeBtn || !allBtn) return;
+
+      if (tab === 'active') {
+        activeBtn.className = "flex-1 py-3 text-sm font-bold border-b-2 border-kinetic text-kinetic transition-all flex items-center justify-center gap-1.5";
+        allBtn.className = "flex-1 py-3 text-sm font-medium border-b-2 border-transparent text-sub-text hover:text-main-text transition-all flex items-center justify-center gap-1.5";
+      } else {
+        allBtn.className = "flex-1 py-3 text-sm font-bold border-b-2 border-kinetic text-kinetic transition-all flex items-center justify-center gap-1.5";
+        activeBtn.className = "flex-1 py-3 text-sm font-medium border-b-2 border-transparent text-sub-text hover:text-main-text transition-all flex items-center justify-center gap-1.5";
+      }
+
+      renderOrdersSubView();
+    }
+
+    function renderOrdersSubView() {
+      const container = document.getElementById('ordersContent');
+      if (!container) return;
+
+      const activeOrders = userOrders.filter(o => o.status === 'active');
+      const allOrders = userOrders;
+
+      // Update badge counts in tabs and root profile
+      const activeBadge = document.getElementById('activeOrdersBadge');
+      const allBadge = document.getElementById('allOrdersBadge');
+      const rootOrdersBadge = document.getElementById('rootOrdersBadge');
+      if (activeBadge) activeBadge.innerText = activeOrders.length;
+      if (allBadge) allBadge.innerText = allOrders.length;
+      if (rootOrdersBadge) rootOrdersBadge.innerText = `${activeOrders.length} ta faol`;
+
+      const displayedOrders = currentOrdersTab === 'active' ? activeOrders : allOrders;
+
+      if (displayedOrders.length === 0) {
+        if (currentOrdersTab === 'active') {
+          container.innerHTML = `
+            <div class="py-14 px-4 text-center">
+              <div class="w-20 h-20 mx-auto rounded-full bg-soft-orange flex items-center justify-center mb-4 shadow-sm border border-kinetic/20">
+                <svg class="w-10 h-10 text-kinetic" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+              </div>
+              <h3 class="text-base font-bold text-main-text mb-1.5">Faol buyurtmalar yo'q</h3>
+              <p class="text-xs text-sub-text max-w-xs mx-auto leading-relaxed mb-6 font-normal">
+                Bu yerda siz rasmiylashtirgan, lekin hali olmagan buyurtmalarni ko'rsatamiz
+              </p>
+              <button onclick="switchMobileTab('home')" class="bg-kinetic hover:bg-[#E64D00] text-white font-bold text-xs py-3 px-6 rounded-xl shadow-md transition-all active:scale-95">
+                Ijara katalogiga o'tish
+              </button>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="py-14 px-4 text-center">
+              <div class="w-20 h-20 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-4 shadow-sm border border-gray-200">
+                <svg class="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+              <h3 class="text-base font-bold text-main-text mb-1.5">Hozircha buyurtmalar yo'q</h3>
+              <p class="text-xs text-sub-text max-w-xs mx-auto leading-relaxed mb-6 font-normal">
+                Bu yerda barcha xaridlaringiz tarixini ko'rsatamiz
+              </p>
+              <button onclick="switchMobileTab('home')" class="bg-kinetic hover:bg-[#E64D00] text-white font-bold text-xs py-3 px-6 rounded-xl shadow-md transition-all active:scale-95">
+                Ijara boshlash
+              </button>
+            </div>
+          `;
+        }
+        return;
+      }
+
+      // Render order cards
+      container.innerHTML = displayedOrders.map(order => `
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <!-- Order Header Bar -->
+          <div class="p-3.5 border-b border-gray-100 flex items-center justify-between bg-gray-50/60">
+            <div class="flex items-center gap-2">
+              <span class="font-mono font-bold text-xs text-main-text">${order.id}</span>
+              <span class="text-[10px] text-sub-text">• ${order.created_at || 'Bugun'}</span>
+            </div>
+            ${order.status === 'active' ? `
+              <span class="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-200/50 text-emerald-700 text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                Faol ijara
+              </span>
+            ` : `
+              <span class="bg-gray-100 text-sub-text text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                Yakunlangan
+              </span>
+            `}
+          </div>
+
+          <!-- Order Content -->
+          <div class="p-3.5 flex gap-3">
+            <div class="w-20 h-20 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0 relative border border-gray-100">
+              <img src="${order.image}" alt="${order.title}" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 min-w-0">
+              <span class="text-[10px] text-kinetic font-bold uppercase tracking-wider">${order.category}</span>
+              <h4 class="font-bold text-xs text-main-text line-clamp-2 mt-0.5">${order.title}</h4>
+              <p class="text-[11px] text-sub-text mt-1 flex items-center gap-1 font-medium">
+                <span>📅</span> Muddat: ${order.period}
+              </p>
+              <div class="mt-1.5 flex items-baseline gap-2">
+                <span class="text-xs font-bold text-kinetic">${formatNumber(order.total_price)} UZS</span>
+                <span class="text-[10px] text-sub-text">(${formatNumber(order.daily_price)} / kun)</span>
+              </div>
+              ${order.address ? `
+                <p class="text-[10px] text-gray-400 truncate mt-1">📍 ${order.address}</p>
+              ` : ''}
+            </div>
+          </div>
+
+          <!-- Order Actions -->
+          <div class="p-3 bg-gray-50/80 border-t border-gray-100 flex items-center justify-between text-xs">
+            <div class="text-[11px] text-sub-text">
+              Egasi: <span class="font-bold text-main-text">${order.owner_name}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              ${order.status === 'active' ? `
+                <button onclick="alert('Topshirish punkti yoki egasi bilan bog\'lanish: ${order.owner_phone}')" class="bg-white border border-gray-200 hover:border-kinetic text-main-text hover:text-kinetic text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all shadow-2xs">
+                  Bog'lanish
+                </button>
+                <button onclick="finishOrder('${order.id}')" class="bg-kinetic hover:bg-[#E64D00] text-white text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all shadow-sm">
+                  Topshirish
+                </button>
+              ` : `
+                <button onclick="repeatOrder('${order.id}')" class="border border-kinetic text-kinetic hover:bg-soft-orange text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all">
+                  Qayta ijara
+                </button>
+              `}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function finishOrder(id) {
+      const o = userOrders.find(x => x.id === id);
+      if (o) {
+        if (confirm(`"${o.title}" ijarasini topshirib, yakunlamoqchimisiz?\nDepozit (${formatNumber(o.deposit)} UZS) hisobingizga qaytariladi.`)) {
+          o.status = 'completed';
+          o.period = "Topshirildi (Bugun)";
+          currentUser.balance += o.deposit;
+          localStorage.setItem('topspot_user', JSON.stringify(currentUser));
+          syncUserUI();
+          renderOrdersSubView();
+          alert(`Ijara muvaffaqiyatli topshirildi!\nDepozit (${formatNumber(o.deposit)} UZS) hamyoningizga qaytarildi.`);
+        }
+      }
+    }
+
+    function repeatOrder(id) {
+      const o = userOrders.find(x => x.id === id);
+      if (o) {
+        const newOrder = {
+          ...o,
+          id: "TS-" + Math.floor(100000 + Math.random() * 900000),
+          period: "Bugun 20:00 gacha",
+          status: "active",
+          created_at: "Bugun, hozir"
+        };
+        userOrders.unshift(newOrder);
+        currentOrdersTab = 'active';
+        switchOrdersTab('active');
+        syncUserUI();
+        alert(`"${o.title}" qayta rasmiylashtirildi va faol buyurtmalarga qo'shildi!`);
+      }
+    }
+
+    function selectAppLanguage(lang) {
+      const label = document.getElementById('currentLangLabel');
+      if (label) label.innerText = lang;
+      alert(`Ilova tili "${lang}" ga muvaffaqiyatli o'zgartirildi.`);
+      navigateToProfileSubView('root');
     }
 
     function saveEditedProfile(e) {
@@ -1810,17 +2576,8 @@
       if (p) currentUser.phone = p;
       localStorage.setItem('topspot_user', JSON.stringify(currentUser));
       syncUserUI();
-      closeEditProfileModal();
+      navigateToProfileSubView('root');
       alert("Profil ma'lumotlari muvaffaqiyatli saqlandi!");
-    }
-
-    function openWalletModal() {
-      syncUserUI();
-      document.getElementById('walletModal').classList.remove('hidden');
-    }
-
-    function closeWalletModal() {
-      document.getElementById('walletModal').classList.add('hidden');
     }
 
     function addWalletFunds(amount) {
@@ -1830,42 +2587,30 @@
       alert(`Hisobingiz ${formatNumber(amount)} UZS ga to'ldirildi!\nYangi balans: ${formatNumber(currentUser.balance)} UZS`);
     }
 
-    function openBookingsModal() {
-      document.getElementById('bookingsModal').classList.remove('hidden');
-    }
-
-    function closeBookingsModal() {
-      document.getElementById('bookingsModal').classList.add('hidden');
-    }
-
-    function openPromoModal() {
-      document.getElementById('promoModal').classList.remove('hidden');
-    }
-
-    function closePromoModal() {
-      document.getElementById('promoModal').classList.add('hidden');
-    }
-
     function applyPromocode(e) {
       e.preventDefault();
       const code = document.getElementById('promoInput').value.trim().toUpperCase();
       if (code === 'TOPSPOT2026') {
         const badge = document.getElementById('promoBadge');
         if (badge) badge.innerText = "Faol (10%)";
-        alert("Tabriklaymiz! 'TOPSPOT2026' promokodi faollashtirildi: 10% chegirma berildi.");
-        closePromoModal();
+        alert("Tabriklaymiz! 'TOPSPOT2026' promokodi faollashtirildi: barcha ijaralarga 10% chegirma berildi.");
+        navigateToProfileSubView('root');
       } else {
         alert("Kiritilgan promokod noto'g'ri yoki muddati o'tgan.");
       }
     }
 
-    function openFaqModal() {
-      document.getElementById('faqModal').classList.remove('hidden');
-    }
-
-    function closeFaqModal() {
-      document.getElementById('faqModal').classList.add('hidden');
-    }
+    // Compatibility bridge for any legacy modal buttons
+    function openEditProfileModal() { navigateToProfileSubView('settings'); }
+    function closeEditProfileModal() { navigateToProfileSubView('root'); }
+    function openWalletModal() { navigateToProfileSubView('wallet'); }
+    function closeWalletModal() { navigateToProfileSubView('root'); }
+    function openBookingsModal() { navigateToProfileSubView('orders'); }
+    function closeBookingsModal() { navigateToProfileSubView('root'); }
+    function openPromoModal() { navigateToProfileSubView('promo'); }
+    function closePromoModal() { navigateToProfileSubView('root'); }
+    function openFaqModal() { navigateToProfileSubView('faq'); }
+    function closeFaqModal() { navigateToProfileSubView('root'); }
 
     function handleLogout() {
       if (confirm("Rostdan ham akkauntdan chiqmoqchimisiz?")) {
