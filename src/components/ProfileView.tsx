@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { formatPrice } from '@/lib/geolocation';
 
 interface ProfileViewProps {
@@ -11,6 +11,7 @@ interface ProfileViewProps {
 type SubViewKey =
   | 'root'
   | 'orders'
+  | 'reviews'
   | 'chats'
   | 'promo'
   | 'settings'
@@ -36,11 +37,42 @@ interface OrderItem {
   created_at: string;
 }
 
+interface ReviewPendingItem {
+  orderId: string;
+  title: string;
+  category: string;
+  image: string;
+  owner_name: string;
+  completed_date?: string;
+}
+
+interface ReviewCompletedItem {
+  orderId: string;
+  title: string;
+  category: string;
+  image: string;
+  owner_name: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
+const STAR_LABELS: Record<number, string> = {
+  1: "Juda yomon (1.0)",
+  2: "Qoniqarsiz (2.0)",
+  3: "O'rtacha (3.0)",
+  4: "Yaxshi (4.0)",
+  5: "A'lo darajada! (5.0)",
+};
+
 export default function ProfileView({ onBackToHome, onOpenWizard }: ProfileViewProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [user, setUser] = useState({
     name: "Jo'rayev Bahodir",
     phone: '+998 88 530 53 63',
     balance: 150000,
+    photo_url: '',
   });
 
   const [currentSubView, setCurrentSubView] = useState<SubViewKey>('root');
@@ -48,6 +80,37 @@ export default function ProfileView({ onBackToHome, onOpenWizard }: ProfileViewP
   const [currentLang, setCurrentLang] = useState("O'zbekcha");
   const [promoInput, setPromoInput] = useState('');
   const [promoApplied, setPromoApplied] = useState(false);
+
+  // Reviews State
+  const [reviewsTab, setReviewsTab] = useState<'pending' | 'completed'>('pending');
+  const [reviewsPending, setReviewsPending] = useState<ReviewPendingItem[]>([
+    {
+      orderId: 'TS-849188',
+      title: 'Bosch GBH 2-26 DRE Professional Perforator',
+      category: 'Qurilish asboblari',
+      image: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=500&auto=format&fit=crop&q=80',
+      owner_name: 'Rustam Usta',
+      completed_date: '03.10.2026',
+    },
+  ]);
+  const [reviewsCompleted, setReviewsCompleted] = useState<ReviewCompletedItem[]>([
+    {
+      orderId: 'TS-847291',
+      title: 'Sony FX3 Cinema Line + 24-70mm GM II Obektiv',
+      category: 'Kamera & Video',
+      image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80',
+      owner_name: 'Jasur Mirzayev',
+      rating: 5,
+      comment: "Juda a'lo darajadagi uskuna! Toza va texnik soz holatda topshirildi. Suratga olish jarayoni a'lo o'tdi, tavsiya qilaman.",
+      date: '28.09.2026',
+    },
+  ]);
+
+  // Review Modal State
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [reviewTarget, setReviewTarget] = useState<ReviewPendingItem | null>(null);
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState('');
 
   const [orders, setOrders] = useState<OrderItem[]>([
     {
@@ -95,12 +158,37 @@ export default function ProfileView({ onBackToHome, onOpenWizard }: ProfileViewP
           name: parsed.name || prev.name,
           phone: parsed.phone || prev.phone,
           balance: parsed.balance !== undefined ? parsed.balance : prev.balance,
+          photo_url: parsed.photo_url || prev.photo_url,
         }));
         setEditName(parsed.name || user.name);
         setEditPhone(parsed.phone || user.phone);
       } catch {}
     }
+    const savedLang = localStorage.getItem('topspot_lang');
+    if (savedLang) {
+      if (savedLang === 'ru') setCurrentLang('Русский');
+      else if (savedLang === 'en') setCurrentLang('English');
+      else setCurrentLang("O'zbekcha");
+    }
   }, []);
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert("Iltimos, rasm faylini tanlang (PNG, JPG, WebP).");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const result = evt.target?.result as string;
+      const updated = { ...user, photo_url: result };
+      setUser(updated);
+      localStorage.setItem('topspot_user', JSON.stringify(updated));
+      alert("Profil rasmi muvaffaqiyatli o'zgartirildi!");
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,6 +206,7 @@ export default function ProfileView({ onBackToHome, onOpenWizard }: ProfileViewP
         name: 'Mehmon',
         phone: '+998 -- --- -- --',
         balance: 0,
+        photo_url: '',
       });
       onBackToHome();
     }
@@ -142,6 +231,37 @@ export default function ProfileView({ onBackToHome, onOpenWizard }: ProfileViewP
     alert(`Hisobingiz ${formatPrice(amount)} UZS ga to'ldirildi! Yangi balans: ${formatPrice(newBal)} UZS`);
   };
 
+  const handleOpenReview = (item: ReviewPendingItem) => {
+    setReviewTarget(item);
+    setReviewRating(5);
+    setReviewComment('');
+    setReviewModalOpen(true);
+  };
+
+  const handleSubmitReview = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reviewTarget) return;
+
+    setReviewsPending((prev) => prev.filter((r) => r.orderId !== reviewTarget.orderId));
+    setReviewsCompleted((prev) => [
+      {
+        orderId: reviewTarget.orderId,
+        title: reviewTarget.title,
+        category: reviewTarget.category,
+        image: reviewTarget.image,
+        owner_name: reviewTarget.owner_name,
+        rating: reviewRating,
+        comment: reviewComment || "A'lo darajadagi xizmat!",
+        date: 'Bugun',
+      },
+      ...prev,
+    ]);
+
+    setReviewModalOpen(false);
+    setReviewsTab('completed');
+    alert("🎉 Rahmat! Sharhingiz muvaffaqiyatli qabul qilindi va e'lon qilindi.");
+  };
+
   const handleFinishOrder = (id: string) => {
     const o = orders.find((x) => x.id === id);
     if (o) {
@@ -163,8 +283,40 @@ export default function ProfileView({ onBackToHome, onOpenWizard }: ProfileViewP
         const updated = { ...user, balance: newBal };
         setUser(updated);
         localStorage.setItem('topspot_user', JSON.stringify(updated));
-        alert(`Ijara muvaffaqiyatli topshirildi!\nDepozit (${formatPrice(o.deposit)} UZS) hamyoningizga qaytarildi.`);
+
+        // Add to pending reviews if not already reviewed
+        const pendingItem: ReviewPendingItem = {
+          orderId: o.id,
+          title: o.title,
+          category: o.category,
+          image: o.image,
+          owner_name: o.owner_name,
+          completed_date: 'Bugun',
+        };
+        if (!reviewsPending.some((r) => r.orderId === o.id) && !reviewsCompleted.some((r) => r.orderId === o.id)) {
+          setReviewsPending((prev) => [pendingItem, ...prev]);
+        }
+
+        const rateNow = confirm(
+          `Ijara muvaffaqiyatli topshirildi!\nDepozit (${formatPrice(
+            o.deposit
+          )} UZS) hamyoningizga qaytarildi.\n\n"${o.title}" bo'yicha baho va sharh qoldirasizmi?`
+        );
+        if (rateNow) {
+          handleOpenReview(pendingItem);
+        }
       }
+    }
+  };
+
+  const handleContactOwner = (o: OrderItem) => {
+    const choice = confirm(
+      `Topspot Aloqa Xizmati\n\nObyekt: ${o.title}\nEgasi: ${o.owner_name}\nTelefon: ${o.owner_phone}\n\nQo'ng'iroq qilish uchun "OK" bosing. Bekor qilinsa, Telegram ochiladi.`
+    );
+    if (choice) {
+      window.location.href = `tel:${o.owner_phone.replace(/\s+/g, '')}`;
+    } else {
+      window.open('https://t.me', '_blank');
     }
   };
 
@@ -227,27 +379,41 @@ export default function ProfileView({ onBackToHome, onOpenWizard }: ProfileViewP
 
               {/* User Card Info */}
               <div className="text-center relative z-10">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleAvatarChange}
+                />
                 <div className="relative w-20 h-20 mx-auto">
                   <div
-                    onClick={() => setCurrentSubView('settings')}
+                    onClick={() => fileInputRef.current?.click()}
                     className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg cursor-pointer border-2 border-white/40 overflow-hidden group hover:scale-105 transition-transform"
                   >
-                    <svg className="w-12 h-12 text-gray-400 mt-2" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                    </svg>
+                    {user.photo_url ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img src={user.photo_url} alt={user.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <svg className="w-12 h-12 text-gray-400 mt-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                      </svg>
+                    )}
                   </div>
                   <button
-                    onClick={() => setCurrentSubView('settings')}
+                    onClick={() => fileInputRef.current?.click()}
                     className="absolute -bottom-1 -right-1 bg-kinetic hover:bg-[#E64D00] text-white w-6 h-6 rounded-full flex items-center justify-center shadow-md border-2 border-[#0B0F17] transition-transform active:scale-90"
+                    title="Rasm yuklash"
                   >
-                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </button>
                 </div>
 
                 <button
-                  onClick={() => setCurrentSubView('settings')}
+                  onClick={() => fileInputRef.current?.click()}
                   className="text-[11px] text-orange-200 hover:text-white mt-1.5 underline font-medium inline-flex items-center gap-1"
                 >
                   O&apos;zgartirish
@@ -313,19 +479,24 @@ export default function ProfileView({ onBackToHome, onOpenWizard }: ProfileViewP
                 </div>
 
                 <div
-                  onClick={() => alert("Siz qoldirgan sharhlar: 3 ta ijobiy baho (5.0 yulduz).")}
-                  className="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer"
+                  onClick={() => setCurrentSubView('reviews')}
+                  className="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group"
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-xl w-7 text-center">⭐</span>
                     <div>
-                      <div className="font-semibold text-main-text text-sm">Sharhlarim</div>
+                      <div className="font-semibold text-main-text text-sm group-hover:text-kinetic transition-colors">Sharhlarim</div>
                       <div className="text-[11px] text-sub-text">Ijara egalariga qoldirilgan fikrlar</div>
                     </div>
                   </div>
-                  <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  <div className="flex items-center gap-1.5">
+                    <span className="bg-kinetic/10 text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-full">
+                      {reviewsPending.length} ta kutyapti
+                    </span>
+                    <svg className="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
 
                 <div
@@ -756,8 +927,8 @@ export default function ProfileView({ onBackToHome, onOpenWizard }: ProfileViewP
                         {order.status === 'active' ? (
                           <>
                             <button
-                              onClick={() => alert(`Topshirish punkti yoki egasi bilan bog'lanish: ${order.owner_phone}`)}
-                              className="bg-white border border-gray-200 hover:border-kinetic text-main-text hover:text-kinetic text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all"
+                              onClick={() => handleContactOwner(order)}
+                              className="bg-white border border-gray-200 hover:border-kinetic text-main-text hover:text-kinetic text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all shadow-2xs"
                             >
                               Bog&apos;lanish
                             </button>
@@ -780,6 +951,156 @@ export default function ProfileView({ onBackToHome, onOpenWizard }: ProfileViewP
                     </div>
                   </div>
                 ))
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ==================== SUB-VIEW: MENING SHARHLARIM (1:1 UZUM STYLE) ==================== */}
+        {currentSubView === 'reviews' && (
+          <div className="min-h-screen bg-[#F2F4F7] overflow-y-auto pb-10">
+            {/* Sticky Header Bar */}
+            <div className="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3.5 flex items-center justify-between shadow-xs">
+              <button
+                onClick={() => setCurrentSubView('root')}
+                className="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90"
+                title="Ortga"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <h2 className="font-bold text-base text-main-text tracking-wide">Mening sharhlarim</h2>
+              <div className="w-7" />
+            </div>
+
+            {/* 1:1 Uzum Pill Selector Tabs: Baholashni kutyapti & Baholangan */}
+            <div className="bg-white border-b border-[#E4E7ED] p-2.5 flex items-center justify-center gap-2 sticky top-[53px] z-40 shadow-2xs">
+              <button
+                onClick={() => setReviewsTab('pending')}
+                className={`px-5 py-2 rounded-full text-xs transition-all flex items-center gap-1.5 ${
+                  reviewsTab === 'pending'
+                    ? 'font-bold bg-[#1F2026] text-white shadow-sm'
+                    : 'font-medium text-sub-text hover:text-main-text'
+                }`}
+              >
+                <span>Baholashni kutyapti</span>
+                <span className="opacity-90 font-mono">({reviewsPending.length})</span>
+              </button>
+              <button
+                onClick={() => setReviewsTab('completed')}
+                className={`px-5 py-2 rounded-full text-xs transition-all flex items-center gap-1.5 ${
+                  reviewsTab === 'completed'
+                    ? 'font-bold bg-[#1F2026] text-white shadow-sm'
+                    : 'font-medium text-sub-text hover:text-main-text'
+                }`}
+              >
+                <span>Baholangan</span>
+                <span className="opacity-90 font-mono">({reviewsCompleted.length})</span>
+              </button>
+            </div>
+
+            {/* Reviews Content */}
+            <div className="p-4 space-y-3">
+              {reviewsTab === 'pending' ? (
+                reviewsPending.length === 0 ? (
+                  <div className="py-14 px-4 text-center">
+                    <div className="w-20 h-20 mx-auto rounded-full bg-soft-orange flex items-center justify-center mb-4 shadow-sm border border-kinetic/20">
+                      <svg className="w-10 h-10 text-kinetic" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-base font-bold text-main-text mb-1.5">
+                      Xarid qilgandan keyin bu yerda baholash uchun tovarlar paydo bo‘ladi
+                    </h3>
+                    <p className="text-xs text-sub-text max-w-xs mx-auto leading-relaxed mb-6 font-normal">
+                      Taassurotlar bilan bo‘lishing — bu boshqa xaridorlarga tanlashda yordam beradi
+                    </p>
+                    <button
+                      onClick={onBackToHome}
+                      className="bg-kinetic hover:bg-[#E64D00] text-white font-bold text-xs py-3 px-6 rounded-xl shadow-md transition-all active:scale-95"
+                    >
+                      Bosh sahifa
+                    </button>
+                  </div>
+                ) : (
+                  reviewsPending.map((item) => (
+                    <div key={item.orderId} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-3">
+                      <div className="flex gap-3">
+                        <div className="w-16 h-16 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0 border border-gray-100">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[10px] text-kinetic font-bold uppercase tracking-wider">{item.category}</span>
+                          <h4 className="font-bold text-xs text-main-text line-clamp-2 mt-0.5">{item.title}</h4>
+                          <p className="text-[11px] text-sub-text mt-1">
+                            Egasi: <span className="font-semibold text-main-text">{item.owner_name}</span>
+                          </p>
+                          <p className="text-[10px] text-gray-400 mt-0.5">Topshirilgan sana: {item.completed_date || 'Yaqinda'}</p>
+                        </div>
+                      </div>
+                      <div className="pt-2 border-t border-gray-100 flex justify-end">
+                        <button
+                          onClick={() => handleOpenReview(item)}
+                          className="bg-kinetic hover:bg-[#E64D00] text-white text-xs font-bold py-2 px-4 rounded-xl shadow-sm transition-all active:scale-95 flex items-center gap-1.5"
+                        >
+                          <span>⭐</span> Baholash
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )
+              ) : (
+                reviewsCompleted.length === 0 ? (
+                  <div className="py-14 px-4 text-center">
+                    <div className="w-20 h-20 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-4 shadow-sm border border-gray-200">
+                      <svg className="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-base font-bold text-main-text mb-1.5">Hali sharhlar mavjud emas</h3>
+                    <p className="text-xs text-sub-text max-w-xs mx-auto leading-relaxed mb-6 font-normal">
+                      Siz baholagan tovarlar va xizmatlar shu yerda saqlanadi
+                    </p>
+                    <button
+                      onClick={onBackToHome}
+                      className="bg-kinetic hover:bg-[#E64D00] text-white font-bold text-xs py-3 px-6 rounded-xl shadow-md transition-all active:scale-95"
+                    >
+                      Bosh sahifa
+                    </button>
+                  </div>
+                ) : (
+                  reviewsCompleted.map((item) => (
+                    <div key={item.orderId} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-3">
+                      <div className="flex gap-3">
+                        <div className="w-14 h-14 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0 border border-gray-100">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] text-kinetic font-bold uppercase tracking-wider">{item.category}</span>
+                            <span className="text-[10px] text-gray-400 font-mono">{item.date}</span>
+                          </div>
+                          <h4 className="font-bold text-xs text-main-text line-clamp-1 mt-0.5">{item.title}</h4>
+                          <div className="flex items-center gap-1.5 mt-1">
+                            <span className="text-amber-400 text-sm">
+                              {'★'.repeat(item.rating)}{'☆'.repeat(5 - item.rating)}
+                            </span>
+                            <span className="text-[11px] font-bold text-main-text">{item.rating}.0</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-gray-50 rounded-xl p-3 border border-gray-100 text-xs text-main-text leading-relaxed">
+                        &quot;{item.comment}&quot;
+                      </div>
+                      <div className="text-[11px] text-sub-text">
+                        Ijara egasi: <span className="font-semibold text-main-text">{item.owner_name}</span>
+                      </div>
+                    </div>
+                  ))
+                )
               )}
             </div>
           </div>
@@ -967,15 +1288,15 @@ export default function ProfileView({ onBackToHome, onOpenWizard }: ProfileViewP
             <div className="p-4 space-y-3">
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
                 {[
-                  { lang: "O'zbekcha", sub: 'Lotin alifbosida', icon: '🇺🇿' },
-                  { lang: 'Ўзбекча', sub: 'Кирилл алифбосида', icon: '🇺🇿' },
-                  { lang: 'Русский', sub: 'Русский язык', icon: '🇷🇺' },
-                  { lang: 'English', sub: 'English language', icon: '🇬🇧' },
+                  { code: 'uz', lang: "O'zbekcha", sub: 'Lotin yozuvida', icon: '🇺🇿' },
+                  { code: 'ru', lang: 'Русский', sub: 'Русский язык', icon: '🇷🇺' },
+                  { code: 'en', lang: 'English', sub: 'English language', icon: '🇬🇧' },
                 ].map((item) => (
                   <div
-                    key={item.lang}
+                    key={item.code}
                     onClick={() => {
                       setCurrentLang(item.lang);
+                      localStorage.setItem('topspot_lang', item.code);
                       alert(`Ilova tili "${item.lang}" ga muvaffaqiyatli o'zgartirildi.`);
                       setCurrentSubView('root');
                     }}
@@ -1205,6 +1526,81 @@ export default function ProfileView({ onBackToHome, onOpenWizard }: ProfileViewP
                     <span className="font-bold text-main-text">-350 000 UZS</span>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ==================== 1:1 INTERACTIVE REVIEW MODAL ==================== */}
+        {reviewModalOpen && reviewTarget && (
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setReviewModalOpen(false)} />
+            <div className="relative min-h-screen flex items-center justify-center p-4">
+              <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden p-6 z-10 animate-slide-up">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-bold text-base text-main-text">Baholash va sharh</h3>
+                  <button
+                    onClick={() => setReviewModalOpen(false)}
+                    className="text-gray-400 hover:text-main-text text-xl leading-none"
+                  >
+                    &times;
+                  </button>
+                </div>
+
+                <div className="bg-gray-50 rounded-2xl p-3 flex items-center gap-3 mb-4 border border-gray-100">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={reviewTarget.image}
+                    alt={reviewTarget.title}
+                    className="w-12 h-12 rounded-xl object-cover border border-gray-200"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-bold text-xs text-main-text truncate">{reviewTarget.title}</h4>
+                    <p className="text-[11px] text-sub-text truncate">Egasi: {reviewTarget.owner_name}</p>
+                  </div>
+                </div>
+
+                <div className="text-center mb-4">
+                  <div className="text-xs text-sub-text mb-2 font-medium">Xizmat va mahsulotni baholang:</div>
+                  <div className="flex items-center justify-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setReviewRating(star)}
+                        className={`text-2xl hover:scale-110 transition-transform ${
+                          star <= reviewRating ? 'text-amber-400' : 'text-gray-300'
+                        }`}
+                      >
+                        ★
+                      </button>
+                    ))}
+                  </div>
+                  <div className="text-xs font-bold text-kinetic mt-1.5">{STAR_LABELS[reviewRating]}</div>
+                </div>
+
+                <form onSubmit={handleSubmitReview} className="space-y-3.5">
+                  <div>
+                    <label className="block text-xs font-semibold text-main-text mb-1">
+                      Taassurotlaringiz bilan bo&apos;lishing
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={reviewComment}
+                      onChange={(e) => setReviewComment(e.target.value)}
+                      placeholder="Obyekt sifati, egasining muomalasi va yetkazib berish haqida batafsil yozing..."
+                      className="w-full border border-gray-200 rounded-xl p-3 text-xs text-main-text focus:outline-none focus:border-kinetic resize-none"
+                      required
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full bg-kinetic hover:bg-[#E64D00] text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md active:scale-95"
+                  >
+                    Sharhni yuborish
+                  </button>
+                </form>
               </div>
             </div>
           </div>

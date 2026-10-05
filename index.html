@@ -58,7 +58,7 @@
   </div>
 
   <!-- ==================== 2. HEADER (UZUM STYLE) ==================== -->
-  <header class="sticky top-0 z-30 bg-obsidian text-white shadow-md">
+  <header id="mainHeader" class="sticky top-0 z-30 bg-obsidian text-white shadow-md">
     <!-- Top Row -->
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between h-14 border-b border-white/10 text-sm">
@@ -254,7 +254,7 @@
   </main>
 
   <!-- ==================== 4.5. MOBILE PROFILE & SUB-VIEWS (1:1 UZUM STYLE) ==================== -->
-  <div id="profileView" class="hidden min-h-screen bg-[#F2F4F7] pb-24 animate-fadeIn">
+  <div id="profileView" class="hidden min-h-screen bg-[#F2F4F7] pb-24 overflow-y-auto animate-fadeIn">
     <div class="max-w-md mx-auto min-h-screen relative bg-[#F2F4F7]">
 
       <!-- ==================== SUB-VIEW: ROOT PROFILE ==================== -->
@@ -285,21 +285,26 @@
 
           <!-- User Card Info -->
           <div class="text-center relative z-10">
-            <!-- Avatar -->
+            <!-- Avatar with Upload -->
             <div class="relative w-20 h-20 mx-auto">
-              <div onclick="navigateToProfileSubView('settings')" class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg cursor-pointer border-2 border-white/40 overflow-hidden group hover:scale-105 transition-transform">
-                <svg class="w-12 h-12 text-gray-400 mt-2" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
+              <input type="file" id="avatarFileInput" accept="image/*" class="hidden" onchange="handleAvatarFileSelect(event)">
+              <div onclick="triggerAvatarUpload()" class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg cursor-pointer border-2 border-white/40 overflow-hidden group hover:scale-105 transition-transform">
+                <img id="profileAvatarImg" src="" alt="Avatar" class="w-full h-full object-cover hidden">
+                <div id="profileAvatarDefault" class="w-full h-full flex items-center justify-center">
+                  <svg class="w-12 h-12 text-gray-400 mt-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                  </svg>
+                </div>
               </div>
-              <button onclick="navigateToProfileSubView('settings')" class="absolute -bottom-1 -right-1 bg-kinetic hover:bg-[#E64D00] text-white w-6 h-6 rounded-full flex items-center justify-center shadow-md border-2 border-[#0B0F17] transition-transform active:scale-90">
-                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              <button onclick="triggerAvatarUpload()" class="absolute -bottom-1 -right-1 bg-kinetic hover:bg-[#E64D00] text-white w-6 h-6 rounded-full flex items-center justify-center shadow-md border-2 border-[#0B0F17] transition-transform active:scale-90" title="Rasm yuklash">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </button>
             </div>
 
-            <button onclick="navigateToProfileSubView('settings')" class="text-[11px] text-orange-200 hover:text-white mt-1.5 underline font-medium inline-flex items-center gap-1">
+            <button onclick="triggerAvatarUpload()" class="text-[11px] text-orange-200 hover:text-white mt-1.5 underline font-medium inline-flex items-center gap-1">
               O'zgartirish
             </button>
 
@@ -352,17 +357,20 @@
               </svg>
             </div>
 
-            <div onclick="alert('Siz qoldirgan sharhlar: 3 ta ijobiy baho (5.0 yulduz).')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer">
+            <div onclick="navigateToProfileSubView('reviews')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
               <div class="flex items-center gap-3">
                 <span class="text-xl w-7 text-center">⭐</span>
                 <div>
-                  <div class="font-semibold text-main-text text-sm">Sharhlarim</div>
+                  <div class="font-semibold text-main-text text-sm group-hover:text-kinetic transition-colors">Sharhlarim</div>
                   <div class="text-[11px] text-sub-text">Ijara egalariga qoldirilgan fikrlar</div>
                 </div>
               </div>
-              <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-              </svg>
+              <div class="flex items-center gap-1.5">
+                <span id="pendingReviewsCountBadge" class="bg-kinetic/10 text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-full">1 ta kutyapti</span>
+                <svg class="w-4 h-4 text-gray-400 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
             </div>
 
             <div onclick="navigateToProfileSubView('wallet')" class="flex items-center justify-between p-3.5 hover:bg-gray-50 active:bg-gray-100 transition-colors cursor-pointer group">
@@ -591,9 +599,9 @@
       </div>
 
       <!-- ==================== SUB-VIEW: BUYURTMALARIM (ORDERS) ==================== -->
-      <div id="profileSubView-orders" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+      <div id="profileSubView-orders" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7] overflow-y-auto pb-10">
         <!-- Sticky Header Bar -->
-        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+        <div class="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3.5 flex items-center justify-between shadow-xs">
           <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90" title="Ortga">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
@@ -604,7 +612,7 @@
         </div>
 
         <!-- 1:1 Uzum Style Tabs: Faollar & Barchasi -->
-        <div class="bg-white border-b border-gray-200 flex text-center sticky top-[49px] z-20">
+        <div class="bg-white border-b border-[#E4E7ED] flex text-center sticky top-[53px] z-40 shadow-2xs">
           <button id="orderTabBtn-active" onclick="switchOrdersTab('active')" class="flex-1 py-3 text-sm font-bold border-b-2 border-kinetic text-kinetic transition-all flex items-center justify-center gap-1.5">
             <span>Faollar</span>
             <span id="activeOrdersBadge" class="bg-kinetic/10 text-kinetic text-[11px] px-2 py-0.2 rounded-full font-bold">1</span>
@@ -621,10 +629,41 @@
         </div>
       </div>
 
-      <!-- ==================== SUB-VIEW: CHATLARIM ==================== -->
-      <div id="profileSubView-chats" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+      <!-- ==================== SUB-VIEW: MENING SHARHLARIM (1:1 UZUM STYLE) ==================== -->
+      <div id="profileSubView-reviews" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7] overflow-y-auto pb-10">
         <!-- Sticky Header Bar -->
-        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+        <div class="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3.5 flex items-center justify-between shadow-xs">
+          <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90" title="Ortga">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h2 class="font-bold text-base text-main-text tracking-wide">Mening sharhlarim</h2>
+          <div class="w-7"></div>
+        </div>
+
+        <!-- 1:1 Uzum Pill Selector Tabs: Baholashni kutyapti & Baholangan -->
+        <div class="bg-white border-b border-[#E4E7ED] p-2.5 flex items-center justify-center gap-2 sticky top-[53px] z-40 shadow-2xs">
+          <button id="reviewTabBtn-pending" onclick="switchReviewsTab('pending')" class="px-5 py-2 rounded-full text-xs font-bold transition-all bg-[#1F2026] text-white shadow-sm flex items-center gap-1.5">
+            <span>Baholashni kutyapti</span>
+            <span id="pendingReviewsPillBadge" class="opacity-90 font-mono">(1)</span>
+          </button>
+          <button id="reviewTabBtn-completed" onclick="switchReviewsTab('completed')" class="px-5 py-2 rounded-full text-xs font-medium transition-all text-sub-text hover:text-main-text flex items-center gap-1.5">
+            <span>Baholangan</span>
+            <span id="completedReviewsPillBadge" class="opacity-90 font-mono">(1)</span>
+          </button>
+        </div>
+
+        <!-- Reviews Content: Cards or 1:1 Uzum Empty State -->
+        <div id="reviewsContent" class="p-4 space-y-3">
+          <!-- Populated dynamically via renderReviewsSubView() -->
+        </div>
+      </div>
+
+      <!-- ==================== SUB-VIEW: CHATLARIM ==================== -->
+      <div id="profileSubView-chats" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7] overflow-y-auto pb-10">
+        <!-- Sticky Header Bar -->
+        <div class="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3.5 flex items-center justify-between shadow-xs">
           <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
@@ -688,9 +727,9 @@
       </div>
 
       <!-- ==================== SUB-VIEW: PROMOKODLARIM ==================== -->
-      <div id="profileSubView-promo" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+      <div id="profileSubView-promo" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7] overflow-y-auto pb-10">
         <!-- Sticky Header Bar -->
-        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+        <div class="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3.5 flex items-center justify-between shadow-xs">
           <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
@@ -742,9 +781,9 @@
       </div>
 
       <!-- ==================== SUB-VIEW: SOZLAMALAR ==================== -->
-      <div id="profileSubView-settings" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+      <div id="profileSubView-settings" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7] overflow-y-auto pb-10">
         <!-- Sticky Header Bar -->
-        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+        <div class="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3.5 flex items-center justify-between shadow-xs">
           <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
@@ -816,9 +855,9 @@
       </div>
 
       <!-- ==================== SUB-VIEW: ILOVA TILI ==================== -->
-      <div id="profileSubView-language" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+      <div id="profileSubView-language" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7] overflow-y-auto pb-10">
         <!-- Sticky Header Bar -->
-        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+        <div class="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3.5 flex items-center justify-between shadow-xs">
           <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
@@ -830,57 +869,46 @@
 
         <div class="p-4 space-y-3">
           <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
-            <div onclick="selectAppLanguage('O\'zbekcha')" class="p-4 flex items-center justify-between hover:bg-soft-orange/30 cursor-pointer">
+            <div onclick="selectAppLanguage('uz')" class="p-4 flex items-center justify-between hover:bg-soft-orange/30 cursor-pointer">
               <div class="flex items-center gap-3">
-                <span class="text-xl">🇺🇿</span>
+                <span class="text-2xl">🇺🇿</span>
                 <div>
                   <div class="font-bold text-sm text-main-text">O'zbekcha</div>
-                  <div class="text-[11px] text-sub-text">Lotin alifbosida</div>
+                  <div class="text-[11px] text-sub-text">Lotin yozuvida</div>
                 </div>
               </div>
-              <span class="w-5 h-5 rounded-full bg-kinetic text-white flex items-center justify-center text-xs font-bold">✓</span>
+              <span id="langCheck-uz" class="w-5 h-5 rounded-full bg-kinetic text-white flex items-center justify-center text-xs font-bold">✓</span>
             </div>
 
-            <div onclick="selectAppLanguage('Ўзбекча')" class="p-4 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
+            <div onclick="selectAppLanguage('ru')" class="p-4 flex items-center justify-between hover:bg-soft-orange/30 cursor-pointer">
               <div class="flex items-center gap-3">
-                <span class="text-xl">🇺🇿</span>
-                <div>
-                  <div class="font-bold text-sm text-main-text">Ўзбекча</div>
-                  <div class="text-[11px] text-sub-text">Кирилл алифбосида</div>
-                </div>
-              </div>
-              <span class="w-5 h-5 rounded-full border border-gray-300"></span>
-            </div>
-
-            <div onclick="selectAppLanguage('Русский')" class="p-4 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
-              <div class="flex items-center gap-3">
-                <span class="text-xl">🇷🇺</span>
+                <span class="text-2xl">🇷🇺</span>
                 <div>
                   <div class="font-bold text-sm text-main-text">Русский</div>
                   <div class="text-[11px] text-sub-text">Русский язык</div>
                 </div>
               </div>
-              <span class="w-5 h-5 rounded-full border border-gray-300"></span>
+              <span id="langCheck-ru" class="w-5 h-5 rounded-full border border-gray-300"></span>
             </div>
 
-            <div onclick="selectAppLanguage('English')" class="p-4 flex items-center justify-between hover:bg-gray-50 cursor-pointer">
+            <div onclick="selectAppLanguage('en')" class="p-4 flex items-center justify-between hover:bg-soft-orange/30 cursor-pointer">
               <div class="flex items-center gap-3">
-                <span class="text-xl">🇬🇧</span>
+                <span class="text-2xl">🇬🇧</span>
                 <div>
                   <div class="font-bold text-sm text-main-text">English</div>
                   <div class="text-[11px] text-sub-text">English language</div>
                 </div>
               </div>
-              <span class="w-5 h-5 rounded-full border border-gray-300"></span>
+              <span id="langCheck-en" class="w-5 h-5 rounded-full border border-gray-300"></span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- ==================== SUB-VIEW: TOPSHIRISH PUNKTLARI ==================== -->
-      <div id="profileSubView-points" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+      <div id="profileSubView-points" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7] overflow-y-auto pb-10">
         <!-- Sticky Header Bar -->
-        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+        <div class="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3.5 flex items-center justify-between shadow-xs">
           <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
@@ -950,9 +978,9 @@
       </div>
 
       <!-- ==================== SUB-VIEW: MA'LUMOTNOMA (FAQ) ==================== -->
-      <div id="profileSubView-faq" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+      <div id="profileSubView-faq" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7] overflow-y-auto pb-10">
         <!-- Sticky Header Bar -->
-        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+        <div class="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3.5 flex items-center justify-between shadow-xs">
           <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
@@ -986,9 +1014,9 @@
       </div>
 
       <!-- ==================== SUB-VIEW: BIZ BILAN BOG'LANISH ==================== -->
-      <div id="profileSubView-contact" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+      <div id="profileSubView-contact" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7] overflow-y-auto pb-10">
         <!-- Sticky Header Bar -->
-        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+        <div class="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3.5 flex items-center justify-between shadow-xs">
           <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
@@ -1041,9 +1069,9 @@
       </div>
 
       <!-- ==================== SUB-VIEW: TOPSPOT HAMYON ==================== -->
-      <div id="profileSubView-wallet" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7]">
+      <div id="profileSubView-wallet" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7] overflow-y-auto pb-10">
         <!-- Sticky Header Bar -->
-        <div class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-xs">
+        <div class="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3.5 flex items-center justify-between shadow-xs">
           <button onclick="navigateToProfileSubView('root')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
@@ -1104,6 +1132,54 @@
           </div>
         </div>
       </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== 1:1 INTERACTIVE REVIEW MODAL ==================== -->
+  <div id="reviewModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeReviewModal()"></div>
+    <div class="relative min-h-screen flex items-center justify-center p-4">
+      <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden p-6 z-10 animate-slide-up">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-bold text-base text-main-text">Baholash va sharh</h3>
+          <button onclick="closeReviewModal()" class="text-gray-400 hover:text-main-text text-xl leading-none">&times;</button>
+        </div>
+
+        <input type="hidden" id="reviewOrderId" value="">
+        <div class="bg-gray-50 rounded-2xl p-3 flex items-center gap-3 mb-4 border border-gray-100">
+          <img id="reviewItemImage" src="" alt="" class="w-12 h-12 rounded-xl object-cover border border-gray-200">
+          <div class="flex-1 min-w-0">
+            <h4 id="reviewItemTitle" class="font-bold text-xs text-main-text truncate">Obyekt nomi</h4>
+            <p id="reviewItemOwner" class="text-[11px] text-sub-text truncate">Egasi: ...</p>
+          </div>
+        </div>
+
+        <div class="text-center mb-4">
+          <div class="text-xs text-sub-text mb-2 font-medium">Xizmat va mahsulotni baholang:</div>
+          <div class="flex items-center justify-center gap-2">
+            <button type="button" onclick="setStarRating(1)" class="star-btn text-2xl text-amber-400 hover:scale-110 transition-transform">★</button>
+            <button type="button" onclick="setStarRating(2)" class="star-btn text-2xl text-amber-400 hover:scale-110 transition-transform">★</button>
+            <button type="button" onclick="setStarRating(3)" class="star-btn text-2xl text-amber-400 hover:scale-110 transition-transform">★</button>
+            <button type="button" onclick="setStarRating(4)" class="star-btn text-2xl text-amber-400 hover:scale-110 transition-transform">★</button>
+            <button type="button" onclick="setStarRating(5)" class="star-btn text-2xl text-amber-400 hover:scale-110 transition-transform">★</button>
+          </div>
+          <div id="starRatingLabel" class="text-xs font-bold text-kinetic mt-1.5">A'lo darajada! (5.0)</div>
+        </div>
+
+        <form onsubmit="submitReviewForm(event)" class="space-y-3.5">
+          <div>
+            <label class="block text-xs font-semibold text-main-text mb-1">Taassurotlaringiz bilan bo'lishing</label>
+            <textarea id="reviewCommentText" rows="3" placeholder="Obyekt sifati, egasining muomalasi va yetkazib berish haqida batafsil yozing..." class="w-full border border-gray-200 rounded-xl p-3 text-xs text-main-text focus:outline-none focus:border-kinetic resize-none" required></textarea>
+          </div>
+
+          <button type="submit" class="w-full bg-kinetic hover:bg-[#E64D00] text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md active:scale-95">
+            Sharhni yuborish
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 
     </div>
   </div>
@@ -1722,10 +1798,27 @@
     let wizardTariffPrice = 0;
     let wizardGPS = { lat: null, lng: null };
     let currentTab = 'home';
+    const TRANSLATIONS = {
+      uz: {
+        langName: "O'zbekcha",
+        searchPlaceholder: "Qidiring: avtomobil, kamera, usta..."
+      },
+      ru: {
+        langName: "Русский",
+        searchPlaceholder: "Искать: авто, камера, мастер..."
+      },
+      en: {
+        langName: "English",
+        searchPlaceholder: "Search: cars, camera, tools..."
+      }
+    };
+    let currentAppLang = 'uz';
+
     let currentUser = {
       name: "Jo'rayev Bahodir",
       phone: "+998 88 530 53 63",
-      balance: 150000
+      balance: 150000,
+      photo_url: ""
     };
 
     // Initialize
@@ -1738,8 +1831,19 @@
           if (parsed.name) currentUser.name = parsed.name;
           if (parsed.phone) currentUser.phone = parsed.phone;
           if (parsed.balance !== undefined) currentUser.balance = parsed.balance;
+          if (parsed.photo_url) currentUser.photo_url = parsed.photo_url;
         } catch (e) {}
       }
+      
+      const savedLang = localStorage.getItem('topspot_lang') || 'uz';
+      if (savedLang) {
+        currentAppLang = savedLang;
+        const langLabel = document.getElementById('currentLangLabel');
+        if (langLabel && TRANSLATIONS[savedLang]) {
+          langLabel.innerText = TRANSLATIONS[savedLang].langName;
+        }
+      }
+
       syncUserUI();
 
       // Load listings from localStorage or fallback
@@ -2307,6 +2411,32 @@
 
     let currentProfileSubView = 'root';
     let currentOrdersTab = 'active'; // 'active' | 'all'
+    let currentReviewsTab = 'pending'; // 'pending' | 'completed'
+    let selectedStarRating = 5;
+
+    let reviewsPending = [
+      {
+        orderId: "TS-849188",
+        title: "Bosch GBH 2-26 DRE Professional Perforator",
+        category: "Qurilish asboblari",
+        image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=500&auto=format&fit=crop&q=80",
+        owner_name: "Rustam Usta",
+        completed_date: "03.10.2026"
+      }
+    ];
+
+    let reviewsCompleted = [
+      {
+        orderId: "TS-847291",
+        title: "Sony FX3 Cinema Line + 24-70mm GM II Obektiv",
+        category: "Kamera & Video",
+        image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80",
+        owner_name: "Jasur Mirzayev",
+        rating: 5,
+        comment: "Juda a'lo darajadagi uskuna! Toza va texnik soz holatda topshirildi. Suratga olish jarayoni a'lo o'tdi, tavsiya qilaman.",
+        date: "28.09.2026"
+      }
+    ];
 
     function syncUserUI() {
       const nameElem = document.getElementById('profileNameDisplay');
@@ -2323,10 +2453,31 @@
       if (modalBalElem) modalBalElem.innerText = `${formatNumber(currentUser.balance)} UZS`;
       if (headerLabel) headerLabel.innerText = currentUser.name.split(' ')[0] || 'Kabinet';
 
+      // Avatar sync
+      const avatarImg = document.getElementById('profileAvatarImg');
+      const avatarDefault = document.getElementById('profileAvatarDefault');
+      if (avatarImg && avatarDefault) {
+        if (currentUser.photo_url) {
+          avatarImg.src = currentUser.photo_url;
+          avatarImg.classList.remove('hidden');
+          avatarDefault.classList.add('hidden');
+        } else {
+          avatarImg.classList.add('hidden');
+          avatarDefault.classList.remove('hidden');
+        }
+      }
+
       // Update badge counts
       const activeCount = userOrders.filter(o => o.status === 'active').length;
       const rootOrdersBadge = document.getElementById('rootOrdersBadge');
       if (rootOrdersBadge) rootOrdersBadge.innerText = `${activeCount} ta faol`;
+
+      const pendingBadge = document.getElementById('pendingReviewsCountBadge');
+      const pendingPillBadge = document.getElementById('pendingReviewsPillBadge');
+      const completedPillBadge = document.getElementById('completedReviewsPillBadge');
+      if (pendingBadge) pendingBadge.innerText = `${reviewsPending.length} ta kutyapti`;
+      if (pendingPillBadge) pendingPillBadge.innerText = `(${reviewsPending.length})`;
+      if (completedPillBadge) completedPillBadge.innerText = `(${reviewsCompleted.length})`;
     }
 
     function switchMobileTab(tab) {
@@ -2343,16 +2494,19 @@
 
       const showcase = document.getElementById('mainShowcase');
       const profile = document.getElementById('profileView');
+      const mainHeader = document.getElementById('mainHeader');
 
       if (tab === 'profile') {
-        showcase.classList.add('hidden');
-        profile.classList.remove('hidden');
+        if (mainHeader) mainHeader.classList.add('hidden');
+        if (showcase) showcase.classList.add('hidden');
+        if (profile) profile.classList.remove('hidden');
         navigateToProfileSubView('root');
         syncUserUI();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
-        profile.classList.add('hidden');
-        showcase.classList.remove('hidden');
+        if (mainHeader) mainHeader.classList.remove('hidden');
+        if (profile) profile.classList.add('hidden');
+        if (showcase) showcase.classList.remove('hidden');
         if (tab === 'catalog') {
           toggleMegaCatalog();
         } else if (tab === 'favorites') {
@@ -2378,6 +2532,8 @@
 
       if (subViewKey === 'orders') {
         renderOrdersSubView();
+      } else if (subViewKey === 'reviews') {
+        renderReviewsSubView();
       } else if (subViewKey === 'settings') {
         const nameInp = document.getElementById('editProfileName');
         const phoneInp = document.getElementById('editProfilePhone');
@@ -2385,6 +2541,19 @@
         if (phoneInp) phoneInp.value = currentUser.phone;
       } else if (subViewKey === 'wallet') {
         syncUserUI();
+      } else if (subViewKey === 'language') {
+        ['uz', 'ru', 'en'].forEach(l => {
+          const checkElem = document.getElementById(`langCheck-${l}`);
+          if (checkElem) {
+            if (l === currentAppLang) {
+              checkElem.className = "w-5 h-5 rounded-full bg-kinetic text-white flex items-center justify-center text-xs font-bold";
+              checkElem.innerHTML = "✓";
+            } else {
+              checkElem.className = "w-5 h-5 rounded-full border border-gray-300";
+              checkElem.innerHTML = "";
+            }
+          }
+        });
       }
     }
 
@@ -2511,7 +2680,7 @@
             </div>
             <div class="flex items-center gap-2">
               ${order.status === 'active' ? `
-                <button onclick="alert('Topshirish punkti yoki egasi bilan bog\'lanish: ${order.owner_phone}')" class="bg-white border border-gray-200 hover:border-kinetic text-main-text hover:text-kinetic text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all shadow-2xs">
+                <button onclick="handleContactOwner('${order.id}')" class="bg-white border border-gray-200 hover:border-kinetic text-main-text hover:text-kinetic text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all shadow-2xs">
                   Bog'lanish
                 </button>
                 <button onclick="finishOrder('${order.id}')" class="bg-kinetic hover:bg-[#E64D00] text-white text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all shadow-sm">
@@ -2528,6 +2697,17 @@
       `).join('');
     }
 
+    function handleContactOwner(orderId) {
+      const o = userOrders.find(x => x.id === orderId);
+      if (!o) return;
+      const choice = confirm(`Topspot Aloqa Xizmati\n\nObyekt: ${o.title}\nEgasi: ${o.owner_name}\nTelefon: ${o.owner_phone}\n\nQo'ng'iroq qilish uchun "OK" bosing. Bekor qilinsa, Telegram ochiladi.`);
+      if (choice) {
+        window.location.href = `tel:${o.owner_phone.replace(/\\s+/g, '')}`;
+      } else {
+        window.open('https://t.me', '_blank');
+      }
+    }
+
     function finishOrder(id) {
       const o = userOrders.find(x => x.id === id);
       if (o) {
@@ -2538,7 +2718,24 @@
           localStorage.setItem('topspot_user', JSON.stringify(currentUser));
           syncUserUI();
           renderOrdersSubView();
-          alert(`Ijara muvaffaqiyatli topshirildi!\nDepozit (${formatNumber(o.deposit)} UZS) hamyoningizga qaytarildi.`);
+
+          // Add to pending reviews if not already reviewed
+          if (!reviewsPending.some(r => r.orderId === o.id) && !reviewsCompleted.some(r => r.orderId === o.id)) {
+            reviewsPending.unshift({
+              orderId: o.id,
+              title: o.title,
+              category: o.category,
+              image: o.image,
+              owner_name: o.owner_name,
+              completed_date: "Bugun"
+            });
+          }
+          syncUserUI();
+
+          const rateNow = confirm(`Ijara muvaffaqiyatli topshirildi!\nDepozit (${formatNumber(o.deposit)} UZS) hisobingizga qaytarildi.\n\n"${o.title}" uchun hoziroq 5 yulduzli baho va sharh qoldirasizmi?`);
+          if (rateNow) {
+            openReviewModal(o.id);
+          }
         }
       }
     }
@@ -2561,10 +2758,279 @@
       }
     }
 
+    // ==================== 1:1 UZUM REVIEWS MANAGEMENT ====================
+    function switchReviewsTab(tab) {
+      currentReviewsTab = tab;
+      const pendingBtn = document.getElementById('reviewTabBtn-pending');
+      const completedBtn = document.getElementById('reviewTabBtn-completed');
+      if (!pendingBtn || !completedBtn) return;
+
+      if (tab === 'pending') {
+        pendingBtn.className = "px-5 py-2 rounded-full text-xs font-bold transition-all bg-[#1F2026] text-white shadow-sm flex items-center gap-1.5";
+        completedBtn.className = "px-5 py-2 rounded-full text-xs font-medium transition-all text-sub-text hover:text-main-text flex items-center gap-1.5";
+      } else {
+        completedBtn.className = "px-5 py-2 rounded-full text-xs font-bold transition-all bg-[#1F2026] text-white shadow-sm flex items-center gap-1.5";
+        pendingBtn.className = "px-5 py-2 rounded-full text-xs font-medium transition-all text-sub-text hover:text-main-text flex items-center gap-1.5";
+      }
+
+      renderReviewsSubView();
+    }
+
+    function renderReviewsSubView() {
+      const container = document.getElementById('reviewsContent');
+      if (!container) return;
+
+      const pendingBadge = document.getElementById('pendingReviewsCountBadge');
+      const pendingPillBadge = document.getElementById('pendingReviewsPillBadge');
+      const completedPillBadge = document.getElementById('completedReviewsPillBadge');
+
+      if (pendingBadge) pendingBadge.innerText = `${reviewsPending.length} ta kutyapti`;
+      if (pendingPillBadge) pendingPillBadge.innerText = `(${reviewsPending.length})`;
+      if (completedPillBadge) completedPillBadge.innerText = `(${reviewsCompleted.length})`;
+
+      if (currentReviewsTab === 'pending') {
+        if (reviewsPending.length === 0) {
+          container.innerHTML = `
+            <div class="py-14 px-4 text-center">
+              <div class="w-20 h-20 mx-auto rounded-full bg-soft-orange flex items-center justify-center mb-4 shadow-sm border border-kinetic/20">
+                <svg class="w-10 h-10 text-kinetic" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+              </div>
+              <h3 class="text-base font-bold text-main-text mb-1.5">Xarid qilgandan keyin bu yerda baholash uchun tovarlar paydo bo‘ladi</h3>
+              <p class="text-xs text-sub-text max-w-xs mx-auto leading-relaxed mb-6 font-normal">
+                Taassurotlar bilan bo‘lishing — bu boshqa xaridorlarga tanlashda yordam beradi
+              </p>
+              <button onclick="switchMobileTab('home')" class="bg-kinetic hover:bg-[#E64D00] text-white font-bold text-xs py-3 px-6 rounded-xl shadow-md transition-all active:scale-95">
+                Bosh sahifa
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = reviewsPending.map(item => `
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-3">
+            <div class="flex gap-3">
+              <div class="w-16 h-16 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0 border border-gray-100">
+                <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+              </div>
+              <div class="flex-1 min-w-0">
+                <span class="text-[10px] text-kinetic font-bold uppercase tracking-wider">${item.category}</span>
+                <h4 class="font-bold text-xs text-main-text line-clamp-2 mt-0.5">${item.title}</h4>
+                <p class="text-[11px] text-sub-text mt-1">Egasi: <span class="font-semibold text-main-text">${item.owner_name}</span></p>
+                <p class="text-[10px] text-gray-400 mt-0.5">Topshirilgan sana: ${item.completed_date || 'Yaqinda'}</p>
+              </div>
+            </div>
+            <div class="pt-2 border-t border-gray-100 flex justify-end">
+              <button onclick="openReviewModal('${item.orderId}')" class="bg-kinetic hover:bg-[#E64D00] text-white text-xs font-bold py-2 px-4 rounded-xl shadow-sm transition-all active:scale-95 flex items-center gap-1.5">
+                <span>⭐</span> Baholash
+              </button>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        if (reviewsCompleted.length === 0) {
+          container.innerHTML = `
+            <div class="py-14 px-4 text-center">
+              <div class="w-20 h-20 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-4 shadow-sm border border-gray-200">
+                <svg class="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                </svg>
+              </div>
+              <h3 class="text-base font-bold text-main-text mb-1.5">Hali sharhlar mavjud emas</h3>
+              <p class="text-xs text-sub-text max-w-xs mx-auto leading-relaxed mb-6 font-normal">
+                Siz baholagan tovarlar va xizmatlar shu yerda saqlanadi
+              </p>
+              <button onclick="switchMobileTab('home')" class="bg-kinetic hover:bg-[#E64D00] text-white font-bold text-xs py-3 px-6 rounded-xl shadow-md transition-all active:scale-95">
+                Bosh sahifa
+              </button>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = reviewsCompleted.map(item => `
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 space-y-3">
+            <div class="flex gap-3">
+              <div class="w-14 h-14 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0 border border-gray-100">
+                <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] text-kinetic font-bold uppercase tracking-wider">${item.category || 'Ijara'}</span>
+                  <span class="text-[10px] text-gray-400 font-mono">${item.date || 'Yaqinda'}</span>
+                </div>
+                <h4 class="font-bold text-xs text-main-text line-clamp-1 mt-0.5">${item.title}</h4>
+                <div class="flex items-center gap-1.5 mt-1">
+                  <span class="text-amber-400 text-sm">${'★'.repeat(item.rating)}${'☆'.repeat(5 - item.rating)}</span>
+                  <span class="text-[11px] font-bold text-main-text">${item.rating}.0</span>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-3 border border-gray-100 text-xs text-main-text leading-relaxed">
+              "${item.comment}"
+            </div>
+            <div class="text-[11px] text-sub-text">
+              Ijara egasi: <span class="font-semibold text-main-text">${item.owner_name}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function openReviewModal(orderId) {
+      const modal = document.getElementById('reviewModal');
+      if (!modal) return;
+
+      let target = reviewsPending.find(r => r.orderId === orderId);
+      if (!target) {
+        const o = userOrders.find(x => x.id === orderId);
+        if (o) {
+          target = {
+            orderId: o.id,
+            title: o.title,
+            category: o.category,
+            image: o.image,
+            owner_name: o.owner_name
+          };
+        }
+      }
+
+      if (target) {
+        document.getElementById('reviewOrderId').value = target.orderId;
+        document.getElementById('reviewItemImage').src = target.image;
+        document.getElementById('reviewItemTitle').innerText = target.title;
+        document.getElementById('reviewItemOwner').innerText = `Egasi: ${target.owner_name}`;
+        document.getElementById('reviewCommentText').value = '';
+        setStarRating(5);
+        modal.classList.remove('hidden');
+      }
+    }
+
+    function closeReviewModal() {
+      const modal = document.getElementById('reviewModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    const STAR_LABELS = {
+      1: "Juda yomon (1.0)",
+      2: "Qoniqarsiz (2.0)",
+      3: "O'rtacha (3.0)",
+      4: "Yaxshi (4.0)",
+      5: "A'lo darajada! (5.0)"
+    };
+
+    function setStarRating(num) {
+      selectedStarRating = num;
+      const stars = document.querySelectorAll('.star-btn');
+      stars.forEach((btn, idx) => {
+        if (idx < num) {
+          btn.classList.add('text-amber-400');
+          btn.classList.remove('text-gray-300');
+        } else {
+          btn.classList.remove('text-amber-400');
+          btn.classList.add('text-gray-300');
+        }
+      });
+      const label = document.getElementById('starRatingLabel');
+      if (label) label.innerText = STAR_LABELS[num] || `${num}.0`;
+    }
+
+    function submitReviewForm(e) {
+      e.preventDefault();
+      const orderId = document.getElementById('reviewOrderId').value;
+      const comment = document.getElementById('reviewCommentText').value.trim();
+
+      let target = reviewsPending.find(r => r.orderId === orderId);
+      if (!target) {
+        const o = userOrders.find(x => x.id === orderId);
+        if (o) {
+          target = {
+            orderId: o.id,
+            title: o.title,
+            category: o.category,
+            image: o.image,
+            owner_name: o.owner_name
+          };
+        }
+      }
+
+      if (target) {
+        reviewsPending = reviewsPending.filter(r => r.orderId !== orderId);
+        reviewsCompleted.unshift({
+          orderId: target.orderId,
+          title: target.title,
+          category: target.category || 'Ijara',
+          image: target.image,
+          owner_name: target.owner_name,
+          rating: selectedStarRating,
+          comment: comment || "A'lo darajadagi xizmat!",
+          date: "Bugun"
+        });
+
+        closeReviewModal();
+        currentReviewsTab = 'completed';
+        switchReviewsTab('completed');
+        syncUserUI();
+        alert("🎉 Rahmat! Sharhingiz muvaffaqiyatli qabul qilindi va e'lon qilindi.");
+      }
+    }
+
+    // ==================== AVATAR UPLOAD SYSTEM ====================
+    function triggerAvatarUpload() {
+      const input = document.getElementById('avatarFileInput');
+      if (input) input.click();
+    }
+
+    function handleAvatarFileSelect(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        alert("Iltimos, rasm faylini tanlang (PNG, JPG, WebP).");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        currentUser.photo_url = evt.target.result;
+        localStorage.setItem('topspot_user', JSON.stringify(currentUser));
+        syncUserUI();
+        alert("Profil rasmi muvaffaqiyatli o'zgartirildi!");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // ==================== LANGUAGE SWITCHER SYSTEM ====================
     function selectAppLanguage(lang) {
+      if (!TRANSLATIONS[lang]) return;
+      currentAppLang = lang;
+      localStorage.setItem('topspot_lang', lang);
+
+      ['uz', 'ru', 'en'].forEach(l => {
+        const checkElem = document.getElementById(`langCheck-${l}`);
+        if (checkElem) {
+          if (l === lang) {
+            checkElem.className = "w-5 h-5 rounded-full bg-kinetic text-white flex items-center justify-center text-xs font-bold";
+            checkElem.innerHTML = "✓";
+          } else {
+            checkElem.className = "w-5 h-5 rounded-full border border-gray-300";
+            checkElem.innerHTML = "";
+          }
+        }
+      });
+
       const label = document.getElementById('currentLangLabel');
-      if (label) label.innerText = lang;
-      alert(`Ilova tili "${lang}" ga muvaffaqiyatli o'zgartirildi.`);
+      if (label) label.innerText = TRANSLATIONS[lang].langName;
+
+      // Update placeholders
+      const searchInputs = document.querySelectorAll('input[type="text"][placeholder*="Qidiring"], input[type="text"][placeholder*="Искать"], input[type="text"][placeholder*="Search"]');
+      searchInputs.forEach(inp => {
+        inp.placeholder = TRANSLATIONS[lang].searchPlaceholder;
+      });
+
+      alert(`Ilova tili "${TRANSLATIONS[lang].langName}" ga o'zgartirildi!`);
       navigateToProfileSubView('root');
     }
 
@@ -2618,7 +3084,8 @@
         currentUser = {
           name: "Mehmon",
           phone: "+998 -- --- -- --",
-          balance: 0
+          balance: 0,
+          photo_url: ""
         };
         syncUserUI();
         switchMobileTab('home');
