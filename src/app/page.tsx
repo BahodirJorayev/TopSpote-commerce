@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import ProductCard from '@/components/ProductCard';
 import BottomNav from '@/components/BottomNav';
 import ListingWizard from '@/components/ListingWizard';
+import ProfileView from '@/components/ProfileView';
 import { supabase } from '@/lib/supabase';
 import { requestGeolocation, formatPrice } from '@/lib/geolocation';
 import { verticals } from '@/lib/categories';
@@ -255,14 +256,21 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white pb-20 md:pb-0">
-      <Header
-        city={city}
-        onSearch={handleSearch}
-        favCount={favorites.size}
-        cartCount={0}
-      />
+      {activeTab === 'profile' ? (
+        <ProfileView
+          onBackToHome={() => setActiveTab('home')}
+          onOpenWizard={() => setShowWizard(true)}
+        />
+      ) : (
+        <>
+          <Header
+            city={city}
+            onSearch={handleSearch}
+            favCount={favorites.size}
+            cartCount={0}
+          />
 
-      <main className="max-w-7xl mx-auto px-4 py-4">
+          <main className="max-w-7xl mx-auto px-4 py-4">
         {/* Vertical quick filter chips */}
         <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-3">
           <button
@@ -362,6 +370,8 @@ export default function HomePage() {
           </div>
         )}
       </main>
+        </>
+      )}
 
       {/* Mobile bottom nav */}
       <BottomNav
