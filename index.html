@@ -165,8 +165,8 @@
           <button onclick="switchVerticalTab('equipment')" id="vTab-equipment" class="vertical-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-main-text hover:bg-gray-100">
             <span class="text-xl">🔧</span> Uskunalar & Texnika
           </button>
-          <button onclick="switchVerticalTab('specialists')" id="vTab-specialists" class="vertical-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-main-text hover:bg-gray-100">
-            <span class="text-xl">👷</span> Mutaxassislar
+          <button onclick="switchVerticalTab('services')" id="vTab-services" class="vertical-tab w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-main-text hover:bg-gray-100">
+            <span class="text-xl">👷‍♂️🛠️</span> Servislar & Xizmatlar
           </button>
         </div>
 
@@ -202,8 +202,8 @@
       <button onclick="filterByCategory('equipment')" id="chip-equipment" class="category-chip flex-shrink-0 px-4 py-2 rounded-full font-medium transition-all bg-soft-orange text-main-text hover:bg-orange-100 flex items-center gap-1.5">
         <span>🔧</span> Uskunalar & Texnika
       </button>
-      <button onclick="filterByCategory('specialists')" id="chip-specialists" class="category-chip flex-shrink-0 px-4 py-2 rounded-full font-medium transition-all bg-soft-orange text-main-text hover:bg-orange-100 flex items-center gap-1.5">
-        <span>👷</span> Mutaxassislar
+      <button onclick="filterByCategory('services')" id="chip-services" class="category-chip flex-shrink-0 px-4 py-2 rounded-full font-medium transition-all bg-soft-orange text-main-text hover:bg-orange-100 flex items-center gap-1.5">
+        <span>👷‍♂️🛠️</span> Servislar & Xizmatlar
       </button>
     </div>
 
@@ -683,8 +683,8 @@
           </div>
 
           <!-- Chat List -->
-          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
-            <div onclick="alert('Topspot 24/7 Operator bilan tezkor ulanish: Salom! Sizga qanday yordam bera olamiz?')" class="p-3.5 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
+          <div id="chatListContainer" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-100">
+            <div onclick="openChatThread('support')" class="p-3.5 flex items-center gap-3 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors">
               <div class="w-11 h-11 rounded-full bg-kinetic text-white flex items-center justify-center font-bold text-base flex-shrink-0">
                 TS
               </div>
@@ -693,11 +693,11 @@
                   <h4 class="font-bold text-sm text-main-text truncate">Topspot Qo'llab-quvvatlash</h4>
                   <span class="text-[10px] text-kinetic font-bold">10:42</span>
                 </div>
-                <p class="text-xs text-sub-text truncate mt-0.5">Assalomu alaykum! Chevrolet Onix buyurtmangiz tasdiqlandi.</p>
+                <p id="chatSnippet-support" class="text-xs text-sub-text truncate mt-0.5">Assalomu alaykum! Chevrolet Onix buyurtmangiz tasdiqlandi.</p>
               </div>
             </div>
 
-            <div onclick="alert('Chevrolet Onix egasi (Azizbek): Salom! Mashina toza holatda tayyor, soat 14:00 da topshira olaman.')" class="p-3.5 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
+            <div onclick="openChatThread('onix')" class="p-3.5 flex items-center gap-3 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors">
               <div class="w-11 h-11 rounded-full bg-[#121824] text-white flex items-center justify-center font-bold text-base flex-shrink-0">
                 🚗
               </div>
@@ -706,11 +706,11 @@
                   <h4 class="font-bold text-sm text-main-text truncate">Azizbek R. (Onix Premier)</h4>
                   <span class="text-[10px] text-gray-400">Kecha</span>
                 </div>
-                <p class="text-xs text-sub-text truncate mt-0.5">Mashina toza holatda tayyor, kutib olaman.</p>
+                <p id="chatSnippet-onix" class="text-xs text-sub-text truncate mt-0.5">Mashina toza holatda tayyor, kutib olaman.</p>
               </div>
             </div>
 
-            <div onclick="alert('Bosch Perforator egasi (Rustam): Uskuna soz holatda qabul qilindi, depozit qaytarildi.')" class="p-3.5 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
+            <div onclick="openChatThread('perforator')" class="p-3.5 flex items-center gap-3 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors">
               <div class="w-11 h-11 rounded-full bg-gray-100 text-main-text flex items-center justify-center font-bold text-base flex-shrink-0">
                 🔨
               </div>
@@ -719,10 +719,68 @@
                   <h4 class="font-bold text-sm text-main-text truncate">Rustam Usta (Bosch GBH)</h4>
                   <span class="text-[10px] text-gray-400">03.10</span>
                 </div>
-                <p class="text-xs text-sub-text truncate mt-0.5">Depozit hamyoningizga muvaffaqiyatli qaytarildi.</p>
+                <p id="chatSnippet-perforator" class="text-xs text-sub-text truncate mt-0.5">Depozit hamyoningizga muvaffaqiyatli qaytarildi.</p>
+              </div>
+            </div>
+
+            <div onclick="openChatThread('ac')" class="p-3.5 flex items-center gap-3 hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors">
+              <div class="w-11 h-11 rounded-full bg-cyan-100 text-cyan-800 flex items-center justify-center font-bold text-base flex-shrink-0">
+                ❄️
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between">
+                  <h4 class="font-bold text-sm text-main-text truncate">Akmal Usta (Konditsioner ustasi)</h4>
+                  <span class="text-[10px] text-emerald-600 font-bold">11:15</span>
+                </div>
+                <p id="chatSnippet-ac" class="text-xs text-sub-text truncate mt-0.5">Konditsioner ta'miri yoki tozalash bo'yicha qaysi tuman?</p>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- ==================== SUB-VIEW: CHAT THREAD (DIALOG OYNASI) ==================== -->
+      <div id="profileSubView-chat-thread" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7] flex flex-col justify-between pb-6">
+        <!-- Sticky Header Bar -->
+        <div class="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3 flex items-center justify-between shadow-xs">
+          <div class="flex items-center gap-2.5">
+            <button onclick="navigateToProfileSubView('chats')" class="p-2 -ml-2 text-main-text hover:text-kinetic rounded-full transition-colors active:scale-90">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <div id="chatThreadAvatar" class="w-9 h-9 rounded-full bg-kinetic text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
+              TS
+            </div>
+            <div>
+              <h3 id="chatThreadTitle" class="font-bold text-xs text-main-text leading-tight">Topspot Qo'llab-quvvatlash</h3>
+              <p class="text-[10px] text-emerald-600 font-medium flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Onlayn
+              </p>
+            </div>
+          </div>
+          <button id="chatThreadCallBtn" onclick="handleChatThreadCall()" class="text-sub-text hover:text-kinetic p-2 rounded-full hover:bg-gray-100 transition-colors">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Chat Messages Container -->
+        <div id="chatMessagesContainer" class="flex-1 p-4 space-y-3 overflow-y-auto max-h-[calc(100vh-190px)]">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Bottom Chat Input Bar -->
+        <div class="sticky bottom-16 bg-white border border-[#E4E7ED] p-2.5 shadow-lg mx-3 rounded-2xl">
+          <form onsubmit="sendChatMessage(event)" class="flex items-center gap-2">
+            <input type="text" id="chatMessageInput" placeholder="Xabar yozing..." class="flex-1 bg-transparent px-3 py-2 text-xs text-main-text focus:outline-none" autocomplete="off" required>
+            <button type="submit" class="bg-kinetic hover:bg-[#E64D00] text-white p-2.5 rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center">
+              <svg class="w-4 h-4 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            </button>
+          </form>
         </div>
       </div>
 
@@ -742,39 +800,56 @@
         <div class="p-4 space-y-4">
           <!-- Input card -->
           <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-            <h3 class="font-bold text-sm text-main-text mb-2">Yangi promokodni faollashtirish</h3>
-            <form onsubmit="applyPromocode(event)" class="space-y-3">
-              <input type="text" id="promoInput" placeholder="Masalan: TOPSPOT2026" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-xs uppercase font-mono tracking-wider focus:outline-none focus:border-kinetic" required>
-              <button type="submit" class="w-full bg-kinetic hover:bg-[#E64D00] text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md active:scale-95">
-                Faollashtirish
+            <h3 class="font-bold text-sm text-main-text mb-2">Maxsus vaucher / Promokod</h3>
+            <form onsubmit="applyPromocode(event)" class="flex gap-2">
+              <input type="text" id="promoInput" placeholder="Kupon kodini kiriting (TOPSPOT2026)" class="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-xs uppercase font-mono tracking-wider focus:outline-none focus:border-kinetic" required>
+              <button type="submit" class="bg-kinetic hover:bg-[#E64D00] text-white font-bold px-5 py-3 rounded-xl text-xs transition-all shadow-md active:scale-95 whitespace-nowrap">
+                Qo'llash
               </button>
             </form>
           </div>
 
           <!-- Active Vouchers -->
-          <h3 class="font-bold text-sm text-main-text px-1">Mavjud vaucherlar</h3>
+          <h3 class="font-bold text-sm text-main-text px-1">Faol keshbek va chegirma kuponlari</h3>
           <div class="space-y-3">
-            <div class="bg-white border-2 border-dashed border-kinetic/50 rounded-2xl p-4 relative overflow-hidden shadow-sm">
+            <!-- TOPSPOT2026 - 15% -->
+            <div class="bg-white border-2 border-dashed border-kinetic/60 rounded-2xl p-4 relative overflow-hidden shadow-sm">
               <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-soft-orange rounded-full pointer-events-none"></div>
               <div class="flex items-center justify-between mb-2">
                 <span class="font-mono font-black text-kinetic text-base tracking-wider">TOPSPOT2026</span>
-                <span class="bg-kinetic text-white text-[11px] font-black px-2.5 py-0.5 rounded-full">-10% Chegirma</span>
+                <span class="bg-kinetic text-white text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-xs">-15% Chegirma</span>
               </div>
-              <p class="text-xs text-sub-text">Barcha turdagi avtomobil, texnika va ko'chmas mulk ijarasi uchun yagona chegirma vaucheri.</p>
+              <p class="text-xs text-sub-text">Barcha turdagi texnika, avtomobil, uskunalar va xizmatlar uchun sinov promokodi.</p>
               <div class="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px]">
                 <span class="text-sub-text">Amal qilish muddati: 31.12.2026 gacha</span>
-                <button onclick="navigator.clipboard.writeText('TOPSPOT2026'); alert('Promokod nusxalandi: TOPSPOT2026')" class="text-kinetic font-bold hover:underline">
-                  Nusxa olish
+                <button onclick="document.getElementById('promoInput').value='TOPSPOT2026'; applyPromocode(new Event('submit'))" class="text-kinetic font-bold hover:underline flex items-center gap-1">
+                  <span>✂️</span> Nusxa va Qo'llash
                 </button>
               </div>
             </div>
 
-            <div class="bg-white border border-gray-200 rounded-2xl p-4 opacity-80">
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="font-mono font-bold text-main-text text-sm">MOBIL50K</span>
-                <span class="bg-gray-100 text-sub-text text-[10px] font-bold px-2 py-0.5 rounded-full">50 000 UZS</span>
+            <!-- KESHBEK5 - 5% Cashback -->
+            <div class="bg-white border-2 border-dashed border-emerald-500/50 rounded-2xl p-4 relative overflow-hidden shadow-sm">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono font-black text-emerald-700 text-base tracking-wider">KESHBEK5</span>
+                <span class="bg-emerald-600 text-white text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-xs">+5% Keshbek</span>
               </div>
-              <p class="text-xs text-sub-text">Yengil avtomobillar uchun birinchi 3 kunlik ijarada amal qiladi.</p>
+              <p class="text-xs text-sub-text">Har bir yakunlangan ijara va buyurtma uchun balansingizga 5% keshbek qaytadi.</p>
+              <div class="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px]">
+                <span class="text-sub-text">Cheksiz muddatli kupon</span>
+                <button onclick="document.getElementById('promoInput').value='KESHBEK5'; applyPromocode(new Event('submit'))" class="text-emerald-600 font-bold hover:underline flex items-center gap-1">
+                  <span>✂️</span> Qo'llash
+                </button>
+              </div>
+            </div>
+
+            <!-- START50 - 50 000 UZS -->
+            <div class="bg-white border border-gray-200 rounded-2xl p-4">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-mono font-bold text-main-text text-sm">START50</span>
+                <span class="bg-gray-100 text-sub-text text-[10px] font-bold px-2.5 py-0.5 rounded-full">50 000 UZS</span>
+              </div>
+              <p class="text-xs text-sub-text">Birinchi marta mutaxassis xizmati yoki asbob ijarasi uchun sovg'a kuponi.</p>
             </div>
           </div>
         </div>
@@ -794,16 +869,39 @@
         </div>
 
         <div class="p-4 space-y-4">
-          <!-- User Profile Form -->
-          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-            <h3 class="font-bold text-sm text-main-text mb-3">Shaxsiy ma'lumotlar</h3>
-            <form onsubmit="saveEditedProfile(event)" class="space-y-3">
-              <div>
-                <label class="block text-xs font-semibold text-main-text mb-1">To'liq ism</label>
-                <input type="text" id="editProfileName" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-xs text-main-text focus:outline-none focus:border-kinetic" required>
+          <!-- User Avatar Card in Settings -->
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-14 h-14 rounded-full bg-gray-100 overflow-hidden relative border-2 border-kinetic/30 flex items-center justify-center">
+                <img id="settingsAvatarPreview" src="" alt="Avatar" class="w-full h-full object-cover hidden">
+                <div id="settingsAvatarDefault" class="text-xl font-bold text-gray-400">TS</div>
               </div>
               <div>
-                <label class="block text-xs font-semibold text-main-text mb-1">Telefon raqam</label>
+                <h4 class="font-bold text-xs text-main-text">Profil fotosi (Avatar)</h4>
+                <p class="text-[10px] text-sub-text">Rasm butun tizimda yangilanadi</p>
+              </div>
+            </div>
+            <button type="button" onclick="triggerAvatarUpload()" class="bg-soft-orange text-kinetic hover:bg-orange-100 font-bold px-3.5 py-2 rounded-xl text-xs transition-colors flex items-center gap-1">
+              <span>📷</span> Almashtirish
+            </button>
+          </div>
+
+          <!-- User Profile Form -->
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <h3 class="font-bold text-sm text-main-text mb-3">Shaxsiy ma'lumotlar tahriri</h3>
+            <form onsubmit="saveEditedProfile(event)" class="space-y-3">
+              <div class="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label class="block text-xs font-semibold text-main-text mb-1">Ism *</label>
+                  <input type="text" id="editProfileName" placeholder="Bahodir" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-xs text-main-text focus:outline-none focus:border-kinetic" required>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-main-text mb-1">Familiya *</label>
+                  <input type="text" id="editProfileSurname" placeholder="Jo'rayev" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-xs text-main-text focus:outline-none focus:border-kinetic" required>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-main-text mb-1">Telefon raqam *</label>
                 <input type="tel" id="editProfilePhone" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-xs text-main-text font-mono focus:outline-none focus:border-kinetic" required>
               </div>
               <div>
@@ -930,54 +1028,89 @@
             </span>
           </div>
 
-          <!-- Points list -->
-          <div class="space-y-2.5">
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+          <!-- District Filter Chips -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            <button onclick="filterPvsPoints('all', this)" class="pvs-filter-chip bg-kinetic text-white text-xs font-bold px-3.5 py-1.5 rounded-full whitespace-nowrap shadow-xs transition-all">Barchasi</button>
+            <button onclick="filterPvsPoints('chilonzor', this)" class="pvs-filter-chip bg-white border border-gray-200 text-sub-text text-xs font-medium px-3.5 py-1.5 rounded-full whitespace-nowrap hover:border-kinetic transition-all">Chilonzor</button>
+            <button onclick="filterPvsPoints('yunusobod', this)" class="pvs-filter-chip bg-white border border-gray-200 text-sub-text text-xs font-medium px-3.5 py-1.5 rounded-full whitespace-nowrap hover:border-kinetic transition-all">Yunusobod</button>
+            <button onclick="filterPvsPoints('mirzo', this)" class="pvs-filter-chip bg-white border border-gray-200 text-sub-text text-xs font-medium px-3.5 py-1.5 rounded-full whitespace-nowrap hover:border-kinetic transition-all">Mirzo Ulug'bek</button>
+            <button onclick="filterPvsPoints('sergeli', this)" class="pvs-filter-chip bg-white border border-gray-200 text-sub-text text-xs font-medium px-3.5 py-1.5 rounded-full whitespace-nowrap hover:border-kinetic transition-all">Sergeli</button>
+          </div>
+
+          <!-- Interactive Points list -->
+          <div id="pvsPointsList" class="space-y-2.5">
+            <div class="pvs-card bg-white p-4 rounded-2xl shadow-sm border border-gray-100" data-district="chilonzor">
               <div class="flex items-start justify-between">
                 <div>
-                  <h4 class="font-bold text-sm text-main-text">Topspot Chilonzor PVS №1</h4>
+                  <div class="flex items-center gap-1.5 mb-0.5">
+                    <span class="bg-orange-50 text-kinetic font-mono text-[10px] font-bold px-1.5 py-0.2 rounded">PVS №1</span>
+                    <h4 class="font-bold text-sm text-main-text">Topspot Chilonzor</h4>
+                  </div>
                   <p class="text-xs text-sub-text mt-1">Chilonzor tumani, Qatortol ko'chasi, 60-uy</p>
-                  <p class="text-[11px] text-emerald-600 font-medium mt-1">Har kuni: 09:00 — 21:00</p>
+                  <p class="text-[11px] text-emerald-600 font-medium mt-1">Har kuni: 09:00 — 21:00 • Topshirish va qabul</p>
                 </div>
-                <span class="bg-soft-orange text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-md">800 m</span>
+                <span class="bg-soft-orange text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-md flex-shrink-0">800 m</span>
               </div>
-              <button onclick="alert('Xaritada yo\'nalish ko\'rsatilmoqda: Chilonzor Qatortol 60')" class="w-full mt-3 bg-gray-50 hover:bg-soft-orange text-kinetic font-bold py-2 rounded-xl text-xs transition-colors border border-kinetic/20">
-                Marshrut olish
+              <button onclick="handleOpenPvsRoute('Chilonzor PVS №1', 'Chilonzor tumani, Qatortol ko\'chasi, 60-uy')" class="w-full mt-3 bg-gray-50 hover:bg-soft-orange text-kinetic font-bold py-2 rounded-xl text-xs transition-colors border border-kinetic/20 flex items-center justify-center gap-1.5">
+                <span>📍</span> Marshrut olish / Xaritada ko'rish
               </button>
             </div>
 
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <div class="pvs-card bg-white p-4 rounded-2xl shadow-sm border border-gray-100" data-district="yunusobod">
               <div class="flex items-start justify-between">
                 <div>
-                  <h4 class="font-bold text-sm text-main-text">Topspot Yunusobod PVS №4</h4>
+                  <div class="flex items-center gap-1.5 mb-0.5">
+                    <span class="bg-orange-50 text-kinetic font-mono text-[10px] font-bold px-1.5 py-0.2 rounded">PVS №4</span>
+                    <h4 class="font-bold text-sm text-main-text">Topspot Yunusobod</h4>
+                  </div>
                   <p class="text-xs text-sub-text mt-1">Yunusobod tumani, Amir Temur shox ko'chasi, 107B</p>
-                  <p class="text-[11px] text-emerald-600 font-medium mt-1">Har kuni: 09:00 — 21:00</p>
+                  <p class="text-[11px] text-emerald-600 font-medium mt-1">Har kuni: 09:00 — 21:00 • Katta texnika qabul punkti</p>
                 </div>
-                <span class="bg-soft-orange text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-md">2.4 km</span>
+                <span class="bg-soft-orange text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-md flex-shrink-0">2.4 km</span>
               </div>
-              <button onclick="alert('Xaritada yo\'nalish ko\'rsatilmoqda: Yunusobod 107B')" class="w-full mt-3 bg-gray-50 hover:bg-soft-orange text-kinetic font-bold py-2 rounded-xl text-xs transition-colors border border-kinetic/20">
-                Marshrut olish
+              <button onclick="handleOpenPvsRoute('Yunusobod PVS №4', 'Yunusobod tumani, Amir Temur 107B')" class="w-full mt-3 bg-gray-50 hover:bg-soft-orange text-kinetic font-bold py-2 rounded-xl text-xs transition-colors border border-kinetic/20 flex items-center justify-center gap-1.5">
+                <span>📍</span> Marshrut olish / Xaritada ko'rish
               </button>
             </div>
 
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+            <div class="pvs-card bg-white p-4 rounded-2xl shadow-sm border border-gray-100" data-district="mirzo">
               <div class="flex items-start justify-between">
                 <div>
-                  <h4 class="font-bold text-sm text-main-text">Topspot Mirzo Ulug'bek PVS №7</h4>
+                  <div class="flex items-center gap-1.5 mb-0.5">
+                    <span class="bg-orange-50 text-kinetic font-mono text-[10px] font-bold px-1.5 py-0.2 rounded">PVS №7</span>
+                    <h4 class="font-bold text-sm text-main-text">Topspot Mirzo Ulug'bek</h4>
+                  </div>
                   <p class="text-xs text-sub-text mt-1">Mirzo Ulug'bek tumani, Buyuk Ipak Yo'li, 42</p>
-                  <p class="text-[11px] text-emerald-600 font-medium mt-1">Har kuni: 09:00 — 21:00</p>
+                  <p class="text-[11px] text-emerald-600 font-medium mt-1">Har kuni: 09:00 — 21:00 • Ekspress tekshiruv</p>
                 </div>
-                <span class="bg-soft-orange text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-md">3.8 km</span>
+                <span class="bg-soft-orange text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-md flex-shrink-0">3.8 km</span>
               </div>
-              <button onclick="alert('Xaritada yo\'nalish ko\'rsatilmoqda: Buyuk Ipak Yo\'li 42')" class="w-full mt-3 bg-gray-50 hover:bg-soft-orange text-kinetic font-bold py-2 rounded-xl text-xs transition-colors border border-kinetic/20">
-                Marshrut olish
+              <button onclick="handleOpenPvsRoute('Mirzo Ulug\'bek PVS №7', 'Mirzo Ulug\'bek tumani, Buyuk Ipak Yo\'li 42')" class="w-full mt-3 bg-gray-50 hover:bg-soft-orange text-kinetic font-bold py-2 rounded-xl text-xs transition-colors border border-kinetic/20 flex items-center justify-center gap-1.5">
+                <span>📍</span> Marshrut olish / Xaritada ko'rish
+              </button>
+            </div>
+
+            <div class="pvs-card bg-white p-4 rounded-2xl shadow-sm border border-gray-100" data-district="sergeli">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="flex items-center gap-1.5 mb-0.5">
+                    <span class="bg-orange-50 text-kinetic font-mono text-[10px] font-bold px-1.5 py-0.2 rounded">PVS №12</span>
+                    <h4 class="font-bold text-sm text-main-text">Topspot Sergeli Avto Hub</h4>
+                  </div>
+                  <p class="text-xs text-sub-text mt-1">Sergeli tumani, Yangi Sergeli ko'chasi, 28-uy</p>
+                  <p class="text-[11px] text-emerald-600 font-medium mt-1">Har kuni: 08:30 — 21:30 • Avtomobil va og'ir texnika</p>
+                </div>
+                <span class="bg-soft-orange text-kinetic text-[10px] font-bold px-2 py-0.5 rounded-md flex-shrink-0">5.1 km</span>
+              </div>
+              <button onclick="handleOpenPvsRoute('Sergeli PVS №12', 'Sergeli tumani, Yangi Sergeli 28')" class="w-full mt-3 bg-gray-50 hover:bg-soft-orange text-kinetic font-bold py-2 rounded-xl text-xs transition-colors border border-kinetic/20 flex items-center justify-center gap-1.5">
+                <span>📍</span> Marshrut olish / Xaritada ko'rish
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ==================== SUB-VIEW: MA'LUMOTNOMA (FAQ) ==================== -->
+      <!-- ==================== SUB-VIEW: MA'LUMOTNOMA (FAQ) - ACCORDION ==================== -->
       <div id="profileSubView-faq" class="profile-sub-view hidden min-h-screen bg-[#F2F4F7] overflow-y-auto pb-10">
         <!-- Sticky Header Bar -->
         <div class="sticky top-0 z-50 bg-white border-b border-[#E4E7ED] px-4 py-3.5 flex items-center justify-between shadow-xs">
@@ -986,29 +1119,87 @@
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h2 class="font-bold text-base text-main-text">Ma'lumotnoma (FAQ)</h2>
+          <h2 class="font-bold text-base text-main-text">Ma'lumotnoma & FAQ</h2>
           <div class="w-7"></div>
         </div>
 
-        <div class="p-4 space-y-3">
-          <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-1">
-            <h4 class="font-bold text-sm text-main-text">Topspot orqali qanday ijara olinadi?</h4>
-            <p class="text-xs text-sub-text leading-relaxed">Katalogdan kerakli avtomobil, uskuna yoki ko'chmas mulkni tanlang. Ijara muddatini belgilab, bron qiling va egasi bilan yoki topshirish punkti orqali qabul qilib oling.</p>
+        <div class="p-4 space-y-2.5">
+          <!-- Accordion Item 1 -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <button onclick="toggleFaqAccordion(this)" class="w-full p-4 flex items-center justify-between text-left focus:outline-none">
+              <h4 class="font-bold text-xs md:text-sm text-main-text pr-2">Topspot orqali qanday ijara olinadi?</h4>
+              <svg class="faq-arrow w-5 h-5 text-gray-400 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-content hidden px-4 pb-4 text-xs text-sub-text leading-relaxed border-t border-gray-50 pt-2">
+              Katalogdan kerakli avtomobil, texnika yoki xizmatni tanlang. Muddatni belgilab, bron qilish tugmasini bosing. To'lov va depozit muzlatilgandan so'ng, topshirish punkti (PVS) yoki egasining manzili orqali qabul qilib olasiz.
+            </div>
           </div>
 
-          <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-1">
-            <h4 class="font-bold text-main-text text-sm">Depozit summasi qachon qaytariladi?</h4>
-            <p class="text-xs text-sub-text leading-relaxed">Obyekt yoki texnika soz holatda topshirilgach, depozit balansingizga 15 daqiqa ichida to'liq qaytariladi. Balansdagi mablag'ni istalgan payt kartangizga chiqarib olishingiz mumkin.</p>
+          <!-- Accordion Item 2 -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <button onclick="toggleFaqAccordion(this)" class="w-full p-4 flex items-center justify-between text-left focus:outline-none">
+              <h4 class="font-bold text-xs md:text-sm text-main-text pr-2">Xavfsizlik va depozit qoidalari qanday?</h4>
+              <svg class="faq-arrow w-5 h-5 text-gray-400 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-content hidden px-4 pb-4 text-xs text-sub-text leading-relaxed border-t border-gray-50 pt-2">
+              Barcha bitimlar elektron dalolatnoma va sug'urta bilan himoyalanadi. Depozit summasi bitim davomida xavfsiz escrow-hisobda muzlatiladi va begona shaxslarga o'tkazilmaydi.
+            </div>
           </div>
 
-          <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-1">
-            <h4 class="font-bold text-main-text text-sm">E'lon berish qoidalari qanday?</h4>
-            <p class="text-xs text-sub-text leading-relaxed">Profil menyusidagi "Ijaraga beruvchi bo'lish" tugmasi orqali 4 bosqichli formani to'ldiring. Admin moderatsiyasidan so'ng e'loningiz barcha foydalanuvchilarga ko'rinadi.</p>
+          <!-- Accordion Item 3 -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <button onclick="toggleFaqAccordion(this)" class="w-full p-4 flex items-center justify-between text-left focus:outline-none">
+              <h4 class="font-bold text-xs md:text-sm text-main-text pr-2">Mulkka zarar yetkazilsa nima bo'ladi?</h4>
+              <svg class="faq-arrow w-5 h-5 text-gray-400 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-content hidden px-4 pb-4 text-xs text-sub-text leading-relaxed border-t border-gray-50 pt-2">
+              Obyekt topshirilishidan oldin 360° video va foto dalolatnoma tuziladi. Tabiiy eskirish yoki ishlab chiqaruvchi nosozligi egasining javobgarligida bo'ladi. Foydalanuvchi aybi bilan yetkazilgan zarar depozit mablag'i doirasida qoplanadi.
+            </div>
           </div>
 
-          <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-1">
-            <h4 class="font-bold text-main-text text-sm">Ijara vaqtida buzilsa nima bo'ladi?</h4>
-            <p class="text-xs text-sub-text leading-relaxed">Har bir shartnoma raqamli dalolatnoma bilan himoyalangan. Ishlab chiqaruvchi nuqsoni bo'lsa egasi javobgar, noto'g'ri foydalanilsa depozit hisobidan qoplanadi.</p>
+          <!-- Accordion Item 4 -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <button onclick="toggleFaqAccordion(this)" class="w-full p-4 flex items-center justify-between text-left focus:outline-none">
+              <h4 class="font-bold text-xs md:text-sm text-main-text pr-2">Depozit summasi qachon qaytariladi?</h4>
+              <svg class="faq-arrow w-5 h-5 text-gray-400 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-content hidden px-4 pb-4 text-xs text-sub-text leading-relaxed border-t border-gray-50 pt-2">
+              Obyekt soz holatda PVS punkti yoki egasiga topshirilib, qabul qilingandan so'ng depozit 15 daqiqa ichida Topspot balansingizga to'liq qaytariladi.
+            </div>
+          </div>
+
+          <!-- Accordion Item 5 -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <button onclick="toggleFaqAccordion(this)" class="w-full p-4 flex items-center justify-between text-left focus:outline-none">
+              <h4 class="font-bold text-xs md:text-sm text-main-text pr-2">E'lon berish qoidalari qanday?</h4>
+              <svg class="faq-arrow w-5 h-5 text-gray-400 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-content hidden px-4 pb-4 text-xs text-sub-text leading-relaxed border-t border-gray-50 pt-2">
+              Pastki menyudagi "+" yoki Profil menyusidagi "Ijaraga beruvchi bo'lish" tugmasi orqali 4 bosqichli formani to'ldiring. Standart e'lon berish mutlaqo bepul.
+            </div>
+          </div>
+
+          <!-- Accordion Item 6 -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <button onclick="toggleFaqAccordion(this)" class="w-full p-4 flex items-center justify-between text-left focus:outline-none">
+              <h4 class="font-bold text-xs md:text-sm text-main-text pr-2">Mutaxassis yoki usta qanday chaqiriladi?</h4>
+              <svg class="faq-arrow w-5 h-5 text-gray-400 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div class="faq-content hidden px-4 pb-4 text-xs text-sub-text leading-relaxed border-t border-gray-50 pt-2">
+              "Servislar & Xizmatlar" bo'limidan kerakli ustani tanlang, uning tajribasi va soatlik/vyizd narxini ko'ring hamda "Bog'lanish / Buyurtma berish" tugmasini bosing. Siz to'g'ridan-to'g'ri telefon yoki Telegram orqali mutaxassis bilan bog'lanasiz.
+            </div>
           </div>
         </div>
       </div>
@@ -1030,38 +1221,59 @@
           <!-- Call card -->
           <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-kinetic/10 text-kinetic flex items-center justify-center text-lg">
+              <div class="w-11 h-11 rounded-2xl bg-orange-50 text-kinetic flex items-center justify-center text-xl border border-kinetic/20">
                 📞
               </div>
               <div>
                 <h4 class="font-bold text-sm text-main-text">Yagona koll-markaz (24/7)</h4>
-                <p class="text-xs text-sub-text font-mono">+998 71 200 00 00</p>
+                <p class="text-xs text-sub-text font-mono mt-0.5">+998 71 200 00 00</p>
               </div>
             </div>
-            <a href="tel:+998712000000" class="bg-kinetic text-white text-xs font-bold px-3 py-1.5 rounded-xl">Qo'ng'iroq</a>
+            <a href="tel:+998712000000" class="bg-kinetic hover:bg-[#E64D00] text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm active:scale-95">
+              Qo'ng'iroq
+            </a>
           </div>
 
           <!-- Telegram Bot card -->
           <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center text-lg">
+              <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center text-xl border border-blue-200/50">
                 ✈️
               </div>
               <div>
                 <h4 class="font-bold text-sm text-main-text">Telegram yordamchi bot</h4>
-                <p class="text-xs text-sub-text">@topspot_support</p>
+                <p class="text-xs text-sub-text mt-0.5">@TopspotSupport</p>
               </div>
             </div>
-            <a href="https://t.me" target="_blank" class="border border-blue-500 text-blue-600 text-xs font-bold px-3 py-1.5 rounded-xl">Yozish</a>
+            <a href="https://t.me/TopspotSupport" target="_blank" rel="noreferrer" class="border border-blue-500 text-blue-600 hover:bg-blue-50 text-xs font-bold px-4 py-2 rounded-xl transition-all active:scale-95">
+              Yozish
+            </a>
+          </div>
+
+          <!-- Official Email card -->
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl border border-emerald-200/50">
+                ✉️
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-main-text">Rasmiy elektron pochta</h4>
+                <p class="text-xs text-sub-text font-mono mt-0.5">support@topspot.uz</p>
+              </div>
+            </div>
+            <a href="mailto:support@topspot.uz" class="border border-emerald-500 text-emerald-700 hover:bg-emerald-50 text-xs font-bold px-4 py-2 rounded-xl transition-all active:scale-95">
+              Email
+            </a>
           </div>
 
           <!-- Message Form -->
           <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-            <h4 class="font-bold text-sm text-main-text mb-2">To'g'ridan-to'g'ri xabar yuborish</h4>
-            <form onsubmit="event.preventDefault(); alert('Xabaringiz qabul qilindi. Tez orada operator siz bilan bog\'lanadi.'); navigateToProfileSubView('root');" class="space-y-3">
-              <textarea placeholder="Savol yoki taklifingizni yozing..." class="w-full border border-gray-200 rounded-xl p-3 text-xs text-main-text focus:outline-none focus:border-kinetic h-24 resize-none" required></textarea>
-              <button type="submit" class="w-full bg-kinetic text-white font-bold py-3 rounded-xl text-xs shadow-md">
-                Yuborish
+            <h4 class="font-bold text-sm text-main-text mb-1">To'g'ridan-to'g'ri xabar yuborish</h4>
+            <p class="text-xs text-sub-text mb-3">Operatorlarimiz 5 daqiqa ichida javob berishadi</p>
+            <form onsubmit="handleSendSupportFeedback(event)" class="space-y-3">
+              <textarea id="supportFeedbackMsg" placeholder="Savol, shikoyat yoki taklifingizni yozing..." class="w-full border border-gray-200 rounded-xl p-3 text-xs text-main-text focus:outline-none focus:border-kinetic h-24 resize-none" required></textarea>
+              <button type="submit" class="w-full bg-kinetic hover:bg-[#E64D00] text-white font-bold py-3 rounded-xl text-xs shadow-md transition-all active:scale-95">
+                Xabarni yuborish
               </button>
             </form>
           </div>
@@ -1367,25 +1579,54 @@
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-semibold text-main-text mb-1">Asosiy Vertikal *</label>
-                <select id="wVertical" class="w-full border border-border-gray rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-kinetic">
+                <select id="wVertical" onchange="handleWizardVerticalChange()" class="w-full border border-border-gray rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-kinetic">
                   <option value="mobility">🚗 Mobillik</option>
                   <option value="realestate">🏢 Ko'chmas mulk</option>
                   <option value="equipment">🔧 Uskunalar & Texnika</option>
+                  <option value="services">👷‍♂️🛠️ Servislar & Xizmatlar</option>
                   <option value="specialists">👷 Mutaxassislar</option>
                 </select>
               </div>
               <div>
                 <label class="block text-xs font-semibold text-main-text mb-1">Toifa / Kategoriya *</label>
-                <input type="text" id="wCategoryName" placeholder="Masalan: Yengil avto" class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
+                <input type="text" id="wCategoryName" placeholder="Masalan: Maishiy texnika ta'miri" class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
               </div>
             </div>
+
+            <!-- Specialist / Service Specific Fields (Shown when Services is selected) -->
+            <div id="wizardServiceFields" class="hidden space-y-3 p-3.5 bg-orange-50/80 border border-kinetic/30 rounded-2xl">
+              <div class="flex items-center gap-1.5 text-xs font-bold text-kinetic">
+                <span>🛠️</span> Mutaxassis va Xizmat ma'lumotlari
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] font-semibold text-main-text mb-1">Mutaxassislik unvoni *</label>
+                  <input type="text" id="wSpecialistTitle" placeholder="Masalan: Professional santexnik" class="w-full bg-white border border-border-gray rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-kinetic">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold text-main-text mb-1">Tajriba muddati *</label>
+                  <input type="text" id="wExperienceYears" placeholder="Masalan: 7 yil tajriba" class="w-full bg-white border border-border-gray rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-kinetic">
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] font-semibold text-main-text mb-1">Tashrif (Vyizd) narxi (UZS)</label>
+                  <input type="number" id="wVisitPrice" placeholder="50000" class="w-full bg-white border border-border-gray rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-kinetic">
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold text-main-text mb-1">Xizmat hududi (tumanlar)</label>
+                  <input type="text" id="wServiceArea" placeholder="Masalan: Toshkent barcha tumanlar" class="w-full bg-white border border-border-gray rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-kinetic">
+                </div>
+              </div>
+            </div>
+
             <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs font-semibold text-main-text mb-1">Kunlik narx (UZS) *</label>
+                <label id="wDailyPriceLabel" class="block text-xs font-semibold text-main-text mb-1">Kunlik narx (UZS) *</label>
                 <input type="number" id="wDailyPrice" placeholder="250000" class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
               </div>
               <div>
-                <label class="block text-xs font-semibold text-main-text mb-1">Soatlik narx (UZS)</label>
+                <label id="wHourlyPriceLabel" class="block text-xs font-semibold text-main-text mb-1">Soatlik narx (UZS)</label>
                 <input type="number" id="wHourlyPrice" placeholder="45000" class="w-full border border-border-gray rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-kinetic">
               </div>
             </div>
@@ -1663,6 +1904,39 @@
     </div>
   </nav>
 
+  <!-- ==================== MODAL: CONTACT OWNER & CHAT ==================== -->
+  <div id="contactOwnerModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+    <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeContactOwnerModal()"></div>
+    <div class="relative min-h-screen flex items-center justify-center p-4">
+      <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden p-6 z-10 animate-slide-up">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-bold text-base text-main-text">Bog'lanish / Aloqa</h3>
+          <button onclick="closeContactOwnerModal()" class="text-gray-400 hover:text-main-text text-xl leading-none">&times;</button>
+        </div>
+        <div class="bg-gray-50 rounded-2xl p-3 flex items-center gap-3 mb-4 border border-gray-100">
+          <div id="contactOwnerAvatar" class="w-12 h-12 rounded-xl bg-kinetic/10 text-kinetic flex items-center justify-center font-bold text-2xl flex-shrink-0">
+            👤
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 id="contactOwnerTitle" class="font-bold text-xs text-main-text truncate">Obyekt</h4>
+            <p id="contactOwnerName" class="text-[11px] text-sub-text truncate">Egasi: -</p>
+          </div>
+        </div>
+        <div class="space-y-2.5">
+          <a id="contactOwnerCallLink" href="#" class="w-full bg-kinetic hover:bg-[#E64D00] text-white font-bold py-3 px-4 rounded-xl text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-2">
+            <span>📞</span> To'g'ridan-to'g'ri qo'ng'iroq qilish
+          </a>
+          <a id="contactOwnerTgLink" href="https://t.me/TopspotSupport" target="_blank" rel="noreferrer" class="w-full bg-[#229ED9] hover:bg-[#1E8BC3] text-white font-bold py-3 px-4 rounded-xl text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-2">
+            <span>✈️</span> Telegram orqali yozish
+          </a>
+          <button id="contactOwnerChatBtn" onclick="handleContactOwnerInAppChat()" class="w-full border border-kinetic text-kinetic hover:bg-soft-orange font-bold py-3 px-4 rounded-xl text-xs transition-all active:scale-95 flex items-center justify-center gap-2">
+            <span>💬</span> Topspot ichki chatida yozish
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== JAVASCRIPT APPLICATION CORE ==================== -->
   <script>
     // Initial Seed Data
@@ -1786,6 +2060,116 @@
         status: "approved",
         image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80",
         receipt_url: ""
+      },
+      {
+        id: "s-1",
+        title: "Konditsioner ta'miri, tozalash va freon to'ldirish",
+        vertical: "services",
+        category_name: "Maishiy texnika ta'miri",
+        daily_price: 150000,
+        hourly_price: 80000,
+        visit_price: 40000,
+        service_area: "Toshkent shahri (20 km)",
+        experience_years: "8 yil tajriba",
+        specialist_title: "Katta sovitish tizimlari ustasi",
+        rating: 4.9,
+        reviews_count: 58,
+        is_service: true,
+        owner_name: "Akmal Usta",
+        phone: "+998 90 999 11 22",
+        address: "Toshkent shahar bo'ylab",
+        tariff: "top",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
+      },
+      {
+        id: "s-2",
+        title: "Professional Santexnik & Isitish tizimlari ustasi",
+        vertical: "services",
+        category_name: "Qurilish & Santexnika",
+        daily_price: 200000,
+        hourly_price: 70000,
+        visit_price: 50000,
+        service_area: "Chilonzor, Yunusobod, Mirzo Ulug'bek",
+        experience_years: "12 yil tajriba",
+        specialist_title: "Oliy toifali santexnik",
+        rating: 5.0,
+        reviews_count: 74,
+        is_service: true,
+        owner_name: "Davron Usta",
+        phone: "+998 93 555 44 33",
+        address: "Toshkent shahar bo'ylab",
+        tariff: "vip",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
+      },
+      {
+        id: "s-3",
+        title: "Mebel yig'ish, buzish va yuk tashish servisi",
+        vertical: "services",
+        category_name: "Mebel & Ko'chirish",
+        daily_price: 180000,
+        hourly_price: 65000,
+        visit_price: 30000,
+        service_area: "Toshkent va viloyat",
+        experience_years: "6 yil tajriba",
+        specialist_title: "Mebel ustasi & Transport",
+        rating: 4.8,
+        reviews_count: 41,
+        is_service: true,
+        owner_name: "Farxod & Jamoasi",
+        phone: "+998 97 777 88 99",
+        address: "Toshkent sh., Sergeli",
+        tariff: "standard",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
+      },
+      {
+        id: "s-4",
+        title: "Professional Fotograf & Videograf xizmati",
+        vertical: "services",
+        category_name: "Tadbir & Media xizmatlari",
+        daily_price: 800000,
+        hourly_price: 150000,
+        visit_price: 80000,
+        service_area: "Toshkent shahar",
+        experience_years: "7 yil tajriba",
+        specialist_title: "Media produser & Fotograf",
+        rating: 5.0,
+        reviews_count: 36,
+        is_service: true,
+        owner_name: "Shohruh Media",
+        phone: "+998 99 888 77 66",
+        address: "Toshkent sh., Mirzo Ulug'bek",
+        tariff: "top",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
+      },
+      {
+        id: "s-5",
+        title: "Kvartira va ofislarni tozalash (General Klininq)",
+        vertical: "services",
+        category_name: "Tozalash & Klininq",
+        daily_price: 350000,
+        hourly_price: 60000,
+        visit_price: 40000,
+        service_area: "Barcha tumanlar bo'ylab",
+        experience_years: "5 yil tajriba",
+        specialist_title: "Klininq brigadasi rahbari",
+        rating: 4.9,
+        reviews_count: 62,
+        is_service: true,
+        owner_name: "CleanPro Toshkent",
+        phone: "+998 94 666 55 44",
+        address: "Toshkent sh., Shayxontohur",
+        tariff: "standard",
+        status: "approved",
+        image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80",
+        receipt_url: ""
       }
     ];
 
@@ -1801,15 +2185,27 @@
     const TRANSLATIONS = {
       uz: {
         langName: "O'zbekcha",
-        searchPlaceholder: "Qidiring: avtomobil, kamera, usta..."
+        searchPlaceholder: "Qidiring: avtomobil, kamera, usta, servis...",
+        navHome: "Bosh sahifa",
+        navCatalog: "Katalog",
+        navSaved: "Saralangan",
+        navProfile: "Profil"
       },
       ru: {
         langName: "Русский",
-        searchPlaceholder: "Искать: авто, камера, мастер..."
+        searchPlaceholder: "Искать: авто, камера, мастер, сервис...",
+        navHome: "Главная",
+        navCatalog: "Каталог",
+        navSaved: "Избранное",
+        navProfile: "Профиль"
       },
       en: {
         langName: "English",
-        searchPlaceholder: "Search: cars, camera, tools..."
+        searchPlaceholder: "Search: cars, camera, tools, services...",
+        navHome: "Home",
+        navCatalog: "Catalog",
+        navSaved: "Saved",
+        navProfile: "Profile"
       }
     };
     let currentAppLang = 'uz';
@@ -1913,6 +2309,79 @@
 
       grid.innerHTML = items.map(item => {
         const isFav = favorites.has(item.id);
+
+        if (item.is_service || item.vertical === 'services' || item.vertical === 'specialists') {
+          return `
+            <div class="bg-white rounded-2xl border border-orange-200/80 overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col justify-between cursor-pointer">
+              <!-- Specialist Photo Container -->
+              <div class="relative w-full aspect-[4/5] bg-gray-100 overflow-hidden">
+                <img src="${item.image || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80'}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                
+                <!-- Specialist Badge -->
+                <div class="absolute top-2.5 left-2.5 bg-kinetic text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm flex items-center gap-1">
+                  <span>🛠️</span> Mutaxassis
+                </div>
+
+                <!-- Experience Tag -->
+                <div class="absolute bottom-2.5 left-2.5 bg-obsidian/85 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm">
+                  ${item.experience_years || '5+ yil tajriba'}
+                </div>
+
+                <!-- Heart Button -->
+                <button onclick="toggleFav('${item.id}', event)" class="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center text-gray-500 hover:text-red-500 hover:scale-110 transition-all shadow-sm">
+                  <svg class="w-4 h-4 ${isFav ? 'text-red-500 fill-red-500' : ''}" fill="${isFav ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Specialist Info & Action -->
+              <div class="p-3.5 flex-1 flex flex-col justify-between space-y-2">
+                <div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-[10px] text-kinetic font-bold uppercase tracking-wider">${item.category_name}</span>
+                    <div class="flex items-center gap-1 text-[11px] font-bold text-amber-500">
+                      <span>★</span>
+                      <span>${item.rating ? Number(item.rating).toFixed(1) : '4.9'}</span>
+                      <span class="text-[10px] text-gray-400">(${item.reviews_count || 24})</span>
+                    </div>
+                  </div>
+                  <h4 class="font-bold text-xs md:text-sm text-main-text line-clamp-2 leading-tight mt-1">${item.title}</h4>
+                  <p class="text-[11px] text-sub-text font-medium mt-0.5">${item.owner_name} ${item.specialist_title ? `• ${item.specialist_title}` : ''}</p>
+                </div>
+
+                <div class="pt-2 border-t border-border-gray/60 space-y-2">
+                  <div class="flex items-baseline justify-between">
+                    <div>
+                      <span class="text-sm md:text-base font-extrabold text-kinetic">${formatNumber(item.hourly_price || item.daily_price)}</span>
+                      <span class="text-[10px] text-sub-text"> so'm/soat</span>
+                    </div>
+                    ${item.visit_price ? `
+                      <div class="text-[10px] text-sub-text font-medium">
+                        Vyizd: <span class="font-bold text-main-text">${formatNumber(item.visit_price)} so'm</span>
+                      </div>
+                    ` : ''}
+                  </div>
+
+                  ${item.service_area || item.address ? `
+                    <div class="text-[10px] text-gray-400 truncate flex items-center gap-1">
+                      <svg class="w-3 h-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      </svg>
+                      <span>${item.service_area || item.address}</span>
+                    </div>
+                  ` : ''}
+
+                  <!-- 100% Interactive Call / Order Button -->
+                  <button onclick="handleSpecialistContact('${item.id}', event)" class="w-full bg-kinetic hover:bg-[#E64D00] text-white text-xs font-bold py-2 rounded-xl shadow-sm transition-all active:scale-95 flex items-center justify-center gap-1.5">
+                    <span>📞</span> Bog'lanish / Buyurtma berish
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
         const hourlyTag = item.hourly_price ? `
           <span class="absolute top-2.5 left-2.5 bg-soft-orange text-kinetic font-bold text-[10px] px-2 py-0.5 rounded-full shadow-sm">
             ${formatNumber(item.hourly_price)} so'm/soat
@@ -2099,12 +2568,24 @@
           { name: "Ovoz va yorug'lik", items: ["Akustik kolonka va miksher", "Mikrofonlar (Rode, Shure)", "Sahna yorug'ligi"] }
         ]
       },
-      specialists: {
-        title: "👷 Mutaxassislar xizmati",
+      services: {
+        title: "👷‍♂️🛠️ Servislar & Xizmatlar",
         groups: [
-          { name: "Texnik ustalar", items: ["Santexnik usta", "Professional elektrik", "Isitish qozoni ustasi"] },
-          { name: "Yig'uvchilar & Montaj", items: ["Mebel yig'uvchi usta", "Konditsioner o'rnatuvchi", "Gipsokarton ustasi"] },
-          { name: "Media ustalari", items: ["Video operator", "Professional fotograf", "Ovoz rejissyori"] }
+          { name: "Maishiy texnika ta'miri", items: ["Konditsioner ta'miri & tozalash", "Muzlatgich ta'miri", "Kir yuvish mashinasi ustasi"] },
+          { name: "Qurilish & Santexnika", items: ["Professional santexnik", "Elektrik ustasi", "Plitkachi usta", "Gipsokartonchi"] },
+          { name: "Mebel & Ko'chirish", items: ["Mebel yig'ish va buzish", "Yuk ortish xizmati", "Yuk taksi / Transport"] },
+          { name: "Tadbir & Media xizmatlari", items: ["Fotograf xizmati", "Videograf & operator", "Montajchi & kolorist", "Tadbir boshlovchisi / DJ"] },
+          { name: "Tozalash & Klininq", items: ["Kvartira va uy tozalash", "Ofis tozalash xizmati", "Kimyoviy tozalash (himchistka)"] }
+        ]
+      },
+      specialists: {
+        title: "👷‍♂️🛠️ Servislar & Xizmatlar",
+        groups: [
+          { name: "Maishiy texnika ta'miri", items: ["Konditsioner ta'miri & tozalash", "Muzlatgich ta'miri", "Kir yuvish mashinasi ustasi"] },
+          { name: "Qurilish & Santexnika", items: ["Professional santexnik", "Elektrik ustasi", "Plitkachi usta", "Gipsokartonchi"] },
+          { name: "Mebel & Ko'chirish", items: ["Mebel yig'ish va buzish", "Yuk ortish xizmati", "Yuk taksi / Transport"] },
+          { name: "Tadbir & Media xizmatlari", items: ["Fotograf xizmati", "Videograf & operator", "Montajchi & kolorist", "Tadbir boshlovchisi / DJ"] },
+          { name: "Tozalash & Klininq", items: ["Kvartira va uy tozalash", "Ofis tozalash xizmati", "Kimyoviy tozalash (himchistka)"] }
         ]
       }
     };
@@ -2194,15 +2675,41 @@
       }
     }
 
+    function handleWizardVerticalChange() {
+      const vert = document.getElementById('wVertical').value;
+      const sFields = document.getElementById('wizardServiceFields');
+      const dailyLbl = document.getElementById('wDailyPriceLabel');
+      const hourlyLbl = document.getElementById('wHourlyPriceLabel');
+      if (vert === 'services' || vert === 'specialists') {
+        if (sFields) sFields.classList.remove('hidden');
+        if (dailyLbl) dailyLbl.innerText = "Kunlik / Baza narx (UZS)";
+        if (hourlyLbl) hourlyLbl.innerText = "Soatlik ish haqi (UZS/soat) *";
+      } else {
+        if (sFields) sFields.classList.add('hidden');
+        if (dailyLbl) dailyLbl.innerText = "Kunlik narx (UZS) *";
+        if (hourlyLbl) hourlyLbl.innerText = "Soatlik narx (UZS)";
+      }
+    }
+
     function nextWizardStep() {
       if (currentStep === 1) {
         const title = document.getElementById('wTitle').value.trim();
+        const vert = document.getElementById('wVertical').value;
         const daily = document.getElementById('wDailyPrice').value;
+        const hourly = document.getElementById('wHourlyPrice').value;
         const owner = document.getElementById('wOwnerName').value.trim();
         const phone = document.getElementById('wPhone').value.trim();
-        if (!title || !daily || !owner || !phone) {
-          alert("Iltimos, yulduzcha (*) bilan belgilangan barcha maydonlarni to'ldiring!");
-          return;
+
+        if (vert === 'services' || vert === 'specialists') {
+          if (!title || (!daily && !hourly) || !owner || !phone) {
+            alert("Iltimos, mutaxassis nomi, soatlik yoki baza narx hamda telefon raqamini to'ldiring!");
+            return;
+          }
+        } else {
+          if (!title || !daily || !owner || !phone) {
+            alert("Iltimos, yulduzcha (*) bilan belgilangan barcha maydonlarni to'ldiring!");
+            return;
+          }
         }
       } else if (currentStep === 2) {
         const addr = document.getElementById('wAddress').value.trim();
@@ -2239,11 +2746,14 @@
         }
       }
 
+      const vert = document.getElementById('wVertical').value;
+      const isService = vert === 'services' || vert === 'specialists';
+
       const newListing = {
         id: `l-${Date.now()}`,
         title: document.getElementById('wTitle').value.trim(),
-        vertical: document.getElementById('wVertical').value,
-        category_name: document.getElementById('wCategoryName').value.trim() || 'Ijara',
+        vertical: vert,
+        category_name: document.getElementById('wCategoryName').value.trim() || (isService ? "Servislar & Xizmatlar" : 'Ijara'),
         daily_price: parseInt(document.getElementById('wDailyPrice').value) || 0,
         hourly_price: parseInt(document.getElementById('wHourlyPrice').value) || 0,
         owner_name: document.getElementById('wOwnerName').value.trim(),
@@ -2253,9 +2763,21 @@
         tariff: wizardTariff,
         status: 'pending', // Awaiting Admin CRM confirmation!
         receipt_url: document.getElementById('wReceiptUrl')?.value.trim() || '',
-        image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80',
+        image: isService 
+          ? 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80'
+          : 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=600&q=80',
         created_at: new Date().toISOString()
       };
+
+      if (isService) {
+        newListing.is_service = true;
+        newListing.specialist_title = document.getElementById('wSpecialistTitle')?.value.trim() || "Malakali usta";
+        newListing.experience_years = document.getElementById('wExperienceYears')?.value.trim() || "5+ yil tajriba";
+        newListing.visit_price = parseInt(document.getElementById('wVisitPrice')?.value) || 50000;
+        newListing.service_area = document.getElementById('wServiceArea')?.value.trim() || "Toshkent shahri";
+        newListing.rating = 5.0;
+        newListing.reviews_count = 1;
+      }
 
       listings.unshift(newListing);
       saveListings();
@@ -2575,6 +3097,26 @@
       renderOrdersSubView();
     }
 
+    // ==================== LIVE COUNTDOWN TICKER FOR ACTIVE ORDERS ====================
+    let orderCountdownInterval = null;
+    let orderRemainingSeconds = 6 * 3600 + 45 * 60 + 20; // 06:45:20
+
+    function startActiveOrdersCountdown() {
+      if (orderCountdownInterval) clearInterval(orderCountdownInterval);
+      orderCountdownInterval = setInterval(() => {
+        if (orderRemainingSeconds > 0) {
+          orderRemainingSeconds--;
+          const hrs = String(Math.floor(orderRemainingSeconds / 3600)).padStart(2, '0');
+          const mins = String(Math.floor((orderRemainingSeconds % 3600) / 60)).padStart(2, '0');
+          const secs = String(orderRemainingSeconds % 60).padStart(2, '0');
+          const text = `${hrs}:${mins}:${secs}`;
+          document.querySelectorAll('.order-countdown-timer').forEach(el => {
+            el.innerText = text;
+          });
+        }
+      }, 1000);
+    }
+
     function renderOrdersSubView() {
       const container = document.getElementById('ordersContent');
       if (!container) return;
@@ -2603,7 +3145,7 @@
               </div>
               <h3 class="text-base font-bold text-main-text mb-1.5">Faol buyurtmalar yo'q</h3>
               <p class="text-xs text-sub-text max-w-xs mx-auto leading-relaxed mb-6 font-normal">
-                Bu yerda siz rasmiylashtirgan, lekin hali olmagan buyurtmalarni ko'rsatamiz
+                Bu yerda siz rasmiylashtirgan, lekin hali topshirmagan buyurtmalarni ko'rsatamiz
               </p>
               <button onclick="switchMobileTab('home')" class="bg-kinetic hover:bg-[#E64D00] text-white font-bold text-xs py-3 px-6 rounded-xl shadow-md transition-all active:scale-95">
                 Ijara katalogiga o'tish
@@ -2663,6 +3205,19 @@
               <p class="text-[11px] text-sub-text mt-1 flex items-center gap-1 font-medium">
                 <span>📅</span> Muddat: ${order.period}
               </p>
+              
+              <!-- Live Muddat Hisoblagichi (Countdown Timer) -->
+              ${order.status === 'active' ? `
+                <div class="mt-1.5 bg-amber-50 border border-amber-200/80 rounded-xl px-2.5 py-1.5 flex items-center justify-between text-[11px]">
+                  <span class="font-semibold text-amber-800 flex items-center gap-1">
+                    <span class="animate-pulse">⏱️</span> Muddat hisoblagichi:
+                  </span>
+                  <span class="order-countdown-timer font-mono font-bold text-amber-900 bg-amber-200/70 px-2 py-0.2 rounded-md text-[11px]">
+                    06:45:20
+                  </span>
+                </div>
+              ` : ''}
+
               <div class="mt-1.5 flex items-baseline gap-2">
                 <span class="text-xs font-bold text-kinetic">${formatNumber(order.total_price)} UZS</span>
                 <span class="text-[10px] text-sub-text">(${formatNumber(order.daily_price)} / kun)</span>
@@ -2684,7 +3239,7 @@
                   Bog'lanish
                 </button>
                 <button onclick="finishOrder('${order.id}')" class="bg-kinetic hover:bg-[#E64D00] text-white text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all shadow-sm">
-                  Topshirish
+                  Ijarani topshirish
                 </button>
               ` : `
                 <button onclick="repeatOrder('${order.id}')" class="border border-kinetic text-kinetic hover:bg-soft-orange text-[11px] font-bold px-3 py-1.5 rounded-xl transition-all">
@@ -2695,17 +3250,74 @@
           </div>
         </div>
       `).join('');
+
+      startActiveOrdersCountdown();
+    }
+
+    // ==================== CONTACT OWNER & SPECIALIST MODAL ====================
+    let activeContactTarget = null;
+
+    function openContactOwnerModal(data) {
+      activeContactTarget = data;
+      const modal = document.getElementById('contactOwnerModal');
+      if (!modal) return;
+
+      const avatar = document.getElementById('contactOwnerAvatar');
+      const title = document.getElementById('contactOwnerTitle');
+      const name = document.getElementById('contactOwnerName');
+      const callLink = document.getElementById('contactOwnerCallLink');
+      const tgLink = document.getElementById('contactOwnerTgLink');
+
+      if (avatar) avatar.innerText = data.avatar || '👤';
+      if (title) title.innerText = data.title;
+      if (name) name.innerText = data.owner_name;
+      if (callLink) callLink.href = `tel:${data.phone.replace(/\\s+/g, '')}`;
+      if (tgLink) tgLink.href = 'https://t.me/TopspotSupport';
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeContactOwnerModal() {
+      const modal = document.getElementById('contactOwnerModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handleContactOwnerInAppChat() {
+      closeContactOwnerModal();
+      if (activeContactTarget && (activeContactTarget.id === 'TS-849201' || activeContactTarget.title.includes('Onix'))) {
+        openChatThread('onix');
+      } else if (activeContactTarget && activeContactTarget.title.includes('Perforator')) {
+        openChatThread('perforator');
+      } else if (activeContactTarget && activeContactTarget.title.includes('Konditsioner')) {
+        openChatThread('ac');
+      } else {
+        openChatThread('support');
+      }
     }
 
     function handleContactOwner(orderId) {
       const o = userOrders.find(x => x.id === orderId);
       if (!o) return;
-      const choice = confirm(`Topspot Aloqa Xizmati\n\nObyekt: ${o.title}\nEgasi: ${o.owner_name}\nTelefon: ${o.owner_phone}\n\nQo'ng'iroq qilish uchun "OK" bosing. Bekor qilinsa, Telegram ochiladi.`);
-      if (choice) {
-        window.location.href = `tel:${o.owner_phone.replace(/\\s+/g, '')}`;
-      } else {
-        window.open('https://t.me', '_blank');
-      }
+      openContactOwnerModal({
+        id: o.id,
+        title: o.title,
+        owner_name: `Egasi: ${o.owner_name}`,
+        phone: o.owner_phone,
+        avatar: o.category.includes('avto') ? '🚗' : '🔨'
+      });
+    }
+
+    function handleSpecialistContact(id, e) {
+      if (e) e.stopPropagation();
+      const item = listings.find(l => l.id === id);
+      if (!item) return;
+      openContactOwnerModal({
+        id: item.id,
+        title: item.title,
+        owner_name: `${item.owner_name} (${item.specialist_title || item.category_name})`,
+        phone: item.phone || '+998 71 200 00 00',
+        avatar: '👷‍♂️'
+      });
     }
 
     function finishOrder(id) {
@@ -2969,11 +3581,209 @@
           date: "Bugun"
         });
 
+        // Update corresponding listing rating and reviews count
+        const matchedListing = listings.find(l => l.title === target.title || l.id === target.orderId);
+        if (matchedListing) {
+          const currentCount = matchedListing.reviews_count || 12;
+          const currentRating = matchedListing.rating || 4.8;
+          matchedListing.rating = Number(((currentRating * currentCount + selectedStarRating) / (currentCount + 1)).toFixed(1));
+          matchedListing.reviews_count = currentCount + 1;
+          saveListings();
+          renderListings();
+        }
+
         closeReviewModal();
         currentReviewsTab = 'completed';
         switchReviewsTab('completed');
         syncUserUI();
-        alert("🎉 Rahmat! Sharhingiz muvaffaqiyatli qabul qilindi va e'lon qilindi.");
+        alert("🎉 Rahmat! Sharhingiz muvaffaqiyatli qabul qilindi va reyting yangilandi.");
+      }
+    }
+
+    // ==================== INTERACTIVE CHATS SYSTEM ====================
+    const CHAT_DATA = {
+      support: {
+        id: 'support',
+        name: "Topspot Qo'llab-quvvatlash",
+        avatar: 'TS',
+        avatarBg: 'bg-kinetic',
+        phone: '+998712000000',
+        messages: [
+          { sender: 'other', text: "Assalomu alaykum! Topspot platformasiga xush kelibsiz. Sizga qanday yordam bera olamiz?", time: "10:30" },
+          { sender: 'other', text: "Chevrolet Onix 2024 Premier buyurtmangiz muvaffaqiyatli tasdiqlandi. Chilonzor PVS №1 punktidan olib ketishingiz mumkin.", time: "10:42" }
+        ]
+      },
+      onix: {
+        id: 'onix',
+        name: 'Azizbek R. (Onix Premier)',
+        avatar: '🚗',
+        avatarBg: 'bg-[#121824]',
+        phone: '+998901234567',
+        messages: [
+          { sender: 'other', text: "Salom! Mashinani soat 10:00 da topshirishga tayyorlab qo'yganman.", time: "Kecha, 18:20" },
+          { sender: 'user', text: "Salom! Mashinada to'liq yonilg'i bormi?", time: "Kecha, 18:25" },
+          { sender: 'other', text: "Ha, to'liq va toza holatda tayyor, kutib olaman.", time: "Kecha, 18:30" }
+        ]
+      },
+      perforator: {
+        id: 'perforator',
+        name: 'Rustam Usta (Bosch GBH)',
+        avatar: '🔨',
+        avatarBg: 'bg-gray-100 text-main-text',
+        phone: '+998934567890',
+        messages: [
+          { sender: 'user', text: "Usta, perforator bilan ishlash tugadi, punktga topshirdim.", time: "03.10, 16:40" },
+          { sender: 'other', text: "Ko'rdim, uskuna soz holatda qabul qilindi. Rahmat!", time: "03.10, 16:55" },
+          { sender: 'other', text: "Depozit hamyoningizga muvaffaqiyatli qaytarildi.", time: "03.10, 17:00" }
+        ]
+      },
+      ac: {
+        id: 'ac',
+        name: 'Akmal Usta (Konditsioner ustasi)',
+        avatar: '❄️',
+        avatarBg: 'bg-cyan-100 text-cyan-800',
+        phone: '+998947778899',
+        messages: [
+          { sender: 'user', text: "Assalomu alaykum, konditsioner freon quyish kerak edi.", time: "11:10" },
+          { sender: 'other', text: "Konditsioner ta'miri yoki tozalash bo'yicha qaysi tuman? Bugun 15:00 da yetib borishim mumkin.", time: "11:15" }
+        ]
+      }
+    };
+    let activeChatId = 'support';
+
+    function openChatThread(id) {
+      const chat = CHAT_DATA[id];
+      if (!chat) return;
+      activeChatId = id;
+      const avatarElem = document.getElementById('chatThreadAvatar');
+      const titleElem = document.getElementById('chatThreadTitle');
+      if (avatarElem) {
+        avatarElem.className = `w-9 h-9 rounded-full ${chat.avatarBg} text-white flex items-center justify-center font-bold text-xs flex-shrink-0`;
+        avatarElem.innerText = chat.avatar;
+      }
+      if (titleElem) titleElem.innerText = chat.name;
+      renderChatMessages();
+      navigateToProfileSubView('chat-thread');
+    }
+
+    function renderChatMessages() {
+      const container = document.getElementById('chatMessagesContainer');
+      if (!container) return;
+      const chat = CHAT_DATA[activeChatId];
+      if (!chat) return;
+
+      container.innerHTML = chat.messages.map(m => {
+        const isMe = m.sender === 'user';
+        return `
+          <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
+            <div class="max-w-[80%] rounded-2xl px-4 py-2.5 text-xs ${
+              isMe
+                ? 'bg-kinetic text-white rounded-br-xs shadow-xs'
+                : 'bg-white text-main-text rounded-bl-xs border border-gray-100 shadow-xs'
+            }">
+              <p class="leading-relaxed">${m.text}</p>
+              <span class="text-[9px] mt-1 block text-right ${isMe ? 'text-white/80' : 'text-sub-text'}">${m.time}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function sendChatMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatMessageInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      const chat = CHAT_DATA[activeChatId];
+      if (chat) {
+        chat.messages.push({ sender: 'user', text, time: timeStr });
+        const snip = document.getElementById(`chatSnippet-${activeChatId}`);
+        if (snip) snip.innerText = text;
+        renderChatMessages();
+        input.value = '';
+
+        // Simulated auto-reply
+        setTimeout(() => {
+          const replies = {
+            support: "Xabaringiz qabul qilindi. Mutaxassisimiz tez orada bog'lanadi yoki savolingizni hal qiladi.",
+            onix: "Xabaringizni oldim, muammo yo'q! Kelyapman.",
+            perforator: "Rahmat, yana biror uskuna kerak bo'lsa bemalol xabar qiling!",
+            ac: "Tushunarli, manzilni SMS orqali jo'natsangiz, yetib borganimda qo'ng'iroq qilaman."
+          };
+          const replyText = replies[activeChatId] || "Assalomu alaykum! Xabaringiz uchun rahmat, tez orada javob beraman.";
+          chat.messages.push({ sender: 'other', text: replyText, time: timeStr });
+          if (snip) snip.innerText = replyText;
+          if (currentProfileSubView === 'chat-thread') {
+            renderChatMessages();
+          }
+        }, 1200);
+      }
+    }
+
+    function handleChatThreadCall() {
+      const chat = CHAT_DATA[activeChatId];
+      if (chat && chat.phone) {
+        window.location.href = `tel:${chat.phone}`;
+      }
+    }
+
+    // ==================== FAQ ACCORDION HANDLER ====================
+    function toggleFaqAccordion(btn) {
+      const parent = btn.parentElement;
+      const content = parent.querySelector('.faq-content');
+      const arrow = parent.querySelector('.faq-arrow');
+      if (content && arrow) {
+        const isHidden = content.classList.contains('hidden');
+        if (isHidden) {
+          content.classList.remove('hidden');
+          arrow.classList.add('rotate-180', 'text-kinetic');
+        } else {
+          content.classList.add('hidden');
+          arrow.classList.remove('rotate-180', 'text-kinetic');
+        }
+      }
+    }
+
+    // ==================== PVS PICKUP POINTS HANDLER ====================
+    function filterPvsPoints(district, btn) {
+      document.querySelectorAll('.pvs-filter-chip').forEach(b => {
+        b.className = "pvs-filter-chip bg-white border border-gray-200 text-sub-text text-xs font-medium px-3.5 py-1.5 rounded-full whitespace-nowrap hover:border-kinetic transition-all";
+      });
+      if (btn) {
+        btn.className = "pvs-filter-chip bg-kinetic text-white text-xs font-bold px-3.5 py-1.5 rounded-full whitespace-nowrap shadow-xs transition-all";
+      }
+
+      const cards = document.querySelectorAll('.pvs-card');
+      cards.forEach(card => {
+        if (district === 'all' || card.getAttribute('data-district') === district) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    function handleOpenPvsRoute(name, address) {
+      const choice = confirm(`Topspot Topshirish Punkti (PVS):\n\n${name}\nManzil: ${address}\n\nXaritada yo'nalish olishni xohlaysizmi? Manzil buferga nusxalanadi.`);
+      if (choice) {
+        if (navigator.clipboard) navigator.clipboard.writeText(address);
+        window.open(`https://yandex.uz/maps/?text=${encodeURIComponent(address)}`, '_blank');
+      }
+    }
+
+    // ==================== SUPPORT FEEDBACK HANDLER ====================
+    function handleSendSupportFeedback(e) {
+      e.preventDefault();
+      const textarea = document.getElementById('supportFeedbackMsg');
+      if (textarea && textarea.value.trim()) {
+        alert("🎉 Xabaringiz Topspot qo'llab-quvvatlash markaziga yuborildi. Operatorlarimiz 5 daqiqa ichida siz bilan bog'lanishadi.");
+        textarea.value = '';
+        navigateToProfileSubView('root');
       }
     }
 
@@ -2997,7 +3807,7 @@
         currentUser.photo_url = evt.target.result;
         localStorage.setItem('topspot_user', JSON.stringify(currentUser));
         syncUserUI();
-        alert("Profil rasmi muvaffaqiyatli o'zgartirildi!");
+        alert("Profil rasmi muvaffaqiyatli o'zgartirildi va tizimda yangilandi!");
       };
       reader.readAsDataURL(file);
     }
@@ -3030,6 +3840,16 @@
         inp.placeholder = TRANSLATIONS[lang].searchPlaceholder;
       });
 
+      // Update mobile nav buttons
+      const tabHome = document.querySelector('#tabBtn-home span');
+      const tabCatalog = document.querySelector('#tabBtn-catalog span');
+      const tabFavs = document.querySelector('#tabBtn-favorites span');
+      const tabProfile = document.querySelector('#tabBtn-profile span');
+      if (tabHome) tabHome.innerText = TRANSLATIONS[lang].navHome || 'Bosh sahifa';
+      if (tabCatalog) tabCatalog.innerText = TRANSLATIONS[lang].navCatalog || 'Katalog';
+      if (tabFavs) tabFavs.innerText = TRANSLATIONS[lang].navSaved || 'Saralangan';
+      if (tabProfile) tabProfile.innerText = TRANSLATIONS[lang].navProfile || 'Profil';
+
       alert(`Ilova tili "${TRANSLATIONS[lang].langName}" ga o'zgartirildi!`);
       navigateToProfileSubView('root');
     }
@@ -3054,12 +3874,21 @@
     }
 
     function applyPromocode(e) {
-      e.preventDefault();
-      const code = document.getElementById('promoInput').value.trim().toUpperCase();
+      if (e && e.preventDefault) e.preventDefault();
+      const code = (document.getElementById('promoInput')?.value || '').trim().toUpperCase();
       if (code === 'TOPSPOT2026') {
         const badge = document.getElementById('promoBadge');
-        if (badge) badge.innerText = "Faol (10%)";
-        alert("Tabriklaymiz! 'TOPSPOT2026' promokodi faollashtirildi: barcha ijaralarga 10% chegirma berildi.");
+        if (badge) badge.innerText = "Faol (15%)";
+        alert("🎉 Tabriklaymiz! 'TOPSPOT2026' promokodi muvaffaqiyatli faollashtirildi: barcha turdagi mahsulot va xizmatlarga 15% chegirma berildi!");
+        navigateToProfileSubView('root');
+      } else if (code === 'KESHBEK5') {
+        const badge = document.getElementById('promoBadge');
+        if (badge) badge.innerText = "Keshbek +5%";
+        alert("🎉 'KESHBEK5' keshbek vaucheri faollashtirildi: har bir yakunlangan buyurtma uchun 5% keshbek beriladi!");
+        navigateToProfileSubView('root');
+      } else if (code === 'START50') {
+        addWalletFunds(50000);
+        alert("🎉 'START50' kuponi faollashtirildi: hisobingizga 50 000 UZS boshlang'ich bonus berildi!");
         navigateToProfileSubView('root');
       } else {
         alert("Kiritilgan promokod noto'g'ri yoki muddati o'tgan.");

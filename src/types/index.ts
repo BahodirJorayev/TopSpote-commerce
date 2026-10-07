@@ -3,8 +3,16 @@ export interface Listing {
   title: string;
   category: string;
   category_name: string;
+  vertical?: string;
   daily_price: number;
   hourly_price: number;
+  visit_price?: number;
+  service_area?: string;
+  experience_years?: string;
+  specialist_title?: string;
+  rating?: number;
+  reviews_count?: number;
+  is_service?: boolean;
   owner_name: string;
   phone: string;
   address: string;

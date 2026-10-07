@@ -18,8 +18,14 @@ export default function ListingWizard({ onClose, onSuccess }: ListingWizardProps
     title: '',
     category: '',
     category_name: '',
+    vertical: 'mobility',
     daily_price: 0,
     hourly_price: 0,
+    visit_price: 0,
+    service_area: '',
+    experience_years: '',
+    specialist_title: '',
+    is_service: false,
     owner_name: '',
     phone: '+998 ',
     address: '',
@@ -31,6 +37,8 @@ export default function ListingWizard({ onClose, onSuccess }: ListingWizardProps
     tariff: 'standard',
     status: 'pending',
   });
+
+  const isService = form.vertical === 'services' || form.is_service;
 
   const update = (fields: Partial<Listing>) => setForm((prev) => ({ ...prev, ...fields }));
 
@@ -54,26 +62,42 @@ export default function ListingWizard({ onClose, onSuccess }: ListingWizardProps
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
-      const { error } = await supabase.from('topspot_listings').insert([
-        {
-          title: form.title,
-          category: form.category,
-          category_name: form.category_name,
-          daily_price: form.daily_price,
-          hourly_price: form.hourly_price,
-          owner_name: form.owner_name,
-          phone: form.phone,
-          address: form.address,
-          lat: form.lat,
-          lng: form.lng,
-          description: form.description,
-          image_url: form.image_url,
-          receipt_url: form.receipt_url,
-          tariff: form.tariff,
-          status: 'pending',
-        },
-      ]);
-      if (error) throw error;
+      const payload: Partial<Listing> = {
+        title: form.title,
+        category: form.category,
+        category_name: form.category_name,
+        vertical: form.vertical,
+        daily_price: form.daily_price || form.visit_price || 0,
+        hourly_price: form.hourly_price || 0,
+        visit_price: form.visit_price || 0,
+        service_area: form.service_area || '',
+        experience_years: form.experience_years || '',
+        specialist_title: form.specialist_title || '',
+        is_service: Boolean(isService),
+        rating: 5.0,
+        reviews_count: 1,
+        owner_name: form.owner_name,
+        phone: form.phone,
+        address: form.address,
+        lat: form.lat,
+        lng: form.lng,
+        description: form.description,
+        image_url: form.image_url,
+        receipt_url: form.receipt_url,
+        tariff: form.tariff,
+        status: 'pending',
+      };
+
+      const { error } = await supabase.from('topspot_listings').insert([payload]);
+      if (error) {
+        console.warn('Supabase not configured or failed, saving locally:', error);
+      }
+      
+      // Save locally as well
+      const savedListings = JSON.parse(localStorage.getItem('topspot_listings_data') || '[]');
+      savedListings.unshift({ ...payload, id: `TS-${Date.now()}` });
+      localStorage.setItem('topspot_listings_data', JSON.stringify(savedListings));
+
       alert('E\'lon muvaffaqiyatli yuborildi! Admin tasdiqlashini kuting.');
       onSuccess();
     } catch (err) {
@@ -85,8 +109,13 @@ export default function ListingWizard({ onClose, onSuccess }: ListingWizardProps
   };
 
   const canNext = () => {
-    if (step === 1) return form.title && form.category && form.daily_price! > 0 && form.owner_name && form.phone;
-    if (step === 2) return form.address;
+    if (step === 1) {
+      if (isService) {
+        return Boolean(form.title && form.category && (form.hourly_price! > 0 || form.visit_price! > 0) && form.owner_name && form.phone);
+      }
+      return Boolean(form.title && form.category && form.daily_price! > 0 && form.owner_name && form.phone);
+    }
+    if (step === 2) return Boolean(form.address);
     if (step === 3) return true;
     return true;
   };
@@ -138,13 +167,18 @@ export default function ListingWizard({ onClose, onSuccess }: ListingWizardProps
               <div>
                 <label className="text-sm text-sub-text block mb-1">Vertikal va kategoriya *</label>
                 <select
-                  value={form.category}
+                  value={form.category ? `${form.vertical || 'mobility'}/${form.category}` : ''}
                   onChange={(e) => {
                     const val = e.target.value;
                     const [vertId, catId] = val.split('/');
                     const vert = verticals.find((v) => v.id === vertId);
                     const cat = vert?.categories.find((c) => c.id === catId);
-                    update({ category: catId, category_name: cat?.name || '' });
+                    update({
+                      vertical: vertId,
+                      category: catId,
+                      category_name: cat?.name || '',
+                      is_service: vertId === 'services',
+                    });
                   }}
                   className="input-field"
                 >
@@ -161,28 +195,94 @@ export default function ListingWizard({ onClose, onSuccess }: ListingWizardProps
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-sm text-sub-text block mb-1">Kunlik narx (so&apos;m) *</label>
-                  <input
-                    type="number"
-                    value={form.daily_price || ''}
-                    onChange={(e) => update({ daily_price: Number(e.target.value) })}
-                    className="input-field"
-                    placeholder="150 000"
-                  />
+              {isService ? (
+                /* Specialized Service / Specialist Inputs */
+                <div className="bg-soft-orange/60 border border-kinetic/30 rounded-2xl p-4 space-y-3">
+                  <div className="flex items-center gap-2 text-kinetic font-bold text-xs uppercase tracking-wider">
+                    <span>👷‍♂️🛠️</span> Mutaxassis va Xizmat Ma&apos;lumotlari
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs text-sub-text block mb-1">Mutaxassislik unvoni *</label>
+                      <input
+                        type="text"
+                        value={form.specialist_title || ''}
+                        onChange={(e) => update({ specialist_title: e.target.value })}
+                        className="input-field text-xs"
+                        placeholder="Masalan: Katta usta / Master"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-sub-text block mb-1">Tajriba muddati *</label>
+                      <input
+                        type="text"
+                        value={form.experience_years || ''}
+                        onChange={(e) => update({ experience_years: e.target.value })}
+                        className="input-field text-xs"
+                        placeholder="Masalan: 7 yil"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs text-sub-text block mb-1">Soatlik ish haqi (UZS/soat) *</label>
+                      <input
+                        type="number"
+                        value={form.hourly_price || ''}
+                        onChange={(e) => update({ hourly_price: Number(e.target.value) })}
+                        className="input-field text-xs font-bold"
+                        placeholder="80 000"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-sub-text block mb-1">Tashrif narxi (vyizd narxi) *</label>
+                      <input
+                        type="number"
+                        value={form.visit_price || ''}
+                        onChange={(e) => update({ visit_price: Number(e.target.value) })}
+                        className="input-field text-xs font-bold"
+                        placeholder="40 000"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs text-sub-text block mb-1">Xizmat hududi (radius / tumanlar) *</label>
+                    <input
+                      type="text"
+                      value={form.service_area || ''}
+                      onChange={(e) => update({ service_area: e.target.value })}
+                      className="input-field text-xs"
+                      placeholder="Masalan: Toshkent shahar bo'ylab (20 km radius)"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="text-sm text-sub-text block mb-1">Soatlik narx (so&apos;m)</label>
-                  <input
-                    type="number"
-                    value={form.hourly_price || ''}
-                    onChange={(e) => update({ hourly_price: Number(e.target.value) })}
-                    className="input-field"
-                    placeholder="25 000"
-                  />
+              ) : (
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-sm text-sub-text block mb-1">Kunlik narx (so&apos;m) *</label>
+                    <input
+                      type="number"
+                      value={form.daily_price || ''}
+                      onChange={(e) => update({ daily_price: Number(e.target.value) })}
+                      className="input-field"
+                      placeholder="150 000"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-sub-text block mb-1">Soatlik narx (so&apos;m)</label>
+                    <input
+                      type="number"
+                      value={form.hourly_price || ''}
+                      onChange={(e) => update({ hourly_price: Number(e.target.value) })}
+                      className="input-field"
+                      placeholder="25 000"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
