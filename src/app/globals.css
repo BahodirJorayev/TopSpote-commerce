@@ -17,12 +17,25 @@
     scrollbar-width: thin;
     scrollbar-color: #E4E7ED transparent;
   }
+
+  /* Prevent overscroll on onboarding/auth screens */
+  .overflow-hidden {
+    overscroll-behavior: none;
+  }
 }
 
 @layer components {
+  /* ─── Primary CTA Button ───────────────────────────────────────────── */
   .btn-primary {
     @apply bg-kinetic text-white font-semibold py-3 px-6 rounded-xl
            hover:bg-[#E64D00] active:scale-[0.97] transition-all duration-200;
+  }
+
+  .btn-primary-gradient {
+    background: linear-gradient(135deg, #FF5500 0%, #FF7733 100%);
+    box-shadow: 0 8px 32px rgba(255, 85, 0, 0.35);
+    @apply text-white font-bold py-4 px-6 rounded-2xl
+           active:scale-[0.97] transition-all duration-200;
   }
 
   .btn-outline {
@@ -30,11 +43,26 @@
            hover:bg-soft-orange active:scale-[0.97] transition-all duration-200;
   }
 
+  /* ─── Cards ─────────────────────────────────────────────────────────── */
   .card {
     @apply bg-white rounded-2xl border border-border-gray
            hover:shadow-lg hover:border-kinetic/20 transition-all duration-300;
   }
 
+  /* Glassmorphism card for dark backgrounds */
+  .glass-card {
+    @apply backdrop-blur-xl border rounded-3xl;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  .glass-card-light {
+    @apply backdrop-blur-xl border rounded-3xl bg-white/60 border-white/80;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+
+  /* ─── Badges ─────────────────────────────────────────────────────────── */
   .badge-available {
     @apply inline-flex items-center gap-1 bg-emerald-50 text-emerald-700
            text-xs font-medium px-2.5 py-1 rounded-full;
@@ -45,14 +73,44 @@
            text-xs font-medium px-2.5 py-1 rounded-full;
   }
 
+  /* ─── Inputs ─────────────────────────────────────────────────────────── */
   .input-field {
     @apply w-full px-4 py-3 rounded-xl border border-border-gray
            focus:outline-none focus:border-kinetic focus:ring-2 focus:ring-kinetic/10
            text-main-text placeholder:text-sub-text transition-all duration-200;
   }
 
+  /* Dark input for dark bg screens */
+  .input-dark {
+    @apply w-full px-4 py-4 rounded-2xl border text-white
+           focus:outline-none transition-all duration-200;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+  }
+
+  .input-dark::placeholder {
+    color: #7E818C;
+  }
+
+  .input-dark:focus {
+    border-color: rgba(255, 85, 0, 0.6);
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  /* ─── Misc ─────────────────────────────────────────────────────────── */
   .mega-catalog-overlay {
     @apply fixed inset-0 bg-black/40 z-40 backdrop-blur-sm;
+  }
+
+  /* Onboarding dot indicators */
+  .dot-active {
+    @apply w-8 h-2.5 bg-kinetic rounded-full;
+    box-shadow: 0 0 12px rgba(255, 85, 0, 0.4);
+  }
+
+  .dot-inactive {
+    @apply w-2.5 h-2.5 bg-white/25 rounded-full hover:bg-white/40;
   }
 }
 
@@ -63,5 +121,34 @@
   .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Smooth text rendering */
+  .text-smooth {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Duration 350 utility */
+  .duration-350 {
+    transition-duration: 350ms;
+  }
+
+  /* Kinetic orange text glow */
+  .text-glow-kinetic {
+    text-shadow: 0 0 20px rgba(255, 85, 0, 0.5);
+  }
+
+  /* Glassmorphism background utility */
+  .bg-glass {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .bg-glass-dark {
+    background: rgba(11, 15, 23, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
   }
 }

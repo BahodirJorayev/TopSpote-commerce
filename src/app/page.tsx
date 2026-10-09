@@ -2,15 +2,20 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import SplashScreen from '@/components/SplashScreen';
+import OnboardingSlider from '@/components/OnboardingSlider';
+import AuthPage from '@/components/AuthPage';
 import Header from '@/components/Header';
 import ProductCard from '@/components/ProductCard';
 import BottomNav from '@/components/BottomNav';
 import ListingWizard from '@/components/ListingWizard';
 import ProfileView from '@/components/ProfileView';
 import { supabase } from '@/lib/supabase';
-import { requestGeolocation, formatPrice } from '@/lib/geolocation';
+import { requestGeolocation } from '@/lib/geolocation';
 import { verticals } from '@/lib/categories';
 import type { Listing } from '@/types';
+
+// ─── App Flow Stages ───────────────────────────────────────────────────────────
+type AppStage = 'splash' | 'onboarding' | 'auth' | 'home';
 
 // Demo listings for display when Supabase is not configured
 const DEMO_LISTINGS: Listing[] = [
@@ -291,7 +296,52 @@ const DEMO_LISTINGS: Listing[] = [
 ];
 
 export default function HomePage() {
-  const [splashDone, setSplashDone] = useState(false);
+  // ── App flow stage ──────────────────────────────────────────────────────────
+  const [stage, setStage] = useState<AppStage>('splash');
+
+  // Check localStorage on mount to determine starting stage
+  useEffect(() => {
+    // This runs only on client
+    const savedUser = localStorage.getItem('topspot_user');
+    const onboarded = localStorage.getItem('topspot_onboarded');
+
+    if (savedUser && onboarded === 'true') {
+      // Already logged in — skip splash/onboarding/auth
+      // Still show splash for 1.7s then go to home
+      setTimeout(() => setStage('home'), 1700);
+    }
+    // If not logged in, splash will handle transition to onboarding
+  }, []);
+
+  const handleSplashComplete = useCallback(() => {
+    const savedUser = localStorage.getItem('topspot_user');
+    const onboarded = localStorage.getItem('topspot_onboarded');
+
+    if (savedUser && onboarded === 'true') {
+      setStage('home');
+    } else if (onboarded === 'true') {
+      // Onboarded but not logged in
+      setStage('auth');
+    } else {
+      setStage('onboarding');
+    }
+  }, []);
+
+  const handleOnboardingComplete = useCallback(() => {
+    localStorage.setItem('topspot_onboarded', 'true');
+    setStage('auth');
+  }, []);
+
+  const handleAuthSuccess = useCallback(
+    (user: { name: string; phone: string; method: string }) => {
+      localStorage.setItem('topspot_user', JSON.stringify(user));
+      localStorage.setItem('topspot_onboarded', 'true');
+      setStage('home');
+    },
+    []
+  );
+
+  // ── Home page state ─────────────────────────────────────────────────────────
   const [city, setCity] = useState('Toshkent');
   const [listings, setListings] = useState<Listing[]>(DEMO_LISTINGS);
   const [filteredListings, setFilteredListings] = useState<Listing[]>(DEMO_LISTINGS);
@@ -379,11 +429,20 @@ export default function HomePage() {
     });
   };
 
-  // Splash
-  if (!splashDone) {
-    return <SplashScreen onComplete={() => setSplashDone(true)} />;
+  // ── Render flow ─────────────────────────────────────────────────────────────
+  if (stage === 'splash') {
+    return <SplashScreen onComplete={handleSplashComplete} />;
   }
 
+  if (stage === 'onboarding') {
+    return <OnboardingSlider onComplete={handleOnboardingComplete} />;
+  }
+
+  if (stage === 'auth') {
+    return <AuthPage onAuthSuccess={handleAuthSuccess} />;
+  }
+
+  // ── Home ────────────────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-white pb-20 md:pb-0">
       {activeTab === 'profile' ? (
@@ -401,105 +460,105 @@ export default function HomePage() {
           />
 
           <main className="max-w-7xl mx-auto px-4 py-4">
-        {/* Vertical quick filter chips */}
-        <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-3">
-          <button
-            onClick={() => handleVerticalFilter(null)}
-            className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-              !activeVertical
-                ? 'bg-kinetic text-white'
-                : 'bg-soft-orange text-main-text hover:bg-kinetic/10'
-            }`}
-          >
-            Hammasi
-          </button>
-          {verticals.map((v) => (
-            <button
-              key={v.id}
-              onClick={() => handleVerticalFilter(v.id)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
-                activeVertical === v.id
-                  ? 'bg-kinetic text-white'
-                  : 'bg-soft-orange text-main-text hover:bg-kinetic/10'
-              }`}
-            >
-              <span>{v.icon}</span>
-              {v.name}
-            </button>
-          ))}
-        </div>
+            {/* Vertical quick filter chips */}
+            <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-3">
+              <button
+                onClick={() => handleVerticalFilter(null)}
+                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  !activeVertical
+                    ? 'bg-kinetic text-white'
+                    : 'bg-soft-orange text-main-text hover:bg-kinetic/10'
+                }`}
+              >
+                Hammasi
+              </button>
+              {verticals.map((v) => (
+                <button
+                  key={v.id}
+                  onClick={() => handleVerticalFilter(v.id)}
+                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
+                    activeVertical === v.id
+                      ? 'bg-kinetic text-white'
+                      : 'bg-soft-orange text-main-text hover:bg-kinetic/10'
+                  }`}
+                >
+                  <span>{v.icon}</span>
+                  {v.name}
+                </button>
+              ))}
+            </div>
 
-        {/* Hero banner */}
-        <div className="bg-gradient-to-r from-obsidian to-[#1a1f2e] rounded-2xl p-6 md:p-8 mb-6 text-white overflow-hidden relative">
-          <div className="relative z-10">
-            <h1 className="text-2xl md:text-3xl font-bold mb-2">
-              Universal Ijara Marketi
-            </h1>
-            <p className="text-gray-300 text-sm md:text-base mb-4 max-w-lg">
-              Avtomobillar, uskunalar, ko&apos;chmas mulk va mutaxassislar — hammasini bir joydan toping va ijaraga oling.
-            </p>
-            <button
-              onClick={() => setShowWizard(true)}
-              className="btn-primary inline-flex items-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              E&apos;lon berish
-            </button>
-          </div>
-          {/* Decorative circle */}
-          <div className="absolute -right-10 -top-10 w-40 h-40 bg-kinetic/20 rounded-full blur-3xl" />
-          <div className="absolute -right-5 -bottom-5 w-24 h-24 bg-kinetic/10 rounded-full blur-2xl" />
-        </div>
+            {/* Hero banner */}
+            <div className="bg-gradient-to-r from-obsidian to-[#1a1f2e] rounded-2xl p-6 md:p-8 mb-6 text-white overflow-hidden relative">
+              <div className="relative z-10">
+                <h1 className="text-2xl md:text-3xl font-bold mb-2">
+                  Universal Ijara Marketi
+                </h1>
+                <p className="text-gray-300 text-sm md:text-base mb-4 max-w-lg">
+                  Avtomobillar, uskunalar, ko&apos;chmas mulk va mutaxassislar — hammasini bir joydan toping va ijaraga oling.
+                </p>
+                <button
+                  onClick={() => setShowWizard(true)}
+                  className="btn-primary inline-flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  E&apos;lon berish
+                </button>
+              </div>
+              {/* Decorative circle */}
+              <div className="absolute -right-10 -top-10 w-40 h-40 bg-kinetic/20 rounded-full blur-3xl" />
+              <div className="absolute -right-5 -bottom-5 w-24 h-24 bg-kinetic/10 rounded-full blur-2xl" />
+            </div>
 
-        {/* Results count */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-main-text">
-            {searchQuery
-              ? `"${searchQuery}" bo'yicha natijalar`
-              : activeVertical
-              ? verticals.find((v) => v.id === activeVertical)?.name
-              : 'Barcha e\'lonlar'}
-            <span className="text-sub-text font-normal text-sm ml-2">
-              ({filteredListings.length})
-            </span>
-          </h2>
-        </div>
+            {/* Results count */}
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-main-text">
+                {searchQuery
+                  ? `"${searchQuery}" bo'yicha natijalar`
+                  : activeVertical
+                  ? verticals.find((v) => v.id === activeVertical)?.name
+                  : 'Barcha e\'lonlar'}
+                <span className="text-sub-text font-normal text-sm ml-2">
+                  ({filteredListings.length})
+                </span>
+              </h2>
+            </div>
 
-        {/* Product Grid */}
-        {filteredListings.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-            {filteredListings.map((listing) => (
-              <ProductCard
-                key={listing.id}
-                listing={listing}
-                isFav={favorites.has(listing.id || '')}
-                onFav={toggleFav}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16">
-            <div className="text-5xl mb-4">📭</div>
-            <h3 className="text-lg font-semibold text-main-text mb-1">
-              E&apos;lonlar topilmadi
-            </h3>
-            <p className="text-sub-text text-sm">
-              Qidiruv so&apos;zini o&apos;zgartirib ko&apos;ring yoki yangi e&apos;lon bering
-            </p>
-            <button
-              onClick={() => setShowWizard(true)}
-              className="btn-primary mt-4 inline-flex items-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              E&apos;lon berish
-            </button>
-          </div>
-        )}
-      </main>
+            {/* Product Grid */}
+            {filteredListings.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                {filteredListings.map((listing) => (
+                  <ProductCard
+                    key={listing.id}
+                    listing={listing}
+                    isFav={favorites.has(listing.id || '')}
+                    onFav={toggleFav}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <div className="text-5xl mb-4">📭</div>
+                <h3 className="text-lg font-semibold text-main-text mb-1">
+                  E&apos;lonlar topilmadi
+                </h3>
+                <p className="text-sub-text text-sm">
+                  Qidiruv so&apos;zini o&apos;zgartirib ko&apos;ring yoki yangi e&apos;lon bering
+                </p>
+                <button
+                  onClick={() => setShowWizard(true)}
+                  className="btn-primary mt-4 inline-flex items-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  E&apos;lon berish
+                </button>
+              </div>
+            )}
+          </main>
         </>
       )}
 
