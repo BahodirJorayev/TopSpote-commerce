@@ -6,6 +6,8 @@ import { formatPrice } from '@/lib/geolocation';
 interface ProfileViewProps {
   onBackToHome: () => void;
   onOpenWizard: () => void;
+  onLogout?: () => void;
+  currentUser?: { name: string; phone: string; method: string } | null;
 }
 
 type SubViewKey =

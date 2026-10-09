@@ -1,12 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-
 interface BottomNavProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
-  favCount: number;
-  cartCount: number;
+  bookingCount?: number;
 }
 
 const tabs = [
@@ -14,35 +11,38 @@ const tabs = [
     id: 'home',
     label: 'Bosh sahifa',
     icon: (active: boolean) => (
-      <svg className="w-6 h-6" fill={active ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.5 : 1.8} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" fill={active ? 'currentColor' : 'none'} fillOpacity={0.15} />
+        <path d="M9 22V12h6v10" />
       </svg>
     ),
   },
   {
-    id: 'catalog',
-    label: 'Katalog',
+    id: 'map',
+    label: 'Xarita',
     icon: (active: boolean) => (
-      <svg className="w-6 h-6" fill={active ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.5 : 1.8} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" fill={active ? 'currentColor' : 'none'} fillOpacity={0.15} />
+        <circle cx="12" cy="10" r="3" fill={active ? 'currentColor' : 'none'} />
       </svg>
     ),
   },
+  // Center "post" button — rendered separately
   {
-    id: 'cart',
-    label: 'Savat',
-    icon: (active: boolean) => (
-      <svg className="w-6 h-6" fill={active ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
-      </svg>
-    ),
+    id: 'post',
+    label: "E'lon",
+    icon: (_active: boolean) => null, // handled separately
   },
   {
-    id: 'favorites',
-    label: 'Saralanganlar',
+    id: 'bookings',
+    label: 'Bronlarim',
     icon: (active: boolean) => (
-      <svg className="w-6 h-6" fill={active ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.5 : 1.8} strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" fill={active ? 'currentColor' : 'none'} fillOpacity={0.12} />
+        <line x1="16" y1="2" x2="16" y2="6" />
+        <line x1="8" y1="2" x2="8" y2="6" />
+        <line x1="3" y1="10" x2="21" y2="10" />
+        <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" strokeWidth="2" />
       </svg>
     ),
   },
@@ -50,42 +50,97 @@ const tabs = [
     id: 'profile',
     label: 'Profil',
     icon: (active: boolean) => (
-      <svg className="w-6 h-6" fill={active ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.5 : 1.8} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" fill={active ? 'currentColor' : 'none'} fillOpacity={0.12} />
+        <circle cx="12" cy="7" r="4" fill={active ? 'currentColor' : 'none'} fillOpacity={0.15} />
       </svg>
     ),
   },
 ];
 
-export default function BottomNav({ activeTab, onTabChange, favCount, cartCount }: BottomNavProps) {
+export default function BottomNav({
+  activeTab,
+  onTabChange,
+  bookingCount = 0,
+}: BottomNavProps) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-30 md:hidden bg-white border-t border-border-gray">
-      <div className="flex items-center justify-around h-16 px-2">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => onTabChange(tab.id)}
-            className={`flex flex-col items-center gap-0.5 relative transition-colors ${
-              activeTab === tab.id ? 'text-kinetic' : 'text-sub-text'
-            }`}
-          >
-            {tab.icon(activeTab === tab.id)}
-            <span className="text-[10px] font-medium">{tab.label}</span>
+    <nav className="fixed bottom-0 left-0 right-0 z-30 md:hidden">
+      {/* Frosted glass bar */}
+      <div
+        className="flex items-end justify-around h-[68px] px-1 border-t"
+        style={{
+          background: 'rgba(255,255,255,0.96)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderColor: '#E4E7ED',
+        }}
+      >
+        {tabs.map((tab) => {
+          // Center Post button
+          if (tab.id === 'post') {
+            return (
+              <button
+                key="post"
+                onClick={() => onTabChange('post')}
+                className="flex flex-col items-center justify-center -mt-5 relative"
+                style={{ flex: '0 0 auto' }}
+              >
+                {/* Orange circle FAB */}
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center shadow-xl active:scale-90 transition-transform"
+                  style={{
+                    background: 'linear-gradient(135deg, #FF5500 0%, #FF7733 100%)',
+                    boxShadow: '0 4px 20px rgba(255,85,0,0.45)',
+                  }}
+                >
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                </div>
+                <span className="text-[9px] font-semibold mt-0.5" style={{ color: '#FF5500' }}>
+                  {tab.label}
+                </span>
+              </button>
+            );
+          }
 
-            {/* Badge */}
-            {tab.id === 'cart' && cartCount > 0 && (
-              <span className="absolute -top-1 right-0 bg-kinetic text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
-                {cartCount}
-              </span>
-            )}
-            {tab.id === 'favorites' && favCount > 0 && (
-              <span className="absolute -top-1 right-0 bg-kinetic text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
-                {favCount}
-              </span>
-            )}
-          </button>
-        ))}
+          const isActive = activeTab === tab.id;
+
+          return (
+            <button
+              key={tab.id}
+              onClick={() => onTabChange(tab.id)}
+              className="flex flex-col items-center justify-center gap-0.5 relative py-2 flex-1 transition-colors"
+              style={{ color: isActive ? '#FF5500' : '#7E818C' }}
+            >
+              {tab.icon(isActive)}
+              <span className="text-[10px] font-medium leading-none">{tab.label}</span>
+
+              {/* Bookings badge */}
+              {tab.id === 'bookings' && bookingCount > 0 && (
+                <span
+                  className="absolute top-1.5 right-4 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold"
+                  style={{ background: '#FF5500' }}
+                >
+                  {bookingCount}
+                </span>
+              )}
+
+              {/* Active indicator dot */}
+              {isActive && (
+                <span
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                  style={{ background: '#FF5500' }}
+                />
+              )}
+            </button>
+          );
+        })}
       </div>
+
+      {/* Safe area spacer (iOS) */}
+      <div style={{ height: 'env(safe-area-inset-bottom)', background: 'rgba(255,255,255,0.96)' }} />
     </nav>
   );
 }
